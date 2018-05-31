@@ -33,22 +33,47 @@
     </tr>
 
     <%var items = items;
-      var budgeted = [];
-      var actualed = [];%>
+      var budgeted = budgeted;%>
 
       <%for(var m = 0; m < items.length; m++){%>
         <tr>
           <form method = "post" action = "/budget/newBudgetItemEntry">
             <td>
               <%=items[m].itemName%>
-              <input hidden value = "<%=items[m].itemname%>" name = "item" placeholder="item"></input>
+              <input hidden value = "<%=items[m].itemName%>" name = "item" placeholder="item"></input>
             </td>
             <td>
-                <input name = "budgeted" placeholder="budgeted amount"></input>
+              <!--how to fix when you have budgeted nothing?-->
+              <%if(budgeted.length == 0){%>
+                <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+              <%}%>
+              <%for(var g = 0; g < budgeted.length; g++){
+
+                if(items[m].itemName == budgeted[g].item){%>
+                  <input name = "budgeted" value = "<%=budgeted[m].budgeted%>"></input>
+                  <!--this catch all below V cannot realize if a match has already been made-->
+                <%}if(g == budgeted.length - 1){%>
+                  <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+                <%}%>
+              <%}%>
+
             </td>
             <td>
-              <input name = "actualed" placeholder="actual amount"></input>
-              <button>Set</button>
+              <%if(budgeted.length == 0){%>
+                <input name = "actualed" placeholder="put actual amount" value = ""></input>
+              <%}%>
+              <%for(var g = 0; g < budgeted.length; g++){
+                if(items[m].itemName == budgeted[g].item){
+                  if(budgeted[g].actualed){%>
+                    <input name = "actualed" value = "<%=budgeted[m].actualed%>"></input>
+                  <%}%>
+
+                <%}if(g == budgeted.length - 1){%>
+                  <input name = "actualed" placeholder="put actual amount" value = ""></input>
+                <%}%>
+              <%}%>
+
+              <button>SET</button>
             </td>
 
           </form>

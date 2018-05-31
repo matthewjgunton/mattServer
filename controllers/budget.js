@@ -10,6 +10,7 @@ exports.budgetHome = function(req, res){
 
     budgetModel.find({}).then(function(budgetData){
       dataObj.budgeted = budgetData;
+      console.log(dataObj.budgeted);
       res.render("budgetHome", dataObj);
     })
 
