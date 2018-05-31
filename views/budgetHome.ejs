@@ -1,0 +1,65 @@
+<html>
+
+
+<head>
+
+  <% include ./partials/mattHead.ejs %>
+  <!-- Our Custom CSS -->
+    <link rel ="stylesheet" href = "/budget.css"></link>
+
+</head>
+
+<body>
+  <h1>MJG Budget</h1>
+
+  <!--
+  todo:
+  *make it so that I can dynamically change what fields are in here:
+  *set up infrastructure to remind me to fill out budget column
+  -->
+
+  <form method = "post" action = "/budget/newBudgetItem">
+    <input name = "itemName" placeholder="new budget item"></input>
+    <button>Submit</button>
+  </form>
+
+  <!--This form will be put into each and every one of the td-->
+
+  <table>
+    <tr>
+      <th>Item</th>
+      <th>Budget</th>
+      <th>Actual</th>
+    </tr>
+
+    <%var items = items;
+      var budgeted = [];
+      var actualed = [];%>
+
+      <%for(var m = 0; m < items.length; m++){%>
+        <tr>
+          <form method = "post" action = "/budget/newBudgetItemEntry">
+            <td>
+              <%=items[m].itemName%>
+              <input hidden value = "<%=items[m].itemname%>" name = "item" placeholder="item"></input>
+            </td>
+            <td>
+                <input name = "budgeted" placeholder="budgeted amount"></input>
+            </td>
+            <td>
+              <input name = "actualed" placeholder="actual amount"></input>
+              <button>Set</button>
+            </td>
+
+          </form>
+        </tr>
+
+      <%}%>
+
+
+
+  </table>
+
+</body>
+
+</html>

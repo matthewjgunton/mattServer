@@ -1,0 +1,405 @@
+<html>
+
+<head>
+  <% include ./partials/mattHead.ejs %>
+  <!-- Our Custom CSS -->
+    <link rel ="stylesheet" href = "/mattStyle.css"></link>
+
+</head>
+
+<body>
+
+
+<!-- todo-->
+<!--
+
+at the end of every day, remove that the nextDay thing happened
+
+need to fix our start to document.ready
+  right now it fails because a false statement from ejs leaves it blank, stopping javascript from executing
+
+ -->
+
+</table>
+
+  <div class="wrapper">
+      <!-- Sidebar Holder -->
+      <nav id="sidebar">
+          <div class="sidebar-header">
+              <h3>Matthew J Gunton's Planner</h3>
+          </div>
+
+          <ul class="list-unstyled components">
+              <p>Add an Entry</p>
+              <li>
+                  <a href="#hwSubmenu" data-toggle="collapse" aria-expanded="false">Homework</a>
+                  <ul class="collapse list-unstyled" id="hwSubmenu">
+                    <form id= "hwForm" method = "post" action = "/hw">
+                      <li>
+                        <select id = "subjectSelect">
+                          <!--will have to make sure this first option is never submitted-->
+                            <option>Select a Subject</option>
+                          <%for(var m = 0; m < subjects.length; m++){%>
+                            <option value = "<%=subjects[m].subject%>"><%=subjects[m].subject%></option>
+                          <%}%>
+                        </select>
+                        <input hidden name = "subject" placeholder="subject"></input>
+                      </li>
+                      <li><input required name = "assignmentName" placeholder="name of assignment"></input></li>
+                      <li>
+                        <select id='gMonth1'>
+                          <!--have month automatically assign to current-->
+
+                          <option value='1'>Janaury</option>
+                          <option value='2'>February</option>
+                          <option value='3'>March</option>
+                          <option value='4'>April</option>
+                          <option value='5'>May</option>
+                          <option value='6'>June</option>
+                          <option value='7'>July</option>
+                          <option value='8'>August</option>
+                          <option value='9'>September</option>
+                          <option value='10'>October</option>
+                          <option value='11'>November</option>
+                          <option value='12'>December</option>
+                        </select>
+                        <input hidden name = "monthDue" placeholder="month"></input>
+                      </li>
+                      <li><input name = "dayDue" placeholder="date"></input></li>
+                      <li><input name = "yearDue" placeholder="year"></input></li>
+                      <!--button appears to show description-->
+                      <button class = "addDescription">Add Description</button>
+                      <button class = "submitHW">Create New HW</button>
+                      <textarea hidden name = "assignmentDescription"></textarea>
+                    </form>
+                  </ul>
+              </li>
+              <li>
+                  <a href="#eventSubmenu" data-toggle="collapse" aria-expanded="false">Event</a>
+                  <ul class="collapse list-unstyled" id="eventSubmenu">
+                    <form action = "/event" method = 'post'>
+                      <li><input required name = "eventName" placeholder="Event"></input></li>
+                      <li>
+                        <select id='gMonth2'>
+                          <!--have month automatically assign to current-->
+
+                          <option value='1'>Janaury</option>
+                          <option value='2'>February</option>
+                          <option value='3'>March</option>
+                          <option value='4'>April</option>
+                          <option value='5'>May</option>
+                          <option value='6'>June</option>
+                          <option value='7'>July</option>
+                          <option value='8'>August</option>
+                          <option value='9'>September</option>
+                          <option value='10'>October</option>
+                          <option value='11'>November</option>
+                          <option value='12'>December</option>
+                        </select>
+
+                        <input hidden name = "month" placeholder="month"></input>
+                      </li>
+                      <li><input name = "day" placeholder="day"></input></li>
+                      <li><input name = "year" placeholder="year"></input></li>
+                      <textarea hidden name = "assignmentDescription"></textarea>
+                      <button class = "addDescription">Add Description</button>
+                      <button class = "submitEvent">Create New Event</button>
+                    </form>
+                  </ul>
+              </li>
+              <li>
+                  <a href="#subjectSubmenu" data-toggle="collapse" aria-expanded="false">Subject</a>
+                  <ul class="collapse list-unstyled" id="subjectSubmenu">
+                    <form action = "/subject" method = "post">
+                      <li><input required name = "subjectNew" placeholder="subject name"></input></li>
+                      <button class = "submitSubject">Create New Subject</button>
+                    </form>
+                  </ul>
+              </li>
+              <li><a href = "/budget">Budget</a></li>
+
+          </ul>
+
+      </nav>
+
+      <!-- Page Content Holder -->
+      <div id="content">
+
+          <nav class="navbar navbar-default">
+              <div class="container-fluid">
+
+                  <div class="navbar-header">
+                      <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                          <i class="glyphicon glyphicon-align-left"></i>
+                          <button type="button" id="sidebarCollapse" class="navbar-btn">
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                          </button>
+                      </button>
+                  </div>
+
+
+                  <span>Week of <%=weekOf%></span>
+              </div>
+          </nav>
+
+          <div id ="plannerTable">
+            <table>
+
+
+
+              <tr>
+                <!--need a function to make sure the dates remain right-->
+                <%
+                var days = [];
+                for(var i = 0; i < showDays; i++){
+                  var midDay = date+i;
+                  if(midDay > daysInMonth){
+                    midDay = midDay - daysInMonth;
+                  }
+                  days.push(midDay);
+                }
+                %>
+
+                <%var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];%>
+
+                <!--start off with only 4 days hard coded in-->
+                <!--we need an extra td for the subjects-->
+
+                <th></th>
+
+                <%for(var i = 0; i < days.length; i++){%>
+                  <%var index = dayOfWeek + i;%>
+                  <%if(index > 6){%>
+                    <%index = index - 7;%>
+                  <%}%>
+                  <th><%=weekDays[index]%><br><%=days[i]%></th>
+                <%}%>
+
+
+              </tr>
+
+              <!--option 1 for events and items due--->
+              <tr>
+
+                <td>EVENTS</td>
+                <%for(var i = 0; i < days.length; i++){%>
+                  <td>
+                    <table>
+                    <%for(var m = 0; m < events.length; m++){%>
+                      <%if(events[m].day == days[i]){%>
+                        <tr>
+                          <td><%=events[m].eventName%></td>
+                        </tr>
+                      <%}%>
+                    <%}%>
+                    </table>
+                  </td>
+                <%}%>
+              </tr>
+
+
+              <%for(var subject = 0; subject < subjects.length; subject++){%>
+
+                <!--next step is tracking if something is done or not-->
+
+                <tr>
+
+                  <td><%=subjects[subject].subject%></td>
+                  <%for(var i=0; i< days.length; i++){%>
+                    <td>
+                      <table id = "assignmentTable">
+                        <%for(var m=0; m < entries[subject].length; m++){%>
+
+                          <!--only the first day is editable-->
+                          <!--issue is it is not allowing -->
+                          <%if(i == 0){%>
+                            <%var dayDue = weekDays[dayOfWeek+(entries[subject][m].dayDue - days[0])];%>
+                            <%if(dayDue == weekDays[dayOfWeek]){%>
+
+                            <%}else{%>
+                            <%if(entries[subject][m].assignmentName != 'blank'){%>
+                              <tr>
+                                <td><%=dayDue%>:<%=entries[subject][m].assignmentName%></td>
+                                <td class="checkmarks" id = "<%=entries[subject][m]._id%>"><!-- we'll create 3 buttons (delete) (checkmark) (Next) -->
+
+                                  <form method = "post" action = "/complete">
+                                    <input hidden value = "<%=entries[subject][m].subject%>" name = "subject"></input>
+                                    <input hidden value = "<%=entries[subject][m].dayDue%>" name = "dayDue"></input>
+                                    <input hidden value = "<%=entries[subject][m].assignmentName%>" name = "assignmentName"></input>
+                                    <button>✔</button>
+                                  </form>
+
+
+                                    <button onclick="nextDay(this)">→</button>
+
+                                  <form method = "post" action = "/delete">
+                                    <input hidden value = "<%=entries[subject][m].subject%>" name = "subject"></input>
+                                    <input hidden value = "<%=entries[subject][m].dayDue%>" name = "dayDue"></input>
+                                    <input hidden value = "<%=entries[subject][m].assignmentName%>" name = "assignmentName"></input>
+                                    <button>X</button>
+                                  </form>
+                                </td>
+                              </tr>
+                            <%}%>
+
+                            <%}%>
+
+                          <%}%>
+
+                        <%}%>
+
+                      </table>
+                    </td>
+                  <%}%>
+                </tr>
+
+                <%}%>
+
+                <!--option 2 for placement
+                maybe have a flag that can be passed in for preferred placement-->
+                <tr>
+                  <td class = "due">DUE:</td>
+
+                  <%for(var i = 0 ; i < days.length; i++){%>
+                    <td class = "due">
+                      <table>
+
+                    <%for(var m = 0; m < subjects.length; m++){%>
+
+                      <%for(var g=0; g < entries[m].length; g++){%>
+
+                      <%if(days[i] == entries[m][g].dayDue){%>
+                      <tr>
+
+                        <td><%=entries[m][g].subject%>:<%=entries[m][g].assignmentName%></td>
+                        <td class="checkmarks"><input class = "complete" type= "checkbox"></input></td>
+                      </tr>
+                      <%}%>
+                      <%}%>
+                    <%}%>
+                  </table>
+                  </td>
+                  <%}%>
+
+                </tr>
+
+
+
+          </div>
+
+      </div>
+  </div>
+
+
+
+</body>
+
+    <!-- jQuery CDN -->
+     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+     <!-- Bootstrap Js CDN -->
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+     <script type="text/javascript">
+
+         $(document).ready(function () {
+
+           <%for(var i = 0 ; i < days.length; i++){%>
+             <%for(var m = 0; m < subjects.length; m++){%>
+               <%for(var g=0; g < entries[m].length; g++){%>
+                 //need to find some other way to do this
+                 //if it comes out to false, it leaves nothing
+                 //this makes the javascript fail
+
+               if(<%=entries[m][g].isCompleted%>){
+                 nextDay(<%=entries[m][g]._id%>, "✔");
+               }
+               if(<%=entries[m][g].isCancelled%>){
+                 nextDay(<%=entries[m][g]._id%>, "X");
+               }
+
+                 <%}}}%>
+
+           $("#gMonth1> option").each(function(){
+             var currentMonth = <%=month%>;
+             if(currentMonth == this.value){
+               $(this).attr("selected", "true");
+
+             }
+           })
+
+           $("#gMonth2> option").each(function(){
+             var currentMonth = <%=month%>;
+             if(currentMonth == this.value){
+               $(this).attr("selected", "true");
+
+             }
+           })
+
+
+           //defaults for homework
+           $("input[name = 'monthDue']").val(<%=month%>);
+           $("input[name = 'yearDue']").val(<%=year%>);
+           $("input[name = 'dayDue']").val(<%=date+1%>);
+
+
+           $("#gMonth1").on('change', function(){
+             var newMonthVal = $("select#gMonth1 option:checked").val();
+             $("input[name = 'monthDue']").val(newMonthVal);
+             console.log($("input[name = 'monthDue']").val());
+           })
+
+           $("#gMonth2").on('change', function(){
+             var newMonthVal = $("select#gMonth2 option:checked").val();
+             $("input[name = 'month']").val(newMonthVal);
+             console.log($("input[name = 'month']").val());
+           })
+
+           $("#subjectSelect").on('change', function(){
+             var newSubjectVal = $("select#subjectSelect option:checked").val();
+             if( typeof newSubjectVal == 'undefined' ){
+               return;
+             }else{
+               $("input[name = 'subject']").val(newSubjectVal);
+               console.log($("input[name = 'subject']").val());
+             }
+
+           })
+
+
+           //defaults for eventSchema
+           $("input[name = 'month']").val(<%=month%>);
+           $("input[name = 'year']").val(<%=year%>);
+           $("input[name = 'day']").val(<%=date+1%>);
+
+           $('#hwForm > input').each(function () {
+             console.log("Begin");
+             console.log(this.value);
+            });
+
+             $('#sidebarCollapse').on('click', function () {
+                 $('#sidebar').toggleClass('active');
+             });
+         });
+
+function nextDay(id, image){
+
+  //get rid of the need for clickedButton by just passing through ID
+  // var a = $(clickedButton).closest("td").prop("id");
+  var a = id;
+  console.log("triggered ok", a);
+  $("#"+a+" > form button, button").each(function(){
+    console.log($("#"+a).html);
+    $(this).hide();
+  })
+
+  $("#"+a).append(image);
+
+}
+
+
+     </script>
+
+
+</html>
