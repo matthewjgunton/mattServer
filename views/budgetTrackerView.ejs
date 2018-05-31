@@ -1,0 +1,43 @@
+<html>
+<head>
+  <% include ./partials/mattHead.ejs %>
+  <!-- Our Custom CSS -->
+    <link rel ="stylesheet" href = "/budget.css"></link>
+</head>
+<body>
+
+
+  <h1>Keep tabs on expenses</h1>
+
+  <form method = "post" action = "/budget/budgetTracker">
+    <fieldset>
+      <input name = 'place' placeholder="place"></input>
+    </fieldset>
+
+    <fieldset>
+      $<input name = 'amount' type = 'number' placeholder="amount"></input>
+    </fieldset>
+
+    <fieldset>
+        <select id = "category">
+            <option value = "null">--Budget Category--</option>
+          <%for(var i = 0; i < categories.length; i++){%>
+            <option value = "<%=categories[i].itemName%>"><%=categories[i].itemName%></option>
+          <%}%>
+        </select>
+    </fieldset>
+
+    <input hidden placeholder="Category" name = 'category'></input>
+
+    <button>submit</button>
+  </form>
+
+  <script>
+  $("#category").on('change', function(){
+    $("input[name = 'category']").val($(this).val());
+    console.log($(this).val());
+  })
+  </script>
+
+</body>
+</html>

@@ -10,81 +10,120 @@
 </head>
 
 <body>
-  <h1>MJG Budget</h1>
+  <div class = "wrapper">
 
-  <!--
-  todo:
-  *make it so that I can dynamically change what fields are in here:
-  *set up infrastructure to remind me to fill out budget column
-  -->
+    <div class = "content">
+    <center>
+      <div class = 'row'>
+        <h1>MJG Budget</h1>
+      </div>
 
-  <form method = "post" action = "/budget/newBudgetItem">
-    <input name = "itemName" placeholder="new budget item"></input>
-    <button>Submit</button>
-  </form>
+    <!--
+    todo:
+    actualed column is read only
 
-  <!--This form will be put into each and every one of the td-->
+    we can also see the individual purchases if we click on something
 
-  <table>
-    <tr>
-      <th>Item</th>
-      <th>Budget</th>
-      <th>Actual</th>
-    </tr>
+    -->
 
-    <%var items = items;
-      var budgeted = budgeted;%>
+    <div class = "row">
+      <div class = 'col-sm-12'>
+        <form method = "post" action = "/budget/newBudgetItem">
+          <input name = "itemName" placeholder="new budget item"></input>
+          <button>Submit</button>
+        </form>
+      </div>
+    </div>
+    <!--This form will be put into each and every one of the td-->
 
-      <%for(var m = 0; m < items.length; m++){%>
-        <tr>
-          <form method = "post" action = "/budget/newBudgetItemEntry">
-            <td>
-              <%=items[m].itemName%>
-              <input hidden value = "<%=items[m].itemName%>" name = "item" placeholder="item"></input>
-            </td>
-            <td>
-              <!--how to fix when you have budgeted nothing?-->
-              <%if(budgeted.length == 0){%>
-                <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
-              <%}%>
-              <%for(var g = 0; g < budgeted.length; g++){
+    <div id = "middleSection">
+      <table>
+        <div class = "row">
+          <tr>
+            <th>Item</th>
+            <th>Budget</th>
+            <th>Actual</th>
+            <th>Remaining</th>
 
-                if(items[m].itemName == budgeted[g].item){%>
-                  <input name = "budgeted" value = "<%=budgeted[m].budgeted%>"></input>
-                  <!--this catch all below V cannot realize if a match has already been made-->
-                <%}if(g == budgeted.length - 1){%>
-                  <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
-                <%}%>
-              <%}%>
+          </tr>
+        </div>
 
-            </td>
-            <td>
-              <%if(budgeted.length == 0){%>
-                <input name = "actualed" placeholder="put actual amount" value = ""></input>
-              <%}%>
-              <%for(var g = 0; g < budgeted.length; g++){
-                if(items[m].itemName == budgeted[g].item){
-                  if(budgeted[g].actualed){%>
-                    <input name = "actualed" value = "<%=budgeted[m].actualed%>"></input>
-                  <%}%>
+        <%var items = items;
+          var budgeted = budgeted;%>
 
-                <%}if(g == budgeted.length - 1){%>
-                  <input name = "actualed" placeholder="put actual amount" value = ""></input>
-                <%}%>
-              <%}%>
+          <%for(var m = 0; m < items.length; m++){%>
+            <div class = "row">
+              <tr>
+                <form method = "post" action = "/budget/newBudgetItemEntry">
+                  <td>
+                    <%=items[m].itemName%>
+                    <input hidden value = "<%=items[m].itemName%>" name = "item" placeholder="item"></input>
+                  </td>
+                  <td>
+                    <!--how to fix when you have budgeted nothing?-->
+                    <%if(budgeted.length == 0){%>
+                      <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+                    <%}%>
+                    <%for(var g = 0; g < budgeted.length; g++){
 
-              <button>SET</button>
-            </td>
+                      if(items[m].itemName == budgeted[g].item){%>
+                        <input name = "budgeted" value = "<%=budgeted[g].budgeted%>"></input>
+                        <!--this catch all below V cannot realize if a match has already been made-->
+                        <% g = budgeted.length%>
+                      <% }
 
-          </form>
-        </tr>
+                      if(g == budgeted.length - 1){%>
+                        <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+                      <%}%>
+                    <%}%>
+                  </td>
+                  <td>
+                    <!--it shoudl be a read only thing-->
+                    <%if(budgeted.length == 0){%>
+                      <input name = "actualed" readonly placeholder="put budgeted amount" value = ""></input>
+                    <%}%>
+                    <%for(var g = 0; g < budgeted.length; g++){
 
-      <%}%>
+                      if(items[m].itemName == budgeted[g].item){%>
+
+                        <input name = "actualed" readonly value = "<%=budgeted[g].actualed%>"></input>
+                        <!--this catch all below V cannot realize if a match has already been made-->
+                        <% g = budgeted.length%>
+                      <% }
+
+                      if(g == budgeted.length - 1){%>
+                        <input name = "actualed" readonly placeholder="put budgeted amount" value = ""></input>
+                      <%}%>
+                    <%}%>
 
 
 
-  </table>
+                  </td>
+                  <td>
+                    <span id = 'diff_<%=m%>'></span>
+                    <button>SET</button>
+                  </td>
+
+                </form>
+              </tr>
+            </div>
+
+          <%}%>
+
+
+
+      </table></center>
+    </div>
+  </div>
+</div>
 
 </body>
+
+<script>
+  <%for(var m = 0; m < items.length; m++){%>
+    //how to get the 2 values into the thing
+    $("#diff_<%=m%>").val();
+  <%}%>
+</script>
 
 </html>

@@ -1,5 +1,6 @@
 const budgetModel = require("../models/budgetSchema.js");
 const budgetItemModel = require("../models/budgetItemSchema.js");
+const purchasesModel = require("../models/purchasesModel.js");
 
 exports.budgetHome = function(req, res){
 
@@ -17,6 +18,47 @@ exports.budgetHome = function(req, res){
 
   })
 
+}
+
+exports.budgetTracker = function(req, res){
+  console.log("reached");
+  var dataObj = {};
+  budgetItemModel.find({}).then(function(data){
+    dataObj.categories = data;
+    res.render("budgetTrackerView", dataObj);
+  })
+
+}
+
+exports.budgetTrackerPost = function(req, res){
+
+  var whole = new Date();
+  var year = whole.getFullYear();
+  var month = whole.getMonth()+1;
+
+  budgetModel.find({item: req.body.item, month: month}).then(function(data){
+    if(!data.actualed){
+      var newActualed = req.body.amount;
+    }else{
+      var newActualed = data.actualed + req.body.amount;
+    }
+    console.log(newActualed, "new amount");
+
+    budgetModel.findOneAndUpdate({item: req.body.category, month: month}, {
+      actualed: newActualed
+    }).then(function(){
+      new purchasesModel({
+        item: req.body.category,
+        place: req.body.place,
+        amount: req.body.amount,
+        month: month,
+        year: year
+      }).save().then(function(purchaseData){
+        console.log("we saved this data", purchaseData);
+        res.redirect("/budget/budgetTracker");
+      })
+    })
+  })
 
 }
 

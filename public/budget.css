@@ -1,0 +1,25 @@
+#middleSection{
+    background: linear-gradient(#544b8c 0%,#aab2d4 100%);
+    color: white;
+    position: absolute;
+    top: 100px;
+    left: 10%;
+    height: 100%;
+    width: 80%;
+}
+
+body{
+
+}
+
+th, td{
+  color: white;
+
+}
+
+
+
+input{
+  color: black;
+  box-sizing: border-box;
+}
