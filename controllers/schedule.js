@@ -141,7 +141,8 @@ exports.newEvent = function(req, res){
   month: req.body.month,
   day: req.body.day,
   year: req.body.year,
-  eventDescription: req.body.assignmentDescription
+  eventDescription: req.body.assignmentDescription,
+  repeats: req.body.repeat
 }).save().then(function(data){
   console.log("successfully saved event",data);
   res.redirect("/");

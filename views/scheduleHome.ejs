@@ -13,9 +13,16 @@
 <!-- todo-->
 <!--
 
-at the end of every day, remove that the nextDay thing happened
+*at the end of every day, remove that the nextDay thing happened
 
-need to fix our start to document.ready
+*autofill needs to know when it's the last day of the month
+
+*we need a way to delete subjects
+
+*every other day works now, we just pass a Boolean
+*on the controller we just ask it to also look for if repeat != null
+
+*need to fix our start to document.ready
   right now it fails because a false statement from ejs leaves it blank, stopping javascript from executing
 
  -->
@@ -99,6 +106,19 @@ need to fix our start to document.ready
 
                         <input hidden name = "month" placeholder="month"></input>
                       </li>
+                      <!--later: <li>
+
+                        <a href="#repeatSubmenu" data-toggle="collapse" aria-expanded="false">Repeating</a>
+                        <ul class="collapse list-unstyled" id="repeatSubmenu">
+                          <li>
+                            <select id='repeater'>
+                              <option value = "null">?Repeat when?</option>
+                              <option value='everyOtherDay'>Every Other Day</option>
+                            </select>
+                            <input hidden name = "repeat"></input>
+                          </li>
+                        </ul>
+                      </li> -->
                       <li><input name = "day" placeholder="day"></input></li>
                       <li><input name = "year" placeholder="year"></input></li>
                       <textarea hidden name = "assignmentDescription"></textarea>
@@ -348,6 +368,12 @@ need to fix our start to document.ready
              var newMonthVal = $("select#gMonth1 option:checked").val();
              $("input[name = 'monthDue']").val(newMonthVal);
              console.log($("input[name = 'monthDue']").val());
+           })
+
+           $("#repeater").on('change', function(){
+             var newMonthVal = $("select#repeater option:checked").val();
+             $("input[name = 'monthDue']").val(newMonthVal);
+             console.log($("input[name = 'repeat']").val());
            })
 
            $("#gMonth2").on('change', function(){
