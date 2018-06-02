@@ -2,35 +2,37 @@
 <head>
   <% include ./partials/mattHead.ejs %>
   <!-- Our Custom CSS -->
-    <link rel ="stylesheet" href = "/budget.css"></link>
+    <link rel ="stylesheet" href = "/budgetTracker.css"></link>
 </head>
 <body>
+  <center>
+  <div class = "holder">
+    <h1>Keep tabs on expenses</h1>
+    <a href = "/budget">Overview of Budget</a>
 
+    <form method = "post" action = "/budget/budgetTracker">
+      <fieldset>
+        <input name = 'place' placeholder="place"></input>
+      </fieldset>
 
-  <h1>Keep tabs on expenses</h1>
+      <fieldset>
+        $<input name = 'amount' type = 'number' placeholder="amount"></input>
+      </fieldset>
 
-  <form method = "post" action = "/budget/budgetTracker">
-    <fieldset>
-      <input name = 'place' placeholder="place"></input>
-    </fieldset>
+      <fieldset>
+          <select id = "category">
+              <option value = "null">--Budget Category--</option>
+            <%for(var i = 0; i < categories.length; i++){%>
+              <option value = "<%=categories[i].itemName%>"><%=categories[i].itemName%></option>
+            <%}%>
+          </select>
+      </fieldset>
 
-    <fieldset>
-      $<input name = 'amount' type = 'number' placeholder="amount"></input>
-    </fieldset>
+      <input hidden placeholder="Category" name = 'category'></input>
 
-    <fieldset>
-        <select id = "category">
-            <option value = "null">--Budget Category--</option>
-          <%for(var i = 0; i < categories.length; i++){%>
-            <option value = "<%=categories[i].itemName%>"><%=categories[i].itemName%></option>
-          <%}%>
-        </select>
-    </fieldset>
-
-    <input hidden placeholder="Category" name = 'category'></input>
-
-    <button>submit</button>
-  </form>
+      <button>submit</button>
+    </form>
+  </div>
 
   <script>
   $("#category").on('change', function(){

@@ -1,0 +1,13 @@
+.holder{
+  height: 90%;
+  background: linear-gradient(#aab2d4 0%,#544b8c 100%);
+  width: 90%;
+}
+
+a{
+  color: white;
+}
+
+fieldset{
+  padding: 10px;
+}

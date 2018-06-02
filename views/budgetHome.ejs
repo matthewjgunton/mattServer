@@ -16,12 +16,16 @@
     <center>
       <div class = 'row'>
         <h1>MJG Budget</h1>
+        <a href = "/budget/budgetTracker">Keep Track</a>
       </div>
 
     <!--
     todo:
-    actualed column is read only
 
+    we need to have 3 types:
+      *income
+      *debt
+      *expenditure
     we can also see the individual purchases if we click on something
 
     -->
@@ -109,6 +113,11 @@
             </div>
 
           <%}%>
+          <tr>
+            <td>Total</td>
+            <td id = "budgetedTotals"></td>
+            <td id = "actualedTotals"></td>
+          </tr>
 
 
 
@@ -120,6 +129,42 @@
 </body>
 
 <script>
+
+  $(document).ready(function(){
+    var budgetedValues = [];
+    var actualedValues = [];
+
+    var budgetedTotals = 0;
+    var actualedTotals = 0;
+    <%for(var m = 0; m < budgeted.length; m++ ){
+      if(budgeted[m].budgeted){%>
+        var budgetPiece = <%=budgeted[m].budgeted%>;
+      <%}else{%>
+        var budgetPiece = 0;
+      <%}
+
+      if(budgeted[m].actualed){%>
+        var actualedPiece = <%=budgeted[m].actualed%>;
+      <%}else{%>
+        var actualedPiece = 0;
+      <%}%>
+      actualedValues.push(actualedPiece);
+      budgetedValues.push(budgetPiece);
+
+    <%}%>
+
+    for(var m = 0; m < budgetedValues.length; m++){
+      budgetedTotals += budgetedValues[m];
+    }
+    for(var m = 0; m < actualedValues.length; m++){
+      actualedTotals += actualedValues[m];
+    }
+
+    $("#budgetedTotals").text(budgetedTotals);
+    $("#actualedTotals").text(actualedTotals);
+
+  })
+
   <%for(var m = 0; m < items.length; m++){%>
     //how to get the 2 values into the thing
     $("#diff_<%=m%>").val();
