@@ -1,0 +1,69 @@
+<html>
+
+<head>
+<% include ./partials/mattHead.ejs %>
+</head>
+<body>
+
+<h1>Convert a base:</h1>
+<select id = "baseSet">
+  <option value = 'null'>From:**</option>
+  <option value = '12'>Base 12</option>
+  <option value = '6'>Base 6</option>
+  <option value = '10'>Base 10</option>
+</select>
+<input id = "original" type = 'number'></input>
+
+<p id = "answer"></p>
+</body>
+
+<script>
+
+$("#baseSet").on("change", function(){
+  var base = $("select#baseSet option:checked").val();
+
+  if(base != "null"){
+    var original = $("#original").val();
+    convert(original, base);
+  }
+})
+
+function convert(original, base){
+
+  if(Math.floor(getLogBase(base, original))>0){
+    console.log("triggeredmMJG", Math.floor(getLogBase(base, original)));
+    var multiplyBy = Math.floor(original/base);
+
+    if(multiplyBy== base){
+      multiplyBy = 1;
+    }
+
+    var big = multiplyBy*Math.pow(10, Math.floor(getLogBase(base, original)));
+    console.log(big, "see?")
+  }else{
+    var big = 10*Math.floor((original/base));
+  }
+
+  var begin = original%base;
+
+  //check for 10^x
+
+
+  if(big > 0){
+    var write = big+begin
+  }else{
+    var write = begin;
+  }
+
+  $("#answer").append("your answer ", write,"<br>");
+
+
+}
+
+function getLogBase(base, x){
+  return Math.log(x)/Math.log(base);
+}
+
+</script>
+
+</html>
