@@ -1,13 +1,106 @@
 <html>
 
-<head></head>
+<head>
+<% include ./partials/mattHead.ejs %>
+<link rel = "stylesheet" href = "/index.css"></link>
+</head>
 
 <body>
-<h1>
-  Matthew J Gunton's Server
-</h1>
 
-<a href = "/auth/google">Log in to Google</a>
+  <div class = "wrapper">
+
+    <nav class="navbar navbar-inverse">
+    	<div class="container-fluid">
+    		<div class="navbar-header">
+    			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<h1 class="sentinelButton" data-hover="Home" >
+    				<a href="/">
+    				<span>The Gunton Server</span></a></h1>
+    		</div>
+    		<div class="collapse navbar-collapse menuItem" id="myNavbar">
+    			<ul class="nav navbar-nav navbar-right">
+    				<!-- <li><a href="/alert">Alerts</a> -->
+            <li><a href = "#about">about MJG</a></li>
+            <li><a href = "#projects">See Projects</a></li>
+
+
+
+    				<!-- <li><a href="/student/report/tracking/">Check-in</a> -->
+    				<!-- <li><a href="/student/report/signouts/">Signout</a> -->
+    			</ul>
+    		</div>
+    	</div>
+    </nav>
+
+
+    <h1>
+      Matthew J Gunton's Server
+    </h1>
+
+    <div class = "row" id = "about">
+      <!--we'll style this like the profile card we used for Sentinel-->
+      <center><h2>ABOUT</h2></center>
+      <div class = "left col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-4">
+        <h4>Matthew J Gunton</h4>
+        <img width = "100%" src = "/profile.jpg"></img>
+      </div>
+      <div class = "right col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-8">
+        <br><br><br><br><br><br>
+        <p>Matthew J Gunton is currently attending Lehigh University and enrolled in the Computer Science and Business program. Previously he attended Lawrence High School for freshmen year where he was number one in his class. Transferring to the Lawrenceville School he then graduated Cum Laude. He enjoys making programs that help make boring tasks faster, such as when he created a program to help his family keep track of who fed and walked their dog. He also loves to work with hardware, having recently started working more closely with arduino and raspberry pi units.</p>
+      </div>
+    </div>
+
+
+    <div id = "projects">
+      <center><h2>Projects</h2></center>
+      <ul>
+        <div class = "row">
+          <li>
+            <div class = "col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-4">
+              <iframe width = "100%"src = "http://eyecareforchildren.com"></iframe><br>
+              <a href = "http://eyecareforchildren.com">Eye Care for Children</a>
+            </div>
+            <div class = "right col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-8">
+              <p>Gunton designed this website to help his mother's patients more easily find the information they needed for surgeries. While the design is simple, it is very easy to use, and it is his first project where bootstrap development was a major focus.</p>
+            </div>
+          </li>
+        </div>
+        <div class = "row">
+          <li>
+            <div class = "right col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-8">
+              <p>This was Gunton's first major backend project. The idea was to set up a marketplace where students who went to his high school could find books. Having been recruited by fellow classmate Max Drojjin, Gunton completely redesigned the backend. The goal was to be efficient when using images, and to create a powerful security system that could protect all the new information. Working alongside front-end developer Eric Cheng, they made it into a phenomenom on campus. Selling reshwap t-shirts, integration with other clubs, and public contests helped keep everyone engaged with the system. When Gunton graduated and handed off the system to the next generation of developers, the site had far-surpassed the previous largest number of items for sale on the site.</p>
+            </div>
+            <div class = "col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-4">
+              <img width = "100%"src = "https://reshwap.com/Reshwap%20Logo%20Black.png"></img><br>
+              <a href = "https://reshwap.com">Reshwap @ The Lawrenceville School</a>
+            </div>
+          </li>
+        </div>
+        <div class = "row">
+          <li>
+            <div class = "col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-4">
+              <iframe width = "100%" src = "https://sentinel.lawrenceville.org"></iframe>
+              <a href = "https://sentinel.lawrenceville.org">Sentinel V</a>
+            </div>
+            <div class = "right col-sm-12 col-xs-12 col-md-6 col-lg-6 col-xl-8">
+              <p>Working for the Lawrenceville School, Gunton helped significantly upgrade the Sentinel Program. Originally built by Dr Keith Voss, Sentinel helps the boarding school keep track of their students when they decide to go off campus. Gunton spent 10 weeks working intensely on the project, with most of his energy focused on creating a new User Interface for the program. In addition, many other key features where created or planned during this time such as "Fast Out"––a way for students' defaults to be saved––as well as creating the framework for a settings page that allows students to personalize and thus make Sentinel work better for them.</p>
+            </div>
+          </li>
+        </div>
+      </ul>
+    </div>
+
+    <div id = "">
+    </div>
+
+    <a href = "/auth/google">Log in to Google</a>
+
+
 
 </body>
 
