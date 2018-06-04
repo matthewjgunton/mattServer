@@ -22,10 +22,7 @@
     <!--
     todo:
 
-    we need to have 3 types:
-      *income
-      *debt
-      *expenditure
+    we need to find a better way to stylize this table
     we can also see the individual purchases if we click on something
 
     -->
@@ -34,6 +31,15 @@
       <div class = 'col-sm-12'>
         <form method = "post" action = "/budget/newBudgetItem">
           <input name = "itemName" placeholder="new budget item"></input>
+          <!--*eventually let the types be editable*-->
+          <select id = "itemTypes">
+            <option value = "income"></option>
+            <option value = "investment"></option>
+            <option value = "debt"></option>
+            <option value = "loans"></option>
+            <option value = "expenses"></option>
+          </select>
+          <input name = "type" hidden></input>
           <button>Submit</button>
         </form>
       </div>
@@ -53,50 +59,57 @@
         </div>
 
         <%var items = items;
-          var budgeted = budgeted;%>
+          var budgeted = budgeted;
+          var itemTypes = ["income", "investment", "debt", "loans", "expenses"];%>
 
-          <%for(var m = 0; m < items.length; m++){%>
+          <!--we'll have a table for each item type-->
+            <%for(var type = 0; type < itemTypes.length; type++){%>
+              <%for(var m = 0; m < items.length; m++){%>
+            <!--we need the following:
+              *Now, we want division between them
+          -->
+          <%if(items[m].type == itemTypes[type]){%>
             <div class = "row">
               <tr>
                 <form method = "post" action = "/budget/newBudgetItemEntry">
                   <td>
-                    <%=items[m].itemName%>
+                    <%=items[m].itemName%>-<%=itemTypes[type]%>
                     <input hidden value = "<%=items[m].itemName%>" name = "item" placeholder="item"></input>
                   </td>
                   <td>
                     <!--how to fix when you have budgeted nothing?-->
                     <%if(budgeted.length == 0){%>
-                      <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+                      <input id = "budget<%=m%>" name = "budgeted" placeholder="put budgeted amount" value = ""></input>
                     <%}%>
                     <%for(var g = 0; g < budgeted.length; g++){
 
                       if(items[m].itemName == budgeted[g].item){%>
-                        <input name = "budgeted" value = "<%=budgeted[g].budgeted%>"></input>
+                        <input id = "budget<%=m%>" name = "budgeted" value = "<%=budgeted[g].budgeted%>"></input>
                         <!--this catch all below V cannot realize if a match has already been made-->
                         <% g = budgeted.length%>
                       <% }
 
                       if(g == budgeted.length - 1){%>
-                        <input name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+                        <input id = "budget<%=m%>" name = "budgeted" placeholder="put budgeted amount" value = ""></input>
                       <%}%>
                     <%}%>
                   </td>
                   <td>
                     <!--it shoudl be a read only thing-->
                     <%if(budgeted.length == 0){%>
-                      <input name = "actualed" readonly placeholder="put budgeted amount" value = ""></input>
+                      <input id = "actual<%=m%>" name = "actualed" readonly placeholder="the actual amount will appear here" value = ""></input>
                     <%}%>
                     <%for(var g = 0; g < budgeted.length; g++){
 
                       if(items[m].itemName == budgeted[g].item){%>
 
-                        <input name = "actualed" readonly value = "<%=budgeted[g].actualed%>"></input>
+                        <input id = "actual<%=m%>" name = "actualed" readonly value = "<%=budgeted[g].actualed%>"></input>
                         <!--this catch all below V cannot realize if a match has already been made-->
                         <% g = budgeted.length%>
                       <% }
 
                       if(g == budgeted.length - 1){%>
-                        <input name = "actualed" readonly placeholder="put budgeted amount" value = ""></input>
+                        <input id = "actual<%=m%>" name = "actualed" readonly placeholder="the actual amount will appear here" value = ""></input>
                       <%}%>
                     <%}%>
 
@@ -112,7 +125,14 @@
               </tr>
             </div>
 
+              <%}%>
           <%}%>
+        <%}%>
+
+
+
+          <!---BELOW THIS WORKS FINE-->
+
           <tr>
             <td>Total</td>
             <td id = "budgetedTotals"></td>
@@ -131,34 +151,50 @@
 <script>
 
   $(document).ready(function(){
-    var budgetedValues = [];
-    var actualedValues = [];
+
+    var itemNumber = 0;
+    $("#itemTypes > option").each(function(){
+      $(this).text($(this).val());
+      if(itemNumber == 0){
+          $("input[name = 'type']").val($(this).val());
+      }
+      itemNumber++;
+    })
+
+    $("#itemTypes").on('change', function(){
+      var newTypeVal = $("select#itemTypes option:checked").val();
+      $("input[name = 'type']").val(newTypeVal);
+      console.log($("input[name = 'type']").val());
+    })
+
+    <%var budgetedValues = [];
+    var actualedValues = [];%>
 
     var budgetedTotals = 0;
     var actualedTotals = 0;
     <%for(var m = 0; m < budgeted.length; m++ ){
-      if(budgeted[m].budgeted){%>
-        var budgetPiece = <%=budgeted[m].budgeted%>;
-      <%}else{%>
+      if(budgeted[m].budgeted){
+        var budgetPiece = budgeted[m].budgeted;
+      }else{
         var budgetPiece = 0;
-      <%}
+      }
 
-      if(budgeted[m].actualed){%>
-        var actualedPiece = <%=budgeted[m].actualed%>;
-      <%}else{%>
+      if(budgeted[m].actualed){
+        var actualedPiece = budgeted[m].actualed;
+      }else{
         var actualedPiece = 0;
-      <%}%>
+      }
       actualedValues.push(actualedPiece);
       budgetedValues.push(budgetPiece);
 
-    <%}%>
+    }%>
 
-    for(var m = 0; m < budgetedValues.length; m++){
-      budgetedTotals += budgetedValues[m];
-    }
-    for(var m = 0; m < actualedValues.length; m++){
-      actualedTotals += actualedValues[m];
-    }
+    <%for(var m = 0; m < budgetedValues.length; m++){%>
+      budgetedTotals += <%=budgetedValues[m]%>;
+    <%}%>
+    <%for(var m = 0; m < actualedValues.length; m++){%>
+      actualedTotals += <%=actualedValues[m]%>;
+    <%}%>
 
     $("#budgetedTotals").text(budgetedTotals);
     $("#actualedTotals").text(actualedTotals);
@@ -167,7 +203,18 @@
 
   <%for(var m = 0; m < items.length; m++){%>
     //how to get the 2 values into the thing
-    $("#diff_<%=m%>").val();
+    if($("#budget<%=m%>").val() && $("#actual<%=m%>").val()){
+      var diff = $("#budget<%=m%>").val() - $("#actual<%=m%>").val();
+    }
+    else if (!$("#budget<%=m%>").val()){
+      var diff = null;
+    }
+    else if (!$("#actual<%=m%>").val()){
+      var diff = $("#budget<%=m%>").val();
+    }
+    console.log(diff);
+
+    $("#diff_<%=m%>").text(diff);
   <%}%>
 </script>
 

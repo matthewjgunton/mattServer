@@ -41,7 +41,7 @@
               <li>
                   <a href="#hwSubmenu" data-toggle="collapse" aria-expanded="false">Homework</a>
                   <ul class="collapse list-unstyled" id="hwSubmenu">
-                    <form id= "hwForm" method = "post" action = "/hw">
+                    <form id= "hwForm" method = "post" action = "/schedule/hw">
                       <li>
                         <select id = "subjectSelect">
                           <!--will have to make sure this first option is never submitted-->
@@ -84,7 +84,7 @@
               <li>
                   <a href="#eventSubmenu" data-toggle="collapse" aria-expanded="false">Event</a>
                   <ul class="collapse list-unstyled" id="eventSubmenu">
-                    <form action = "/event" method = 'post'>
+                    <form action = "/schedule/event" method = 'post'>
                       <li><input required name = "eventName" placeholder="Event"></input></li>
                       <li>
                         <select id='gMonth2'>
@@ -130,7 +130,7 @@
               <li>
                   <a href="#subjectSubmenu" data-toggle="collapse" aria-expanded="false">Subject</a>
                   <ul class="collapse list-unstyled" id="subjectSubmenu">
-                    <form action = "/subject" method = "post">
+                    <form action = "/schedule/subject" method = "post">
                       <li><input required name = "subjectNew" placeholder="subject name"></input></li>
                       <button class = "submitSubject">Create New Subject</button>
                     </form>
@@ -244,7 +244,7 @@
                                 <td><%=dayDue%>:<%=entries[subject][m].assignmentName%></td>
                                 <td class="checkmarks" id = "<%=entries[subject][m]._id%>"><!-- we'll create 3 buttons (delete) (checkmark) (Next) -->
 
-                                  <form method = "post" action = "/complete">
+                                  <form method = "post" action = "/schedule/complete">
                                     <input hidden value = "<%=entries[subject][m].subject%>" name = "subject"></input>
                                     <input hidden value = "<%=entries[subject][m].dayDue%>" name = "dayDue"></input>
                                     <input hidden value = "<%=entries[subject][m].assignmentName%>" name = "assignmentName"></input>
@@ -254,7 +254,7 @@
 
                                     <button onclick="nextDay(this)">→</button>
 
-                                  <form method = "post" action = "/delete">
+                                  <form method = "post" action = "/schedule/delete">
                                     <input hidden value = "<%=entries[subject][m].subject%>" name = "subject"></input>
                                     <input hidden value = "<%=entries[subject][m].dayDue%>" name = "dayDue"></input>
                                     <input hidden value = "<%=entries[subject][m].assignmentName%>" name = "assignmentName"></input>

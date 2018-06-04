@@ -64,7 +64,8 @@ exports.budgetTrackerPost = function(req, res){
 
 exports.postBudgetItem = function(req, res){
   new budgetItemModel({
-      itemName: req.body.itemName
+      itemName: req.body.itemName,
+      type: req.body.type
   }).save().then(function(data){
     console.log("adding new budget item", data);
     res.redirect("/budget");

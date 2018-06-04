@@ -3,23 +3,25 @@ var sendRoutes = express.Router();//required to make this separate file works
 
 var controller = require("../controllers/budget.js");
 
-
-//we need to add in the infrastructure on front end to move between pages
-
-
 sendRoutes.route("/")
-  .get(controller.budgetHome);
+  .get(isLoggedIn, controller.budgetHome);
 
 sendRoutes.route("/newBudgetItem")
-  .post(controller.postBudgetItem);
+  .post(isLoggedIn, controller.postBudgetItem);
 
 sendRoutes.route("/newBudgetItemEntry")
-  .post(controller.postBudgetItemEntry);
+  .post(isLoggedIn, controller.postBudgetItemEntry);
 
 sendRoutes.route("/budgetTracker")
-  .get(controller.budgetTracker)
-  .post(controller.budgetTrackerPost);
+  .get(isLoggedIn, controller.budgetTracker)
+  .post(isLoggedIn, controller.budgetTrackerPost);
 
-
+  function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+      console.log("person logged in "+req.user.matthew.name);
+      return next();
+    }
+      res.redirect('/')
+  }
 
 module.exports = sendRoutes;

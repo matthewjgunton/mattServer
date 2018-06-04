@@ -2,7 +2,12 @@ const hwModel = require("../models/hwSchema.js");
 const eventModel = require("../models/eventSchema.js");
 const subjectModel = require("../models/subjectSchema.js");
 
-const config = require("../config.json");
+const config = require("../config/config.json");
+
+var User = require("../models/users.js");//allows us to search the userbase, and register new ones
+
+var passport = require("passport");//because we cannot pass it through on app.js
+
 
 exports.getSchedule = function(req, res){
   var dataObj = {};
@@ -112,7 +117,7 @@ exports.newSubject = function(req, res){
     subject: req.body.subjectNew
   }).save().then(function(data){
     console.log("successfully saved subject",data);
-    res.redirect("/");
+    res.redirect("/schedule");
   })
 }
 
@@ -128,7 +133,7 @@ exports.newHW = function(req, res){
     isHandedIn: false,
   }).save().then(function(data){
     console.log("successfully saved homework", data);
-    res.redirect("/");
+    res.redirect("/schedule");
   })
 }
 
@@ -145,7 +150,7 @@ exports.newEvent = function(req, res){
   repeats: req.body.repeat
 }).save().then(function(data){
   console.log("successfully saved event",data);
-  res.redirect("/");
+  res.redirect("/schedule");
 });
 }
 
@@ -159,7 +164,7 @@ exports.completeHW = function(req, res){
     isCompleted: true
   }).then(function(){
     console.log("the event", req.body.assignmentName, " was completed");
-    res.redirect("/");
+    res.redirect("/schedule");
   })
 }
 
@@ -173,6 +178,6 @@ exports.deleteHW = function(req, res){
       isCancelled: true
   }).then(function(){
     console.log("the event", req.body.assignmentName, " was cancelled");
-    res.redirect("/");
+    res.redirect("/schedule");
   })
 }

@@ -4,24 +4,30 @@ var sendRoutes = express.Router();//required to make this separate file works
 var controller = require("../controllers/schedule.js");
 
 sendRoutes.route("/")
-  .get(controller.getSchedule)
-  .post(controller.postItem);
+  .get(isLoggedIn, controller.getSchedule)
+  .post(isLoggedIn, controller.postItem);
 
 sendRoutes.route("/subject")
-  .post(controller.newSubject);
+  .post(isLoggedIn, controller.newSubject);
 
 sendRoutes.route("/hw")
-  .post(controller.newHW);
+  .post(isLoggedIn, controller.newHW);
 
 sendRoutes.route("/event")
-  .post(controller.newEvent);
+  .post(isLoggedIn, controller.newEvent);
 
 sendRoutes.route("/complete")
-  .post(controller.completeHW);
+  .post(isLoggedIn, controller.completeHW);
 
 sendRoutes.route("/delete")
-  .post(controller.deleteHW);
+  .post(isLoggedIn, controller.deleteHW);
 
-
+  function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+      console.log("person logged in "+req.user.matthew.name);
+      return next();
+    }
+      res.redirect('/')
+  }
 
 module.exports = sendRoutes;

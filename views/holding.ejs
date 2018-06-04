@@ -1,0 +1,60 @@
+***
+
+<%for(var m = 0; m < items.length; m++){%>
+  <div class = "row">
+    <tr>
+      <form method = "post" action = "/budget/newBudgetItemEntry">
+        <td>
+          <%=items[m].itemName%>
+          <input hidden value = "<%=items[m].itemName%>" name = "item" placeholder="item"></input>
+        </td>
+        <td>
+          <!--how to fix when you have budgeted nothing?-->
+          <%if(budgeted.length == 0){%>
+            <input id = "budget<%=m%>" name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+          <%}%>
+          <%for(var g = 0; g < budgeted.length; g++){
+
+            if(items[m].itemName == budgeted[g].item){%>
+              <input id = "budget<%=m%>" name = "budgeted" value = "<%=budgeted[g].budgeted%>"></input>
+              <!--this catch all below V cannot realize if a match has already been made-->
+              <% g = budgeted.length%>
+            <% }
+
+            if(g == budgeted.length - 1){%>
+              <input id = "budget<%=m%>" name = "budgeted" placeholder="put budgeted amount" value = ""></input>
+            <%}%>
+          <%}%>
+        </td>
+        <td>
+          <!--it shoudl be a read only thing-->
+          <%if(budgeted.length == 0){%>
+            <input id = "actual<%=m%>" name = "actualed" readonly placeholder="put budgeted amount" value = ""></input>
+          <%}%>
+          <%for(var g = 0; g < budgeted.length; g++){
+
+            if(items[m].itemName == budgeted[g].item){%>
+
+              <input id = "actual<%=m%>" name = "actualed" readonly value = "<%=budgeted[g].actualed%>"></input>
+              <!--this catch all below V cannot realize if a match has already been made-->
+              <% g = budgeted.length%>
+            <% }
+
+            if(g == budgeted.length - 1){%>
+              <input id = "actual<%=m%>" name = "actualed" readonly placeholder="put budgeted amount" value = ""></input>
+            <%}%>
+          <%}%>
+
+
+
+        </td>
+        <td>
+          <span id = 'diff_<%=m%>'></span>
+          <button>SET</button>
+        </td>
+
+      </form>
+    </tr>
+  </div>
+
+<%}%>

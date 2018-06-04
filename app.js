@@ -1,10 +1,14 @@
 var express = require("express");
 var app = express();
+var session = require('express-session');//to store information between links from user
+var MongoStore = require('connect-mongo')(session);
+const mongoose = require("mongoose");
+var passport = require("passport");//for identification
 
 app.set("view engine", "ejs");
 
 //connecting to db
-const mongoose = require("mongoose");
+
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/mPresent", function(err){
   if(err){
@@ -15,16 +19,23 @@ mongoose.connect("mongodb://localhost/mPresent", function(err){
 	}
 });
 
-require("./dbConfig.js");
+require("./config/dbConfig.js");
+require("./config/passport.js")(passport);
 
 var bodyParser = require("body-parser");
 var urlencoderParser = bodyParser.urlencoded({extended:false});
+
 app.use(urlencoderParser);//it now says body works
+app.use(passport.initialize());//starts passport
+app.use(passport.session());//allows authentication info to pass between pages
 
 app.use(express.static(__dirname+"/public"));
 
+const rtAuth = require("./routes/rtAuth.js");
+app.use("/", rtAuth);
+
 const rtSchedule = require("./routes/rtPlanner.js");
-app.use("/", rtSchedule);
+app.use("/schedule", rtSchedule);
 
 const rtBudget = require("./routes/rtBudget.js");
 app.use("/budget", rtBudget);
