@@ -10,6 +10,7 @@ var passport = require("passport");//because we cannot pass it through on app.js
 
 
 exports.getSchedule = function(req, res){
+  
   var dataObj = {};
   var whole = new Date();
   var year = whole.getFullYear();

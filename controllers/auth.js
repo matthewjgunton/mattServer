@@ -5,10 +5,9 @@ var passport = require("passport");//because we cannot pass it through on app.js
 exports.googleLogin = passport.authenticate('google', {scope: ['profile', 'email']});
 
 exports.googleCallback = passport.authenticate('google', {
-  successRedirect: '/schedule',
-  failureRedirect: '/',
-  failureFlash: true
-})
+    successRedirect: '/schedule',
+    failureRedirect: '/',
+  })
 
 exports.indexPage = function(req, res){
   res.render("index");

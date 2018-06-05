@@ -23,11 +23,12 @@ sendRoutes.route("/delete")
   .post(isLoggedIn, controller.deleteHW);
 
   function isLoggedIn(req, res, next){
+    console.log("is logged in? ",req.user);
     if(req.isAuthenticated()){
       console.log("person logged in "+req.user.matthew.name);
       return next();
     }
-      res.redirect('/')
+      res.redirect('/');
   }
 
 module.exports = sendRoutes;

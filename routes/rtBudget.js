@@ -21,6 +21,7 @@ sendRoutes.route("/budgetTracker")
       console.log("person logged in "+req.user.matthew.name);
       return next();
     }
+    console.log("give it up");
       res.redirect('/')
   }
 
