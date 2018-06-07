@@ -2,9 +2,20 @@ const budgetModel = require("../models/budgetSchema.js");
 const budgetItemModel = require("../models/budgetItemSchema.js");
 const purchasesModel = require("../models/purchasesModel.js");
 
+const config = require("../config/config.json");
+
 exports.budgetHome = function(req, res){
 
   var dataObj = {};
+  var monthsArray = ["January","February","March","April","May","June","July",
+            "August","September","October","November","December"];
+
+  var whole = new Date();
+  var month = whole.getMonth();
+
+  dataObj.pages = config.pages;
+
+  dataObj.month = monthsArray[month];
 
   budgetItemModel.find({}).then(function(data){
     dataObj.items = data;
@@ -55,7 +66,7 @@ exports.budgetTrackerPost = function(req, res){
         year: year
       }).save().then(function(purchaseData){
         console.log("we saved this data", purchaseData);
-        res.redirect("/budget/budgetTracker");
+        res.redirect("/budget");
       })
     })
   })

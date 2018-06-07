@@ -7,7 +7,7 @@ exports.googleLogin = passport.authenticate('google', {scope: ['profile', 'email
 exports.googleCallback = passport.authenticate('google', {
     successRedirect: '/schedule',
     failureRedirect: '/',
-  })
+    })
 
 exports.indexPage = function(req, res){
   res.render("index");

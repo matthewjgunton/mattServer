@@ -1,6 +1,7 @@
 const hwModel = require("../models/hwSchema.js");
 const eventModel = require("../models/eventSchema.js");
 const subjectModel = require("../models/subjectSchema.js");
+const budgetItemModel = require("../models/budgetItemSchema.js");
 
 const config = require("../config/config.json");
 
@@ -10,7 +11,7 @@ var passport = require("passport");//because we cannot pass it through on app.js
 
 
 exports.getSchedule = function(req, res){
-  
+
   var dataObj = {};
   var whole = new Date();
   var year = whole.getFullYear();
@@ -21,6 +22,8 @@ exports.getSchedule = function(req, res){
   var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   dataObj.daysInMonth = daysInMonth[month - 1];
+
+  dataObj.pages = config.pages;
 
   dataObj.year = year;
   dataObj.showDays = config.days;
@@ -77,9 +80,14 @@ exports.getSchedule = function(req, res){
 
       eventModel.find({month: month, day: {$gt: date-1, $lt: date+dataObj.showDays }}).then(function(eventData){
         dataObj.events = eventData;
+
+        budgetItemModel.find({}).then(function(budgetData){
+          dataObj.categories = budgetData;
+          res.status(201).render("scheduleHome", dataObj);
+        })
         //console.log("***",dataObj.entries, "is data being successfully passed?\n");
 
-        res.status(201).render("scheduleHome", dataObj);
+
 
       })
 

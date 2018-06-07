@@ -1,0 +1,10 @@
+
+BEFORE LAUNCH:
+
+1) longer snippet on eyecareforchildren
+2) way to delete items & subjects & finish schedule
+
+LR:
+
+1) FredIsFed incorporation
+2) Create universal navbar

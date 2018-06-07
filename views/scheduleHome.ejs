@@ -27,7 +27,6 @@
 
  -->
 
-</table>
 
   <div class="wrapper">
       <!-- Sidebar Holder -->
@@ -37,7 +36,7 @@
           </div>
 
           <ul class="list-unstyled components">
-              <p>Add an Entry</p>
+
               <li>
                   <a href="#hwSubmenu" data-toggle="collapse" aria-expanded="false">Homework</a>
                   <ul class="collapse list-unstyled" id="hwSubmenu">
@@ -136,7 +135,27 @@
                     </form>
                   </ul>
               </li>
-              <li><a href = "/budget">Budget</a></li>
+              <li>
+                <a href="#budgetTrackerSubmenu" data-toggle="collapse" aria-expanded="false">Add Purchase</a>
+                <form method = "post" action = "/budget/budgetTracker">
+                  <ul class="collapse list-unstyled" id="budgetTrackerSubmenu">
+                    <li><input name = 'place' placeholder="place"></input></li>
+                    <li>$<input name = 'amount' type = 'number' placeholder="amount"></input></li>
+                    <li>
+                      <select id = "category">
+                          <option value = "null">--Budget Category--</option>
+                        <%for(var i = 0; i < categories.length; i++){%>
+                          <option value = "<%=categories[i].itemName%>"><%=categories[i].itemName%></option>
+                        <%}%>
+                      </select>
+                    </li>
+                    <input hidden placeholder="Category" name = 'category'></input>
+                    <li><button>submit</button></li>
+                  </ul>
+                </form>
+              </li>
+              <li><a href = "/budget">Go To Budget</a></li>
+
 
           </ul>
 
@@ -316,10 +335,7 @@
 
 </body>
 
-    <!-- jQuery CDN -->
-     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-     <!-- Bootstrap Js CDN -->
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<% include ./partials/bottom.ejs %>
 
      <script type="text/javascript">
 

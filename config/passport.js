@@ -35,7 +35,7 @@ passport.use(new googleStrategy({
           return done(err);
         }
         if(user){
-          console.log("returning user");
+          console.log("returning user", user);
           return done(null, user);
         }else{
           if(profile.name.familyName == "Gunton"){
