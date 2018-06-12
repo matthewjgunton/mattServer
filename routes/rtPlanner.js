@@ -22,6 +22,9 @@ sendRoutes.route("/complete")
 sendRoutes.route("/delete")
   .post(isLoggedIn, controller.deleteHW);
 
+sendRoutes.route("/postpone")
+  .post(isLoggedIn, controller.postponeHW);
+
   function isLoggedIn(req, res, next){
     console.log("is logged in? ",req.user);
     if(req.isAuthenticated()){

@@ -76,6 +76,8 @@ exports.getSchedule = function(req, res){
       //assignment is the second []
       dataObj.entries = entries;
 
+      console.log("entries", entries);
+
       //there is some unfulfilled promise here, that is throwing off the redirect, but fine on reload
 
       eventModel.find({month: month, day: {$gt: date-1, $lt: date+dataObj.showDays }}).then(function(eventData){
@@ -187,6 +189,21 @@ exports.deleteHW = function(req, res){
       isCancelled: true
   }).then(function(){
     console.log("the event", req.body.assignmentName, " was cancelled");
+    res.redirect("/schedule");
+  })
+}
+
+exports.postponeHW = function(req, res){
+
+  //we'll have to then have a function that at midnight every day makes isPostponedForToday = null
+  hwModel.findOneAndUpdate({
+    subject: req.body.subject,
+    assignmentName: req.body.assignmentName,
+    dayDue: req.body.dayDue,
+  },{
+      isPostponedForToday: true
+  }).then(function(){
+    console.log("the event", req.body.assignmentName, " was postponed");
     res.redirect("/schedule");
   })
 }

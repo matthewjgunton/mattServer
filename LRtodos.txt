@@ -3,6 +3,7 @@ BEFORE LAUNCH:
 
 1) longer snippet on eyecareforchildren
 2) way to delete items & subjects & finish schedule
+3) req.flash added into everything
 
 LR:
 

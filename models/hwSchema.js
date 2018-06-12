@@ -12,7 +12,8 @@ const mPresentSchema = new schema ({
   assignmentDescription: String,
   isCompleted: Boolean,
   isHandedIn: Boolean,
-  isCancelled: Boolean
+  isCancelled: Boolean,
+  isPostponedForToday: Boolean
 });
 
 const mattModel = mongoose.model("hwModel", mPresentSchema);

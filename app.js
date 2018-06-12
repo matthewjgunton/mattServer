@@ -40,15 +40,24 @@ app.use(passport.session());//allows authentication info to pass between pages
 app.use(express.static(__dirname+"/public"));
 
 const rtAuth = require("./routes/rtAuth.js");
+const rtSchedule = require("./routes/rtPlanner.js");
+const rtBudget = require("./routes/rtBudget.js");
+const rtOneOffs = require("./routes/rtOneOffs.js");
+
+//enabling an offline development mode
+if (process.env.offLINEMODE === "ON") {
+	console.log("OFFLINE DEVELOPER MODE ACTIVATED");
+	Object.assign(rtSchedule, require("./offlineMode/rtSchedule.js") );
+  Object.assign(rtBudget, require("./offlineMode/rtBudget.js") );
+
+}
+
 app.use("/", rtAuth);
 
-const rtSchedule = require("./routes/rtPlanner.js");
 app.use("/schedule", rtSchedule);
 
-const rtBudget = require("./routes/rtBudget.js");
 app.use("/budget", rtBudget);
 
-const rtOneOffs = require("./routes/rtOneOffs.js");
 app.use("/mprojects", rtOneOffs);
 
 app.listen(5000);

@@ -13,6 +13,10 @@
 <!-- todo-->
 <!--
 
+*1) momentum needs to work
+  a) we need the next day key to work
+  b) we need the checkmark & delete keys to add a new class to the texts
+
 *at the end of every day, remove that the nextDay thing happened
 
 *autofill needs to know when it's the last day of the month
@@ -130,7 +134,7 @@
                   <a href="#subjectSubmenu" data-toggle="collapse" aria-expanded="false">Subject</a>
                   <ul class="collapse list-unstyled" id="subjectSubmenu">
                     <form action = "/schedule/subject" method = "post">
-                      <li><input required name = "subjectNew" placeholder="subject name"></input></li>
+                      <li><input autocomplete="off" required name = "subjectNew" placeholder="subject name"></input></li>
                       <button class = "submitSubject">Create New Subject</button>
                     </form>
                   </ul>
@@ -140,7 +144,7 @@
                 <form method = "post" action = "/budget/budgetTracker">
                   <ul class="collapse list-unstyled" id="budgetTrackerSubmenu">
                     <li><input name = 'place' placeholder="place"></input></li>
-                    <li>$<input name = 'amount' type = 'number' placeholder="amount"></input></li>
+                    <li>$<input autocomplete="off" name = 'amount' type = 'number' placeholder="amount"></input></li>
                     <li>
                       <select id = "category">
                           <option value = "null">--Budget Category--</option>
@@ -253,12 +257,19 @@
 
                           <!--only the first day is editable-->
                           <!--issue is it is not allowing -->
-                          <%if(i == 0){%>
-                            <%var dayDue = weekDays[dayOfWeek+(entries[subject][m].dayDue - days[0])];%>
-                            <%if(dayDue == weekDays[dayOfWeek]){%>
+                          <%if(i == 0){
 
-                            <%}else{%>
-                            <%if(entries[subject][m].assignmentName != 'blank'){%>
+                            var numberDay = dayOfWeek+(entries[subject][m].dayDue - days[0]);
+
+                            if (numberDay >= weekDays.length){
+                              var dayDue = weekDays[numberDay - weekDays.length];
+                            }else{
+                              var dayDue = weekDays[dayOfWeek+(entries[subject][m].dayDue - days[0])];
+                            }
+                            if(dayDue == weekDays[dayOfWeek]){
+
+                            }else{
+                            if(entries[subject][m].assignmentName != 'blank'){%>
                               <tr>
                                 <td><%=dayDue%>:<%=entries[subject][m].assignmentName%></td>
                                 <td class="checkmarks" id = "<%=entries[subject][m]._id%>"><!-- we'll create 3 buttons (delete) (checkmark) (Next) -->
@@ -270,8 +281,15 @@
                                     <button>✔</button>
                                   </form>
 
+                                <%if(entries[subject][m].dayDue != days[1]){%>
+                                  <form method = "post" action = "/schedule/postpone">
+                                    <input hidden value = "<%=entries[subject][m].subject%>" name = "subject"></input>
+                                    <input hidden value = "<%=entries[subject][m].dayDue%>" name = "dayDue"></input>
+                                    <input hidden value = "<%=entries[subject][m].assignmentName%>" name = "assignmentName"></input>
+                                    <button>→</button>
+                                  </form>
+                                <%}%>
 
-                                    <button onclick="nextDay(this)">→</button>
 
                                   <form method = "post" action = "/schedule/delete">
                                     <input hidden value = "<%=entries[subject][m].subject%>" name = "subject"></input>
@@ -341,21 +359,21 @@
 
          $(document).ready(function () {
 
-           <%for(var i = 0 ; i < days.length; i++){%>
-             <%for(var m = 0; m < subjects.length; m++){%>
-               <%for(var g=0; g < entries[m].length; g++){%>
-                 //need to find some other way to do this
-                 //if it comes out to false, it leaves nothing
-                 //this makes the javascript fail
 
-               if(<%=entries[m][g].isCompleted%>){
-                 nextDay(<%=entries[m][g]._id%>, "✔");
-               }
-               if(<%=entries[m][g].isCancelled%>){
-                 nextDay(<%=entries[m][g]._id%>, "X");
-               }
+           <%for(var m = 0; m < subjects.length; m++){%>
+             <%for(var g=0; g < entries[m].length; g++){%>
 
-                 <%}}}%>
+             <%if(entries[m][g].isCompleted){%>
+               pickedButton("<%=entries[m][g]._id%>", "✔");
+             <%}
+              if(entries[m][g].isCancelled){%>
+               pickedButton("<%=entries[m][g]._id%>", "X");
+             <%}
+              if(entries[m][g].isPostponedForToday){%>
+                pickedButton("<%=entries[m][g]._id%>", "→")
+              <%}
+
+               }}%>
 
            $("#gMonth1> option").each(function(){
              var currentMonth = <%=month%>;
@@ -425,13 +443,13 @@
              });
          });
 
-function nextDay(id, image){
+function pickedButton(id, image){
 
   //get rid of the need for clickedButton by just passing through ID
   // var a = $(clickedButton).closest("td").prop("id");
   var a = id;
   console.log("triggered ok", a);
-  $("#"+a+" > form button, button").each(function(){
+  $("#"+a+" > form button").each(function(){
     console.log($("#"+a).html);
     $(this).hide();
   })
