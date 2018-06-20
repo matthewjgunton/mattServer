@@ -5,9 +5,11 @@ const schema = mongoose.Schema;
 
 const mPresentSchema = new schema ({
   item: String,
+  type: String,
   place: String,
   amount: Number,
   month: Number,
+  date: Number,
   year: Number
 });
 

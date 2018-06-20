@@ -125,6 +125,7 @@
                   <td>
                     <%=items[m].itemName%>-<%=itemTypes[type]%>
                     <input hidden value = "<%=items[m].itemName%>" name = "item" placeholder="item"></input>
+
                   </td>
                   <td>
                     <!--how to fix when you have budgeted nothing?-->
@@ -227,7 +228,7 @@
       var holder = 0;
       <%for(var g = 0; g < budgeted.length; g++){%>
         <%if(items[g].type == itemTypes[m]){%>
-        
+
           <%if(budgeted[g].budgeted){%>
             holder += <%=budgeted[g].budgeted%>;
           <%}
@@ -251,6 +252,15 @@
       $("input[name = 'type']").val(newTypeVal);
       console.log($("input[name = 'type']").val());
     })
+
+
+    $("#category").on('change', function(){
+      var newTypeVal = $("select#category option:checked").val();
+      $("input[name = 'category']").val(newTypeVal);
+      console.log($("input[name = 'category']").val());
+    })
+
+
 
     <%var budgetedValues = [];
     var actualedValues = [];%>

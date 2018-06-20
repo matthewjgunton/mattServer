@@ -1,0 +1,26 @@
+<html>
+<head>
+  <% include ./partials/mattHead.ejs %>
+
+</head>
+
+<body>
+
+  <h1>Your Expenses for the <%=type%></h1>
+
+
+
+  <table>
+  <%for(var m = 0; m < allBudgetEntriesOfType.length; m++){%>
+    <tr>
+      <td><%=allBudgetEntriesOfType[m].place%>/$<%=allBudgetEntriesOfType[m].amount%></td>
+
+    </tr>
+
+  <%}%>
+  </table>
+
+
+</body>
+
+</html>

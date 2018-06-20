@@ -43,11 +43,16 @@ exports.budgetTracker = function(req, res){
 
 exports.budgetTrackerPost = function(req, res){
 
+  console.log(req.body.category,"found?");
+
+  console.log("reached");
+
   var whole = new Date();
   var year = whole.getFullYear();
   var month = whole.getMonth()+1;
+  var date = whole.getDate();
 
-  budgetModel.find({item: req.body.item, month: month}).then(function(data){
+  budgetModel.find({item: req.body.category, month: month}).then(function(data){
     if(!data.actualed){
       var newActualed = req.body.amount;
     }else{
@@ -55,19 +60,29 @@ exports.budgetTrackerPost = function(req, res){
     }
     console.log(newActualed, "new amount");
 
+
     budgetModel.findOneAndUpdate({item: req.body.category, month: month}, {
       actualed: newActualed
     }).then(function(){
-      new purchasesModel({
-        item: req.body.category,
-        place: req.body.place,
-        amount: req.body.amount,
-        month: month,
-        year: year
-      }).save().then(function(purchaseData){
-        console.log("we saved this data", purchaseData);
-        res.redirect("/budget");
-      })
+      console.log("REACHED", req.body.category, 'ok');
+
+      budgetItemModel.find({itemName: req.body.category}).then(function(data){
+
+        console.log("REACHED PAST", data);
+
+        new purchasesModel({
+          item: req.body.category,
+          type: data.type,
+          place: req.body.place,
+          amount: req.body.amount,
+          month: month,
+          date: date,
+          year: year
+        }).save().then(function(purchaseData){
+          console.log("we saved this data", purchaseData);
+          res.redirect("/budget");
+        })
+      });
     })
   })
 
@@ -89,14 +104,49 @@ exports.postBudgetItemEntry = function(req, res){
   var year = whole.getFullYear();
   var month = whole.getMonth()+1;
 
-  new budgetModel({
-    item: req.body.item,
-    budgeted: req.body.budgeted,
-    actualed: req.body.actualed,
-    month: month,
-    year: year
-  }).save().then(function(data){
-    console.log("adding new budget item entry", data);
-    res.redirect("/budget");
+  //figure out what the type is based off the item:
+
+  console.log(req.body.item);
+
+  budgetItemModel.find({item: req.body.item}).then(function(data){
+
+    new budgetModel({
+      type: data.type,
+      item: req.body.item,
+      budgeted: req.body.budgeted,
+      actualed: req.body.actualed,
+      month: month,
+      year: year
+    }).save().then(function(savedData){
+      console.log("adding new budget item entry", savedData);
+      res.redirect("/budget");
+    })
+
   })
+
+
+}
+
+exports.item = function(req, res){
+
+  var dataObj = {};
+
+  var type = req.params.item;
+  dataObj.type = type;
+  var whole = new Date();
+  var month = whole.getMonth()+1;
+  var year = whole.getFullYear();
+
+
+
+  console.log(type);
+
+  purchasesModel.find({item: type, month: month, year: year}).then(function(data){
+    console.log("data:",data);
+    dataObj.allBudgetEntriesOfType = data;
+    console.log("HERE:",dataObj.allBudgetEntriesOfType);
+    res.render("entriesOfType", dataObj);
+  })
+
+
 }

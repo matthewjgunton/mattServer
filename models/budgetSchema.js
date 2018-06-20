@@ -5,6 +5,7 @@ const schema = mongoose.Schema;
 
 const mPresentSchema = new schema ({
   item: String,
+  type: String,
   budgeted: Number,
   actualed: Number,
   month: Number,

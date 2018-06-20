@@ -16,4 +16,7 @@ sendRoutes.route("/budgetTracker")
   .get(controller.budgetTracker)
   .post(controller.budgetTrackerPost);
 
+sendRoutes.route("/:item")
+  .get(controller.item);
+
 module.exports = sendRoutes;

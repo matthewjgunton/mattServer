@@ -16,6 +16,9 @@ sendRoutes.route("/budgetTracker")
   .get(isLoggedIn, controller.budgetTracker)
   .post(isLoggedIn, controller.budgetTrackerPost);
 
+sendRoutes.route("/:item")
+  .get(isLoggedIn, controller.item);
+
   function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
       console.log("person logged in "+req.user.matthew.name);
