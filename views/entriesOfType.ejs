@@ -1,19 +1,25 @@
 <html>
 <head>
   <% include ./partials/mattHead.ejs %>
+  <link rel = 'stylesheet' href = "/entriesOfType.css"></link>
 
 </head>
 
 <body>
+  <center>
 
-  <h1>Your Expenses for the <%=type%></h1>
+  <h1>Your Expenses for <%=type%></h1>
+
+  <a href = "/budget">Back</a>
 
 
 
   <table>
   <%for(var m = 0; m < allBudgetEntriesOfType.length; m++){%>
     <tr>
-      <td><%=allBudgetEntriesOfType[m].place%>/$<%=allBudgetEntriesOfType[m].amount%></td>
+      <td><%=allBudgetEntriesOfType[m].place%></td>
+      <td>$<%=allBudgetEntriesOfType[m].amount%></td>
+      <td><%=allBudgetEntriesOfType[m].month%>/<%=allBudgetEntriesOfType[m].date%></td>
 
     </tr>
 
@@ -21,6 +27,7 @@
   </table>
 
 
+  </center>
 </body>
 
 </html>

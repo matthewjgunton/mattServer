@@ -52,6 +52,8 @@ exports.budgetTrackerPost = function(req, res){
   var month = whole.getMonth()+1;
   var date = whole.getDate();
 
+  //NEED TO FIX THE newActualed function later
+
   budgetModel.find({item: req.body.category, month: month}).then(function(data){
     if(!data.actualed){
       var newActualed = req.body.amount;
@@ -66,13 +68,13 @@ exports.budgetTrackerPost = function(req, res){
     }).then(function(){
       console.log("REACHED", req.body.category, 'ok');
 
-      budgetItemModel.find({itemName: req.body.category}).then(function(data){
+      budgetItemModel.findOne({itemName: req.body.category}).then(function(newData){
 
-        console.log("REACHED PAST", data);
+        console.log("REACHED PAST", newData.type);
 
         new purchasesModel({
           item: req.body.category,
-          type: data.type,
+          type: newData.type,
           place: req.body.place,
           amount: req.body.amount,
           month: month,
@@ -108,7 +110,7 @@ exports.postBudgetItemEntry = function(req, res){
 
   console.log(req.body.item);
 
-  budgetItemModel.find({item: req.body.item}).then(function(data){
+  budgetItemModel.find({itemName: req.body.item}).then(function(data){
 
     new budgetModel({
       type: data.type,
@@ -141,7 +143,7 @@ exports.item = function(req, res){
 
   console.log(type);
 
-  purchasesModel.find({item: type, month: month, year: year}).then(function(data){
+  purchasesModel.find({type: type, month: month, year: year}).then(function(data){
     console.log("data:",data);
     dataObj.allBudgetEntriesOfType = data;
     console.log("HERE:",dataObj.allBudgetEntriesOfType);
