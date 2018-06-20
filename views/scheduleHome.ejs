@@ -448,7 +448,6 @@ function pickedButton(id, image){
   //get rid of the need for clickedButton by just passing through ID
   // var a = $(clickedButton).closest("td").prop("id");
   var a = id;
-  console.log("triggered ok", a);
   $("#"+a+" > form button").each(function(){
     console.log($("#"+a).html);
     $(this).hide();

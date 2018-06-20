@@ -45,7 +45,7 @@ const rtBudget = require("./routes/rtBudget.js");
 const rtOneOffs = require("./routes/rtOneOffs.js");
 
 //enabling an offline development mode
-if (process.env.offLINEMODE === "ON") {
+if (process.env.OFFLINEMODE === "ON") {
 	console.log("OFFLINE DEVELOPER MODE ACTIVATED");
 	Object.assign(rtSchedule, require("./offlineMode/rtSchedule.js") );
   Object.assign(rtBudget, require("./offlineMode/rtBudget.js") );

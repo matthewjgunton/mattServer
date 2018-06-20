@@ -10,7 +10,7 @@ const mPresentSchema = new schema ({
   year: Number,
   eventDescription: String,
   isCancelled: Boolean,
-  repeats: String,
+  repeats: String
 });
 
 const mattModel = mongoose.model("eventModel", mPresentSchema);
