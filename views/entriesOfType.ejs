@@ -17,6 +17,7 @@
   <table>
   <%for(var m = 0; m < allBudgetEntriesOfType.length; m++){%>
     <tr>
+      <td><%=allBudgetEntriesOfType[m].item%></td>
       <td><%=allBudgetEntriesOfType[m].place%></td>
       <td>$<%=allBudgetEntriesOfType[m].amount%></td>
       <td><%=allBudgetEntriesOfType[m].month%>/<%=allBudgetEntriesOfType[m].date%></td>

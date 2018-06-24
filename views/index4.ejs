@@ -1,0 +1,276 @@
+<html>
+
+<head>
+
+  <% include ./partials/mattHead.ejs %>
+  <link rel = "stylesheet" href = "/home.css"></link>
+
+</head>
+
+
+<!--
+todos before beta launch:
+*how to get cool scrolling CSS
+*redesign last 2 ones
+*fix a href for projects now
+*stuff
+-->
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h2 class="navbar-brand" href="#">Matthew J Gunton</h2>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#AboutMe">About Me</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#reshwap">Reshwap</a></li>
+              <li><a href="#merge">Merge</a></li>
+              <li><a href="#fredIsFed">Fred Is Fed</a></li>
+              <li><a href="#Sentinel">Sentinel</a></li>
+              <li><a href="#EyeCareForChildren">Eye Care for Children</a></li>
+            </ul>
+          </li>
+          <li><a href = "#Skills">Skills</a></li>
+          <li><a href = "#Contact">Contact</a></li>
+          <li><a href = "#Resume">Resume</a></li>
+        </ul>
+
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+    <div class = "row">
+      <center>
+        <div class = "col-sm-12 col-md-12">
+          <div class = 'card' id = "AboutMe">
+            <!--choose another profile & make it into like he had-->
+            <img width = "50%" src = "/profile.jpg"></img>
+            <p>Matthew <a href = "/auth/google">J</a> Gunton is currently attending Lehigh University and enrolled in the Computer Science and Business program. Previously he attended Lawrence High School for freshmen year where he was number one in his class. Transferring to the Lawrenceville School he then graduated Cum Laude. He enjoys making programs that help make boring tasks faster. He is proficient in Node.JS, HTML, CSS, MongoDB and JavaScript. He also loves to work with hardware, having recently started working more closely with arduino and raspberry pi units.</p>
+          </div>
+        </center>
+      </div>
+    </div>
+
+    <div class="slideshow-container">
+
+      <h1>Projects</h1>
+
+        <div class="mySlides">
+
+          <a href = "https://reshwap.com"><img width = "50%"src = "https://reshwap.com/Reshwap%20Logo%20Black.png"></img><br></a>
+          <p>This was Gunton's first major backend project. The idea was to set up a marketplace where students who went to his high school could find books. Having been recruited by fellow classmate Max Drojjin, Gunton completely redesigned the backend. The goal was to be efficient when using images, and to create a powerful security system that could protect all the new information. Working alongside front-end developer Eric Cheng, they made it into a phenomenom on campus. Selling reshwap t-shirts, integration with other clubs, and public contests helped keep everyone engaged with the system. When Gunton graduated and handed off the system to the next generation of developers, the site had far-surpassed the previous largest number of items for sale on the site.</p>
+        </div>
+
+        <div class="mySlides">
+
+          <a href = "https://lawrenceville.org"><img width = "10%" src = "/merge.png"></img></a>
+          <p>Working alongside Eric Cheng and Jack Chau, Gunton created the brain for online harkness learning. The project was enormously ambitious. Students at his high school have graded discussions in their English courses, and Gunton wanted to create a way to not only to keep track of who said what, but also let students and teachers track their progress in discussion. To do so, the backend required almost all of the features to the custom. For instance, one teacher might decide taht she wants to track the quality of questions raised by students in discusison, while another may decide he wants to see who really analyzed the text in the novels. This project required Gunton focus on creating a powerful, yet intuitive UI. The project was being tested in classrooms when Gunton graduated high school. It is being incorporated into the Sentinel Project.</p>
+
+        </div>
+
+        <div class="mySlides">
+
+          <img width = "100%"src = "/fredImg2.png"></img><br>
+          <p>This was a project Gunton put together to simply make life easier. Gunton's dog often tries to deceive his owners by pretending he hasn't eaten. This behavior helps him get fed many times. While he may have enjoyed this, the family noticed that he was beginning to gain weight. To help solve the problem, Gunton built a program to keep track of how many times a day Fred had been fed. Once the infrastructure was set up, Gunton really started to run with it. He used the local server to display the family's daily calendar using Google's API, and he created a system where the family can send reminders and announcements to the entire house at once. Unfortunately because this is a local server, it is not accessible to the public.</p>
+
+        </div>
+
+        <div class="mySlides">
+
+          <a href = "https://sentinel.lawrenceville.org"><img width = "10%" src = "https://sentinel.lawrenceville.org/img/sentinel.png"></img></a>
+          <p>Working for the Lawrenceville School, Gunton helped significantly upgrade the Sentinel Program. Originally built by Dr Keith Voss, Sentinel helps the boarding school keep track of their students when they decide to go off campus. Gunton spent 10 weeks working intensely on the project, with most of his energy focused on creating a new User Interface for the program. In addition, many other key features where created or planned during this time such as "Fast Out"––a way for students' defaults to be saved––as well as creating the framework for a settings page that allows students to personalize and thus make Sentinel work better for them.</p>
+
+        </div>
+
+        <div class="mySlides">
+
+          <a href = "http://eyecareforchildren.com/"><img width = '50%' src = "http://eyecareforchildren.com/mainMomLogo.png"></img></a>
+          <p>After Gunton was made webmaster for his mother's company, he went about recreating their website so it would be easier to use. The design should be minimal and user-friendly, so patients and their parents feel completely comfortable using the site. To go beyond simply adding a better layer of paint to the website, Gunton also utlized the Google Maps API to allow patients to see which office location works best for them.</p>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <div style="text-align:center">
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+      <span class="dot" onclick="currentSlide(3)"></span>
+      <span class="dot" onclick="currentSlide(4)"></span>
+      <span class="dot" onclick="currentSlide(5)"></span>
+    </div>
+
+    <!-- <div class = "row">
+      <center>
+        <div class= 'col-xs-2 col-sm-1 col-md-1'>
+        </div>
+        <div class = "col-xs-12 col-sm-3 col-md-3">
+          <div class = 'card' id = "reshwap">
+            <a href = "https://reshwap.com"><img width = "50%"src = "https://reshwap.com/Reshwap%20Logo%20Black.png"></img><br></a>
+            <p>This was Gunton's first major backend project. The idea was to set up a marketplace where students who went to his high school could find books. Having been recruited by fellow classmate Max Drojjin, Gunton completely redesigned the backend. The goal was to be efficient when using images, and to create a powerful security system that could protect all the new information. Working alongside front-end developer Eric Cheng, they made it into a phenomenom on campus. Selling reshwap t-shirts, integration with other clubs, and public contests helped keep everyone engaged with the system. When Gunton graduated and handed off the system to the next generation of developers, the site had far-surpassed the previous largest number of items for sale on the site.</p>
+          </div>
+        </div>
+      </center>
+
+      <center>
+        <div class = "col-xs-12 col-sm-3 col-md-3">
+          <div class = 'card' id = "merge">
+            <img width = "10%" src = "/merge.png"></img>
+            <p>Working alongside Eric Cheng and Jack Chau, Gunton created the brain for online harkness learning. The project was enormously ambitious. Students at his high school have graded discussions in their English courses, and Gunton wanted to create a way to not only to keep track of who said what, but also let students and teachers track their progress in discussion. To do so, the backend required almost all of the features to the custom. For instance, one teacher might decide taht she wants to track the quality of questions raised by students in discusison, while another may decide he wants to see who really analyzed the text in the novels. This project required Gunton focus on creating a powerful, yet intuitive UI. The project was being tested in classrooms when Gunton graduated high school. It is being incorporated into the Sentinel Project.</p>
+
+          </div>
+        </div>
+      </center>
+
+      <center>
+        <div class = "col-xs-12 col-sm-3 col-md-3">
+          <div class = 'card' id = "fredIsFed">
+            <img width = "100%"src = "/fredImg2.png"></img><br>
+            <p>This was a project Gunton put together to simply make life easier. Gunton's dog often tries to deceive his owners by pretending he hasn't eaten. This behavior helps him get fed many times. While he may have enjoyed this, the family noticed that he was beginning to gain weight. To help solve the problem, Gunton built a program to keep track of how many times a day Fred had been fed. Once the infrastructure was set up, Gunton really started to run with it. He used the local server to display the family's daily calendar using Google's API, and he created a system where the family can send reminders and announcements to the entire house at once. Unfortunately because this is a local server, it is not accessible to the public.</p>
+
+          </div>
+        </div>
+      </center>
+    </div>
+
+    <div class = "row">
+      <center>
+        <div class = "col-xs-12 col-sm-2 col-md-4">
+        </div>
+        <div class = "col-xs-12 col-sm-4 col-md-4">
+          <div class = 'card' id = "Sentinel">
+            <a href = "https://sentinel.lawrenceville.org"><img width = "10%" src = "https://sentinel.lawrenceville.org/img/sentinel.png"></img></a>
+            <p>Working for the Lawrenceville School, Gunton helped significantly upgrade the Sentinel Program. Originally built by Dr Keith Voss, Sentinel helps the boarding school keep track of their students when they decide to go off campus. Gunton spent 10 weeks working intensely on the project, with most of his energy focused on creating a new User Interface for the program. In addition, many other key features where created or planned during this time such as "Fast Out"––a way for students' defaults to be saved––as well as creating the framework for a settings page that allows students to personalize and thus make Sentinel work better for them.</p>
+
+          </div>
+        </div>
+      </center>
+
+      <center>
+        <div class = "col-xs-12 col-sm-4 col-md-4">
+          <div class = 'card' id = "EyeCareForChildren">
+            <a href = "http://eyecareforchildren.com/"><img width = '50%' src = "http://eyecareforchildren.com/mainMomLogo.png"></img></a>
+            <p>After Gunton was made webmaster for his mother's company, he went about recreating their website so it would be easier to use. The design should be minimal and user-friendly, so patients and their parents feel completely comfortable using the site. To go beyond simply adding a better layer of paint to the website, Gunton also utlized the Google Maps API to allow patients to see which office location works best for them.</p>
+
+          </div>
+        </div>
+      </center>
+    </div> -->
+
+    <div class = "row">
+      <center>
+        <div class = 'col-xs-4'>
+        </div>
+        <div class = "col-xs-4">
+          <div class = 'card' id = "Skills">
+            <p>I have experience in the following languages:</p>
+            <ul>
+              <li>HTML 5</li>
+              <li>CSS 3</li>
+              <li>Javascript/Jquery</li>
+              <li>Node.js</li>
+              <li>Git</li>
+              <li>Command Line Interface</li>
+            </ul>
+          </div>
+        </div>
+      </center>
+    </div>
+
+    <div class = "row">
+
+      <center>
+        <div class = "col-xs-9">
+          <div class = 'card' id = "Contact">
+            <p>Feel free to reach out with anything cool you might want to do or create <a href = "mailto:boss@maurelius.com">boss@maurelius.com</a></p>
+          </div>
+        </div>
+      </center>
+
+
+
+    <center>
+      <div class = "col-xs-3">
+        <div class = 'card' id = "Resume">
+          <p><a href = "ABC">View my Resume</a>
+        </div>
+      </div>
+    </center>
+
+    </div>
+
+
+</body>
+
+<% include ./partials/bottom.ejs %>
+
+<script>
+
+
+//adapt this so it goes by row
+//
+// $(".row").each(function () {
+//   //for each card in this row,
+//   var defaultHeight = 0;
+//   var m = 0;
+//
+//   //inside row, look at t
+//   console.log($(this).children());
+//
+//   $(this).children().each(function(){
+//     m++;
+//     if($(this).height > defaultHeight){
+//       defaultHeight = $(this).height;
+//     }
+//     $(this).height(defaultHeight);
+//   })
+//
+// });
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  console.log('called');
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+}
+
+
+</script>
+
+</html>
