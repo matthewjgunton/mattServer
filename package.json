@@ -2,9 +2,10 @@
   "name": "mattserver",
   "version": "1.0.0",
   "description": "programs for matt's personal server, mostly for programs i will find immediately useful",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development nodemon server.js"
   },
   "keywords": [
     "Matthew",
@@ -22,6 +23,12 @@
     "express-session": "^1.15.6",
     "mongoose": "^5.1.2",
     "passport": "^0.4.0",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "repository": "https://github.com/matthewjgunton/mattServer.git",
+  "devDependencies": {
+    "morgan": "^1.9.0",
+    "nodemon": "^1.18.3"
   }
 }

@@ -2,10 +2,14 @@ var express = require("express");
 var sendRoutes = express.Router();//required to make this separate file works
 
 var controller = require("../controllers/schedule.js");
+var control = require("../controllers/planner.js");
 
 sendRoutes.route("/")
-  .get(isLoggedIn, controller.getSchedule)
-  .post(isLoggedIn, controller.postItem);
+  .get(isLoggedIn, control.landing);
+
+
+  // .get(isLoggedIn, controller.getSchedule)
+  // .post(isLoggedIn, controller.postItem);
 
 sendRoutes.route("/subject")
   .post(isLoggedIn, controller.newSubject);
