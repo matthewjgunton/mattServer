@@ -1,0 +1,51 @@
+<div>
+
+  <!--only when we want to look back do we show more than one day-->
+
+  <table>
+    <tr>
+      <th>TODO:</th>
+    </tr>
+    <tr>
+      <th>{{svrData.date[3]}}</th>
+    </tr>
+
+    <!--these tr are going to ng-repeat-->
+    <tr>
+      <td></td>
+    </tr>
+  </table>
+
+  <!--this is reserved for adding hw-->
+  <div ng-if="addNewEvent">
+    <button ng-click = "newEvent('hw', false)">X</button>
+    <form>
+
+      <select ng-model="subject" data-ng-options="subject.subject for subject in svrData.subjects"></select>
+      <input type = "text" ng-model="hwName" placeholder = "HW Name"></input>
+      Due:<input type = "date" ng-model="hwDate"></input>
+      <button ng-click="newEntry(subject, hwName, hwDate)">Add</button>
+    </form>
+  </div>
+  <button ng-if = "!addNewEvent" ng-click= "newEvent('hw', true)">+</button>
+
+
+  <!--adding a subject-->
+  <div ng-if="addNewSubject">
+    <button ng-click = "newEvent('subject', false)">X</button>
+    <input type = "text" ng-model = "subject" placeholder = "subject name"></input>
+    <button ng-click = "newSubject(subject)">Submit</button>
+    <!-- <button ng-if= "!deleteSubjectActive">Delete Subject</button> -->
+  </div>
+  <button ng-if = "!addNewSubject" ng-click= "newEvent('subject', true)">Add New Subject</button>
+
+
+  <!--deleting a subject-->
+  <div ng-if="deleteSubjectActive">
+    <button ng-repeat="subject in svrData.subjects" ng-click = "deleteSubject(subject._id)">{{subject.subject}}</button>
+  </div>
+  <button ng-click= "showDeleteSubject(deleteSubjectActive)">Delete Subject</button>
+
+
+
+</div>

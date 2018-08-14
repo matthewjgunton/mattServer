@@ -24,9 +24,8 @@ require("./config/dbConfig.js");
 require("./config/passport.js")(passport);
 
 var bodyParser = require("body-parser");
-var urlencoderParser = bodyParser.urlencoded({extended:false});
 
-app.use(urlencoderParser);//it now says body works
+app.use(bodyParser.json());//it now says body works
 app.use(session({//set up session to our specifications
   secret: 'secret',
   store: mongoStore,
@@ -43,6 +42,7 @@ const rtAuth = require("./routes/rtAuth.js");
 const rtSchedule = require("./routes/rtPlanner.js");
 const rtBudget = require("./routes/rtBudget.js");
 const rtOneOffs = require("./routes/rtOneOffs.js");
+const rtNew = require("./routes/rtNew.js");
 
 //enabling an offline development mode
 if (process.env.OFFLINEMODE === "ON") {
@@ -53,6 +53,8 @@ if (process.env.OFFLINEMODE === "ON") {
 }
 
 app.use("/", rtAuth);
+
+app.use("/home", rtNew);
 
 app.use("/schedule", rtSchedule);
 

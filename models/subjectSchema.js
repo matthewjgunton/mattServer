@@ -4,7 +4,11 @@ const schema = mongoose.Schema;
 //create schema for each item
 
 const mPresentSchema = new schema ({
-  subject: String
+  subject: String,
+  item:{
+    type: schema.Types.ObjectId,
+    ref: "hwModel"
+  },
 });
 
 const mattModel = mongoose.model("subjectModel", mPresentSchema);

@@ -4,7 +4,10 @@ const schema = mongoose.Schema;
 //create schema for each item
 
 const mPresentSchema = new schema ({
-  subject: String,
+  item:{
+    type: schema.Types.ObjectId,
+    ref: "subjectModel"
+  },
   assignmentName: String,
   monthDue: Number,
   dayDue: Number,
@@ -13,8 +16,8 @@ const mPresentSchema = new schema ({
   isCompleted: Boolean,
   isHandedIn: Boolean,
   isCancelled: Boolean,
-  isPostponedForToday: Boolean
-});
+  isPostponedForToday: Boolean,
+}, {timestamps: true});
 
 const mattModel = mongoose.model("hwModel", mPresentSchema);
 
