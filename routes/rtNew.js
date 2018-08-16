@@ -18,4 +18,10 @@ sendRoutes.route("/newSubject")
 sendRoutes.route("/deleteSubject")
   .post(controller.postDeleteSubject);
 
+sendRoutes.route("/newEntry")
+  .post(controller.postNewEntry);
+
+sendRoutes.route("/completed")
+  .post(controller.postCompletedEntry);
+
 module.exports = sendRoutes;

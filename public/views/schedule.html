@@ -9,10 +9,19 @@
     <tr>
       <th>{{svrData.date[3]}}</th>
     </tr>
+    <tr ng-repeat="entry in svrData.hwData" class = "{{entry.isCompleted}}">
 
-    <!--these tr are going to ng-repeat-->
-    <tr>
-      <td></td>
+      <td><b>{{entry.assignmentName}}</b></td>
+      <!--how should we use subject? right now it's only an id, which is bothering me a bit-->
+      <td>{{entry.subject}}</td>
+      <td>Due: {{entry.monthDue}}/{{entry.dayDue}}</td>
+      <td><input ng-model="checked" ng-init="checked=entry.isCompleted" ng-click = "completed(entry._id)" type = "checkbox"></input></td>
+
+    </tr>
+    <!--Empty Handler-->
+    <tr ng-if= "svrData.hwData.length == 0">
+      <td>You've finished your current tasks!</td>
+      <td>Begin Something New</td>
     </tr>
   </table>
 
@@ -23,8 +32,9 @@
 
       <select ng-model="subject" data-ng-options="subject.subject for subject in svrData.subjects"></select>
       <input type = "text" ng-model="hwName" placeholder = "HW Name"></input>
-      Due:<input type = "date" ng-model="hwDate"></input>
-      <button ng-click="newEntry(subject, hwName, hwDate)">Add</button>
+      <input type = "number" ng-model = "month"></input>/
+      <input type = "number" ng-model = "date"></input>
+      <button ng-click="newEntry(subject, hwName, month, date)">Add</button>
     </form>
   </div>
   <button ng-if = "!addNewEvent" ng-click= "newEvent('hw', true)">+</button>
@@ -45,7 +55,5 @@
     <button ng-repeat="subject in svrData.subjects" ng-click = "deleteSubject(subject._id)">{{subject.subject}}</button>
   </div>
   <button ng-click= "showDeleteSubject(deleteSubjectActive)">Delete Subject</button>
-
-
 
 </div>

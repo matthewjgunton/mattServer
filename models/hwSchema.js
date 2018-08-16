@@ -4,14 +4,15 @@ const schema = mongoose.Schema;
 //create schema for each item
 
 const mPresentSchema = new schema ({
-  item:{
-    type: schema.Types.ObjectId,
-    ref: "subjectModel"
-  },
+  // item:{
+  //   type: schema.Types.ObjectId,
+  //   ref: "subjectModel"
+  // },
+  subject: String,
   assignmentName: String,
   monthDue: Number,
   dayDue: Number,
-  yearDue: Number,
+  dueDate: String,
   assignmentDescription: String,
   isCompleted: Boolean,
   isHandedIn: Boolean,

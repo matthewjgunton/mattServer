@@ -55,12 +55,24 @@ if (process.env.OFFLINEMODE === "ON") {
 app.use("/", rtAuth);
 
 app.use("/home", rtNew);
+//
+// app.use("/schedule", rtSchedule);
+//
+// app.use("/budget", rtBudget);
+//
+// app.use("/mprojects", rtOneOffs);
 
-app.use("/schedule", rtSchedule);
+app.use(function(req, res){
+  res.status(404);
 
-app.use("/budget", rtBudget);
+  // respond with html page
+  if (req.accepts('html')) {
+    console.log(req.url);
+    res.redirect("/");
+    return;
+  }
 
-app.use("/mprojects", rtOneOffs);
+});
 
 app.listen(5000);
 console.log("lift off");
