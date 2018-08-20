@@ -156,6 +156,39 @@
   </div>
 
   <div style="position:relative;">
+    <div style="color:#777;background-color:#white;text-align:center;padding:50px 80px;text-align: justify;">
+      <div id = 'testimonials' class="slideshow-container">
+
+        <h1>Testimonials</h1>
+
+          <div class="mySlidesNew">
+
+            <a href = "https://www.valuationresearch.com/"><img width = "50%"src = "/vrc.jpg"></img><br></a>
+            <p>"During his time at VRC’s Summer Internship program, Matthew demonstrated a sharp mind and strong work ethic. Matthew navigated well through the program despite large volumes of new information and complex problem solving challenges. Matthew would be perfect for a leadership position given his high level of motivation, positive attitude and natural ability to direct a group and we wish him the best of luck in future endeavors."</p>
+            <h4 style = "text-align:right">-Mike Murphy</h4>
+          </div>
+
+          <div class="mySlidesNew">
+
+            <a href = "https://www.willseye.org/"><img width = "20%"src = "/weh.png"></img><br></a>
+            <p>"Matthew was a delight to have on our service. He brought a unique perspective with his inquiring mind about the role of computer technology in the diagnosis of genetic disease. He clearly sees the potential for using artificial intelligence to shed more light in this complex area of medicine"</p>
+            <h4 style = "text-align:right">-Dr Alex V Levin</h4>
+          </div>
+
+
+          <br>
+
+          <div style="text-align:center">
+            <span class="dotNew" onclick="lookatNew(1)"></span>
+            <span class="dotNew" onclick="lookatNew(2)"></span>
+
+            <!-- <span class="dot" onclick="currentSlide(6)"></span> -->
+
+          </div>
+        </div>
+      </div>
+
+  <div style="position:relative;">
     <div id = "Contact" style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
       <h2>Contact</h2>
       <p>Feel free to reach out with anything cool you might want to do or create <a href = "mailto:me@maurelius.com">me@maurelius.com</a></p>
@@ -268,6 +301,52 @@ var pckry = new Packery( grid, {
   gutter: 10,
   itemSelector: '.grid-item'
 });
+
+
+//testimonials
+var slideIndexNew = 1;
+showSlidesNew(slideIndexNew);
+
+function plusSlidesNew(n) {
+  showSlidesNew(slideIndexNew += n);
+}
+
+function currentSlideNew(n) {
+  showSlidesNew(slideIndexNew = n);
+}
+
+function showSlidesNew(n) {
+  console.log('reached');
+
+  var i;
+  var slides = document.getElementsByClassName("mySlidesNew");
+  var dots = document.getElementsByClassName("dotNew");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndexNew = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndexNew-1].style.display = "block";
+  dots[slideIndexNew-1].className += " active";
+}
+
+function lookatNew(i){
+  console.log('found');
+  $('html,body').animate({
+        scrollTop: $("#testimonials").offset().top},
+        'slow');
+
+  currentSlideNew(i);
+}
+
+function scrollToNew(id){
+  $('html,body').animate({
+        scrollTop: $("#"+id).offset().top},
+        'slow');
+}
 
 </script>
 
