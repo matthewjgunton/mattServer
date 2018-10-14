@@ -9,50 +9,7 @@
 
 <body>
 
-  <!--
-  before beta launch:
-  *fix skills thing
-  *decide on Resume
-  *
-
--->
-
   <div class="bgimg-1">
-
-    <!-- <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <h2 class="navbar-brand" href="#">Matthew J Gunton</h2>
-        </div>
-
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="javascript:scrollTo('AboutMe')">About Me</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href = "javascript:lookat(1)">Reshwap</a></li>
-                <li><a href = "javascript:lookat(2)">Merge</a></li>
-                <li><a href = "javascript:lookat(3)">Fred Is Fed</a></li>
-                <li><a href = "javascript:lookat(4)">Sentinel</a></li>
-                <li><a href = "javascript:lookat(5)">Eye Care for Children</a></li>
-              </ul>
-            </li>
-            <li><a href = "javascript:scrollTo('Skills')">Skills</a></li>
-            <li><a href = "javascript:scrollTo('Contact')">Contact</a></li>
-            <li><a href = "javascript:scrollTo('Resume')">Resume</a></li>
-          </ul>
-
-        </div>
-      </div>
-    </nav> -->
 
     <div class="caption">
       <span class="border" id = "welcome">Hello, World</span>
@@ -252,6 +209,30 @@ function sayWelcome(whichLanguage){
 
 }
 
+//functions for sliding between images & such:
+function unify(e) { return e.changedTouches ? e.changedTouches[0] : e };
+let x0 = null;
+
+function lock(e) { x0 = unify(e).clientX };
+
+function move(e) {
+  if(x0 || x0 === 0) {
+    let dx = unify(e).clientX - x0;
+    let s = Math.sign(dx);
+
+    if(s > 0 && slideIndex > 1){
+      showSlides(--slideIndex);
+    }
+    if(s<0 && slideIndex < 5){
+      showSlides(++slideIndex);
+    }
+
+
+
+    x0 = null;
+  }
+};
+
 var slideIndex = 1;
 showSlides(slideIndex);
 
@@ -347,6 +328,12 @@ function scrollToNew(id){
         scrollTop: $("#"+id).offset().top},
         'slow');
 }
+
+document.getElementById("projects").addEventListener('mousedown', lock, false);
+document.getElementById("projects").addEventListener('touchstart', lock, false);
+
+document.getElementById("projects").addEventListener('mouseup', move, false);
+document.getElementById("projects").addEventListener('touchend', move, false);
 
 </script>
 
