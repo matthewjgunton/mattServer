@@ -233,6 +233,12 @@ function move(e) {
   }
 };
 
+document.getElementById("projects").addEventListener('mousedown', lock, false);
+document.getElementById("projects").addEventListener('touchstart', lock, false);
+
+document.getElementById("projects").addEventListener('mouseup', move, false);
+document.getElementById("projects").addEventListener('touchend', move, false);
+
 var slideIndex = 1;
 showSlides(slideIndex);
 
@@ -285,7 +291,32 @@ var pckry = new Packery( grid, {
 
 
 //testimonials
+
 var slideIndexNew = 1;
+
+function moveNew(e) {
+  if(x0 || x0 === 0) {
+    let dx = unify(e).clientX - x0;
+    let s = Math.sign(dx);
+
+    if(s > 0 && slideIndexNew > 1){
+      showSlidesNew(--slideIndexNew);
+    }
+    if(s < 0 && slideIndexNew < 2){
+      showSlidesNew(++slideIndexNew);
+    }
+
+    x0 = null;
+  }
+};
+
+document.getElementById("testimonials").addEventListener('mousedown', lock, false);
+document.getElementById("testimonials").addEventListener('touchstart', lock, false);
+
+document.getElementById("testimonials").addEventListener('mouseup', moveNew, false);
+document.getElementById("testimonials").addEventListener('touchend', moveNew, false);
+
+
 showSlidesNew(slideIndexNew);
 
 function plusSlidesNew(n) {
@@ -329,11 +360,7 @@ function scrollToNew(id){
         'slow');
 }
 
-document.getElementById("projects").addEventListener('mousedown', lock, false);
-document.getElementById("projects").addEventListener('touchstart', lock, false);
 
-document.getElementById("projects").addEventListener('mouseup', move, false);
-document.getElementById("projects").addEventListener('touchend', move, false);
 
 </script>
 
