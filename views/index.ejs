@@ -24,7 +24,7 @@
 
   <div id = "AboutMe" style="color: #777;background-color:white;text-align:center;padding:50px 80px;text-align: justify;">
     <h3 style="text-align:center;">About Me</h3>
-    <p>My name is Matthew <a href = "/auth/google">J</a> Gunton, and I am a freshmen Computer Science and Business student at Lehigh University. Previously I went to the Lawrenceville School where I graduated Cum Laude. I enjoy writing programs that make boring tasks faster. I am proficient in Node.JS, HTML, CSS, MongoDB, React, and JavaScript 6. I look forward to beginning my winter internship at Imbrex.</p>
+    <p>My name is Matthew <a href = "/auth/google">J</a> Gunton, and I am a freshmen Computer Science and Business student at Lehigh University. Previously I went to the Lawrenceville School where I graduated Cum Laude. I enjoy writing programs that make boring tasks faster. I am proficient in Node.JS, HTML, CSS, MongoDB, React, and JavaScript 6. </p>
     </div>
 
   <div class="bgimg-2">
@@ -47,7 +47,7 @@
 
           <div class="mySlides">
 
-            <a href = "https://lawrenceville.org"><img width = "10%" src = "/merge.png"></img></a>
+            <a href = "https://www.lawrenceville.org"><img width = "10%" src = "/merge.png"></img></a>
             <p>Working alongside Eric Cheng and Jack Chau, I created the brain for online Harkness learning. The project was enormously ambitious. Students at Lawrenceville have graded discussions in their English courses, and I wanted to create a way to not only to keep track of who said what, but also create an interface so the collection of the data could be useful. To do so, I had to create enough personalization options so every teacher could find a use for it. For instance, one teacher might decide that she wants to track the quality of questions raised by students in discusison, while another may decide he wants to see who really analyzed the text in the novels. This project required me to focus on making all functions very adaptable. The project was being tested in classrooms when I graduated. It is now being incorporated into the Sentinel Project.</p>
 
           </div>
@@ -68,8 +68,8 @@
 
           <div class="mySlides">
 
-            <img width = "100%"src = "/fredImg2.png"></img><br>
-            <p>My dog likes to eat and often times will try to fool my family into feeding him multiple dinners. After this began to negativly affect my dog's health, I created an application to help my family keep track of who fed my dog. Once the project was in place, I would work on it every break to make it more useful. I programmed a way to keep track of who was feeding Fred. That way, whenever no one wanted to take him for a walk, we could use data to decide. The project is local to keep it low cost. It runs off a raspberry pi.</p>
+            <center><img width = "30%"src = "/alexa.jpg"></img><br></center>
+            <p>My good friend Brian Snyder and I entered a competition together to create an Amazon Alexa Skill. Although we'd never worked with the format before, we dove into it, and built a fully functional skill in 2 weeks. The skill would use the client's current location to recommend local restaurants. Utilizing Google Maps API, it is available on all Alexa Devices in the US. I focused primarily on the backend, converting the zipcode Alexa gave us into coordinates, and plugging those coordiantes into Maps API. The code is publically available on <a href = "https://github.com/matthewjgunton/alexaSkillContest">Our Github Repository</a></p>
 
           </div>
 
@@ -127,12 +127,22 @@
             <h4 style = "text-align:right">-Dr. Alex V Levin</h4>
           </div>
 
+          <div class="mySlidesNew">
+
+            <a href = "https://imbrex.io/"><img width = "30%"src = "/imbrex.png"></img><br></a>
+            <p>"At imbrex, Matthew contributed to the successful launch of our beta application, balancing time in between writing frontend code and exploring new backend frameworks like Sails.js. Matthew has a deep understanding of technology and a keen eagerness to learn. It was a pleasure working with Matthew, he is welcome back to imbrex anytime!"</p>
+            <h4 style = "text-align:right">-Stephen King</h4>
+          </div>
+
+
+
 
           <br>
 
           <div style="text-align:center">
             <span class="dotNew" onclick="lookatNew(1)"></span>
             <span class="dotNew" onclick="lookatNew(2)"></span>
+            <span class="dotNew" onclick="lookatNew(3)"></span>
 
             <!-- <span class="dot" onclick="currentSlide(6)"></span> -->
 
@@ -278,7 +288,7 @@ function moveNew(e) {
     if(s > 0 && slideIndexNew > 1){
       showSlidesNew(--slideIndexNew);
     }
-    if(s < 0 && slideIndexNew < 2){
+    if(s < 0 && slideIndexNew < 3){
       showSlidesNew(++slideIndexNew);
     }
 
