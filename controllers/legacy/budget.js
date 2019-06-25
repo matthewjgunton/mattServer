@@ -123,9 +123,7 @@ exports.postBudgetItemEntry = function(req, res){
       console.log("adding new budget item entry", savedData);
       res.redirect("/budget");
     })
-
   })
-
 
 }
 

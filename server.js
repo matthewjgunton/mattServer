@@ -39,10 +39,11 @@ app.use(passport.session());//allows authentication info to pass between pages
 app.use(express.static(__dirname+"/public"));
 
 const rtAuth = require("./routes/rtAuth.js");
-const rtSchedule = require("./routes/rtPlanner.js");
-const rtBudget = require("./routes/rtBudget.js");
-const rtOneOffs = require("./routes/rtOneOffs.js");
-const rtNew = require("./routes/rtNew.js");
+// const rtSchedule = require("./routes/rtPlanner.js");
+// const rtBudget = require("./routes/rtBudget.js");
+// const rtOneOffs = require("./routes/rtOneOffs.js");
+// const rtNew = require("./routes/rtNew.js");
+const rtEyeRemember = require("./routes/rtEyeRemember");
 
 //enabling an offline development mode
 if (process.env.OFFLINEMODE === "ON") {
@@ -53,8 +54,8 @@ if (process.env.OFFLINEMODE === "ON") {
 }
 
 app.use("/", rtAuth);
-
-app.use("/home", rtNew);
+app.use("/eye_remember", rtEyeRemember);
+// app.use("/home", rtNew);
 //
 // app.use("/schedule", rtSchedule);
 //
@@ -64,7 +65,7 @@ app.use("/home", rtNew);
 
 app.use(function(req, res){
   res.status(404);
-
+  console.log("redirected");
   // respond with html page
   if (req.accepts('html')) {
     console.log(req.url);
