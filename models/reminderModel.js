@@ -5,9 +5,8 @@ const schema = mongoose.Schema;
 
 const mPresentSchema = new schema ({
   token: String,
-  remindAt: String,
-  taken: Boolean,
-  active: Boolean
+  remindAt: Number,
+  taken: Boolean
 });
 
 const mattModel = mongoose.model("reminderModel", mPresentSchema);

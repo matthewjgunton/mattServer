@@ -7,7 +7,13 @@ sendRoutes.route("/token/:tokenId")
   .get(controller.tokenReceived);
 
 sendRoutes.route("/records")
-  .post(controller.reminderReceived)
+  .post(controller.reminderReceived);
+  //make a get request here for the full records
 
+sendRoutes.route("/test")
+  .post(controller.test);
+
+sendRoutes.route("/treated")
+  .post(controller.wasReminded);
 
 module.exports = sendRoutes;
