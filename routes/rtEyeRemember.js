@@ -11,7 +11,7 @@ sendRoutes.route("/records")
   //make a get request here for the full records
 
 sendRoutes.route("/test")
-  .post(controller.test);
+  .get(controller.test);
 
 sendRoutes.route("/treated")
   .post(controller.wasReminded);
