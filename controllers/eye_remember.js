@@ -1,10 +1,11 @@
 const fetch = require("node-fetch");
 const reminderModel = require("../models/reminderModel");
+const schedule = require('node-schedule');
 
-//every hour
 
-exports.test = (req, res) => {
 
+var j = schedule.scheduleJob('00 * * * *', function(){
+  //every hour
   console.log('arrived at test');
   let timeNowMili = new Date().getTime();
   let hourPlus = timeNowMili + 1000 * 60 * 60;
@@ -12,19 +13,20 @@ exports.test = (req, res) => {
   reminderModel.find({remindAt: {$gt: timeNowMili, $lt: hourPlus} } ).sort({remindAt: 1}).then( (data)=> {
     console.log("j'arive",data.length);
     //here's our spinner
-    let promises = [];
     for(let i = 0; i < data.length; i++){
       //we'll need to convert d into seconds, milisceonds is too big for setTimeout
       console.log("reached", data[i]);
+      const time = data.remindAt - new Date().getTime();
       // promises.push()
-      setTimeout(()=>{preSendNotification(data[i])}, 0);
-      setTimeout(()=>{preSendNotification(data[i])}, 1000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, 2000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, 3000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, 4000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 1000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 2000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 3000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 4000 * 60);
     }
   })
-}
+});
+
 
 
 function preSendNotification(data){
@@ -81,11 +83,12 @@ exports.tokenReceived = (req, res) => {
     let tdate = new Date();
     let a = tdate.getTime();
     //>later we'll create a function to grab all the data, for now it's only forward looking
-    reminderModel.find({token: tokenId, remindAt: {$gte: a - (1000 * 60 * 7)}, taken: false}).sort({remindAt: 1}).then( (data) => {
+    reminderModel.find({token: tokenId, remindAt: {$gte: a - (1000 * 60 * 7)}, taken: false }).sort({remindAt: 1}).then( (data) => {
+      console.log(data.taken, "ought to be false or empty");
       return res.status(200).json({msg: 'data for user '+tokenId, data})
     })
     .catch( (e) => {
-      return res.status(500).json({msg: 'error getting '+tokenId+"'s data"})
+      return res.status(500).json({error: true, msg: 'error getting '+tokenId+"'s data"})
     })
   }
 }
@@ -95,8 +98,9 @@ exports.wasReminded = (req, res) => {
   const tokenId = req.body.token.value;
   const remindAt = req.body.remindAt.value;
 
-  reminderModel.updateOne({tokenId, remindAt}, {taken: true}).save()
+  reminderModel.findOneAndUpdate({token: tokenId, remindAt}, {taken: true})
   .then( (data)=>{
+    console.log(data, "here is what we found with the tokenId and remindAt");
     return res.status(201).json({msg: 'successfully checked off '+remindAt+" reminder", data})
   })
   .catch( (e) => {

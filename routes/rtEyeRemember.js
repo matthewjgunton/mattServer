@@ -10,8 +10,8 @@ sendRoutes.route("/records")
   .post(controller.reminderReceived);
   //make a get request here for the full records
 
-sendRoutes.route("/test")
-  .get(controller.test);
+// sendRoutes.route("/test")
+//   .get(controller.test);
 
 sendRoutes.route("/treated")
   .post(controller.wasReminded);
