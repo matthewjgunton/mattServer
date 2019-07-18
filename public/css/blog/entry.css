@@ -1,0 +1,17 @@
+.blog-article{
+  background-color: rgb(61, 61, 64);
+  width: 70%;
+  margin: auto;
+  /* display: flex; */
+  /* justify-content: center; */
+}
+
+.left{
+  display: inline-block;
+  width: 35%;
+}
+
+.right{
+  display: inline-block;
+  width: 55%;
+}

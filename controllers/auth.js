@@ -22,3 +22,13 @@ exports.projectSpecific = (req, res) => {
   let a = req.params.project;
   res.status(200).sendFile(path.join(__dirname+'/../views/projects/'+a+'.html'));
 }
+
+exports.blogPage = (req, res) => {
+  res.status(200).sendFile(path.join(__dirname+'/../views/blog.html'));
+}
+
+exports.blogSpecific = (req, res) => {
+  console.log(req.params.project);
+  let a = req.params.num;
+  res.status(200).sendFile(path.join(__dirname+'/../views/blogs/'+a+'.html'));
+}
