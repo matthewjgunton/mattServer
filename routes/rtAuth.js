@@ -6,6 +6,9 @@ var controller = require("../controllers/auth.js");
 sendRoutes.route("/")
   .get(controller.indexPage);
 
+sendRoutes.route("/projects")
+  .get(controller.projectPage);
+
 sendRoutes.route("/auth/google")
   .get(controller.googleLogin);
 

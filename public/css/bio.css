@@ -1,0 +1,20 @@
+#bio{
+  height: 40vh;
+  display: flex;
+  flex: 1;
+}
+
+#descrip{
+  display: inline-block;
+  width: 60%;
+  font-size: 30px;
+  padding: 5px;
+  padding-left: 20px;
+}
+
+#signature{
+  padding: 10px;
+  display: inline-block;
+  width: 40%;
+  background-image: url("/bg4.png");
+}
