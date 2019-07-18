@@ -32,3 +32,7 @@ exports.blogSpecific = (req, res) => {
   let a = req.params.num;
   res.status(200).sendFile(path.join(__dirname+'/../views/blogs/'+a+'.html'));
 }
+
+exports.mediaPage = (req, res) => {
+  res.status(200).sendFile(path.join(__dirname+'/../views/media.html'));
+}

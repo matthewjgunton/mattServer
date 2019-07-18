@@ -12,7 +12,8 @@
   <!-- <meta name="google-site-verification" content="xG8lCsXIU0hTHhH6Cj41yyo_tqyfsoszTugkHA93Kg0" /> -->
   <!-- <meta name="msvalidate.01" content="129B059FC9FD8F76F9BCBEFA4B897CE5" /> -->
   <link href = "/css/common.css" rel = "stylesheet" />
-  <link href = "/css/project/common.css" rel = "stylesheet" />
+  <link href = "/css/landing.css" rel ='stylesheet' />
+  <link href = "/css/blog/entry.css" rel = "stylesheet" />
   <link href = "/css/start.css" rel="stylesheet" />
   <link href = "/css/icons.css" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -23,27 +24,27 @@
 <body>
 
   <div>
-    <a href = "/">Home</a>
-    <a href = "/blog">Blog</a>
-    <a href = "/projects">Projects</a>
-    <a href = "/media">Media</a>
+    <a data-aos="fade-up" data-aos-delay="50" href = "/">Home</a>
+    <a data-aos="fade-up" data-aos-delay="70" href = "/blog">Blog</a>
+    <a data-aos="fade-up" data-aos-delay="150" href = "/projects">Projects</a>
+    <a data-aos="fade-up" data-aos-delay="330" href = "/media">Media</a>
   </div>
 
-  <h1>Eye Care for Children</h1>
-  <h4>Healthcare | Web-Design</h4>
-
-  <center><img src = "/eyecare.png"/></center>
-  <div id = "text">
-    <p>A website for my mother's private practice. Contains references to all of her published articles.</p>
+  <div id = "splash">
+    <div id = 'text'>
+      <h1 class='fadein'>Media</h1>
+        <p class="fadein2">My friends and I love creating videos and podcasts.</p>
+      </div>
   </div>
 
-  <div id = "tech">
-    <span>Tech Used</span>
-    <ul>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>Bootstrap</li>
-    </ul>
+  <div class = 'blog-article'>
+    <a href = "/blog/1"><div class = 'left'>
+      <h1>Title</h1>
+      <h4>Date</h4>
+    </div>
+    <div class = 'right'>
+      <span>The first few sentences of my blog post...</span>
+    </div></a>
   </div>
 
   <div data-aos="fade-right"  id = "start">
@@ -72,9 +73,10 @@
     </div>
   </div>
 
-  <script>
-    AOS.init();
-  </script>
+
+    <script>
+      AOS.init();
+    </script>
 
 </body>
 

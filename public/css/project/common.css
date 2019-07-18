@@ -4,6 +4,13 @@ img {
   /* justify-content: center; */
 }
 
+#mid{
+  margin: auto;
+  width: 80%;
+  text-align: justify;
+  font-size: 25px;
+}
+
 a{
   color: white;
   text-decoration: none;
@@ -26,11 +33,13 @@ span{
 #text{
   display: inline-block;
   width:70%;
-  padding-left: 5%;
+  padding-left: 8%;
+  font-size: 20px;
 }
 
 #tech{
   border-left: 1px solid white;
   display: inline-block;
   width: 20%;
+  font-size: 30px;
 }
