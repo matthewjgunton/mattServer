@@ -1,0 +1,15 @@
+.focus > div{
+  display: inline-block;
+}
+
+.images{
+  width: 70%;
+}
+
+.images img{
+  width: 100%;
+}
+
+.text{
+  width: 25%;
+}

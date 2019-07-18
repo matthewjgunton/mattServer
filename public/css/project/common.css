@@ -1,0 +1,36 @@
+img {
+  width: 80%;
+  /* flex: 1; */
+  /* justify-content: center; */
+}
+
+a{
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+a:hover{
+  font-size: 20px;
+}
+
+h1, h4{
+  text-align: center;
+}
+
+span{
+  padding-left: 5px;
+}
+
+#text{
+  display: inline-block;
+  width:70%;
+  padding-left: 5%;
+}
+
+#tech{
+  border-left: 1px solid white;
+  display: inline-block;
+  width: 20%;
+}

@@ -9,6 +9,9 @@ sendRoutes.route("/")
 sendRoutes.route("/projects")
   .get(controller.projectPage);
 
+sendRoutes.route("/projects/:project")
+  .get(controller.projectSpecific);
+
 sendRoutes.route("/auth/google")
   .get(controller.googleLogin);
 

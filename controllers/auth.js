@@ -16,3 +16,9 @@ exports.indexPage = function(req, res){
 exports.projectPage = (req, res) => {
   res.status(200).sendFile(path.join(__dirname+'/../views/projects.html'));
 }
+
+exports.projectSpecific = (req, res) => {
+  console.log(req.params.project);
+  let a = req.params.project;
+  res.status(200).sendFile(path.join(__dirname+'/../views/projects/'+a+'.html'));
+}
