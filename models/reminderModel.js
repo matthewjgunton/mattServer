@@ -6,7 +6,8 @@ const schema = mongoose.Schema;
 const mPresentSchema = new schema ({
   token: String,
   remindAt: Number,
-  boolDrops: Boolean,
+  boolPatch: Boolean,
+  patchLength: Number,
   taken: Boolean
 });
 

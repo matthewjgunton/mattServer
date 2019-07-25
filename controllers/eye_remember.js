@@ -54,17 +54,30 @@ function preSendNotification(data){
 exports.reminderReceived = (req, res) => {
 
   console.log(Object.keys(req.body).length);
-  if(Object.keys(req.body).length != 3){
+  if(Object.keys(req.body).length != 4){
     // console.log(req.body.length, "not big enough");
     return res.status(400).json({msg: "bad request!"});
   }
 
-  new reminderModel({
-    token: req.body.token.value,
-    remindAt: req.body.remindAt.value,
-    boolDrops: req.body.boolDrops.value,
-    taken: false
-  }).save().then( (proof) => {
+  let body = {};
+  if(req.body.boolPatch.value){
+    body = {
+      token: req.body.token.value,
+      remindAt: req.body.remindAt.value,
+      boolPatch: req.body.boolPatch.value,
+      patchLength: req.body.patchLength.value,
+      taken: false
+    }
+  }else{
+    body = {
+      token: req.body.token.value,
+      remindAt: req.body.remindAt.value,
+      boolPatch: req.body.boolPatch.value,
+      taken: false
+    }
+  }
+
+  new reminderModel(body).save().then( (proof) => {
     console.log(proof, " we saved it");
     return res.status(201).json({msg: 'success! we saved '+proof.token})
   })
@@ -72,6 +85,8 @@ exports.reminderReceived = (req, res) => {
     console.log("error saving reminder",e);
     return res.status(500).json({msg: 'error', e});
   })
+
+
 }
 
 exports.tokenReceived = (req, res) => {
