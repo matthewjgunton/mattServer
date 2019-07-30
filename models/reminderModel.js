@@ -8,7 +8,8 @@ const mPresentSchema = new schema ({
   remindAt: Number,
   boolPatch: Boolean,
   patchLength: Number,
-  taken: Boolean
+  taken: Boolean,
+  finished: Boolean
 });
 
 const mattModel = mongoose.model("reminderModel", mPresentSchema);

@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const reminderModel = require("../models/reminderModel");
 const schedule = require('node-schedule');
-
+const path = require("path");
 
 
 var j = schedule.scheduleJob('00 * * * *', function(){
@@ -15,6 +15,8 @@ var j = schedule.scheduleJob('00 * * * *', function(){
     //here's our spinner
     for(let i = 0; i < data.length; i++){
       //we'll need to convert d into seconds, milisceonds is too big for setTimeout
+
+
       console.log("reached", data[i]);
       const time = data.remindAt - new Date().getTime();
       // promises.push()
@@ -23,11 +25,24 @@ var j = schedule.scheduleJob('00 * * * *', function(){
       setTimeout(()=>{preSendNotification(data[i])}, time + 2000 * 60);
       setTimeout(()=>{preSendNotification(data[i])}, time + 3000 * 60);
       setTimeout(()=>{preSendNotification(data[i])}, time + 4000 * 60);
+      if(data[i].boolPatch){
+        setTimeout(()=>{reminderNotification(data[i])},time + 1000 * 60 * data[i].patchLength);
+      }
     }
   })
 });
 
+function reminderNotification(data){
 
+  sendNotification(data, "Your Patching Time Is Over").then( (data)=> {
+    console.log(data, "hooray sent");
+    // resolve("sent!");
+  })
+  .catch( (e)=> {
+    console.log(e, "oh no something is wrong");
+    // reject(e);
+  })
+}
 
 function preSendNotification(data){
 
@@ -37,9 +52,10 @@ function preSendNotification(data){
     reminderModel.findOne({remindAt: data.remindAt, token: data.token}).then( (confData)=>{
       if(confData.taken){
         return;
-        // reject("already taken");
       }
-      sendNotification(data).then( (data)=> {
+
+      const msg = (data.boolPatch) ? ("Time to patch") : ("Time to take your drops");
+      sendNotification(data, msg).then( (data)=> {
         console.log(data, "hooray sent");
         // resolve("sent!");
       })
@@ -54,7 +70,7 @@ function preSendNotification(data){
 exports.reminderReceived = (req, res) => {
 
   console.log(Object.keys(req.body).length);
-  if(Object.keys(req.body).length != 4){
+  if(Object.keys(req.body).length != 5){
     // console.log(req.body.length, "not big enough");
     return res.status(400).json({msg: "bad request!"});
   }
@@ -66,14 +82,16 @@ exports.reminderReceived = (req, res) => {
       remindAt: req.body.remindAt.value,
       boolPatch: req.body.boolPatch.value,
       patchLength: req.body.patchLength.value,
-      taken: false
+      taken: false,
+      id: req.body.id.value
     }
   }else{
     body = {
       token: req.body.token.value,
       remindAt: req.body.remindAt.value,
       boolPatch: req.body.boolPatch.value,
-      taken: false
+      taken: false,
+      id: req.body.id.value
     }
   }
 
@@ -85,8 +103,6 @@ exports.reminderReceived = (req, res) => {
     console.log("error saving reminder",e);
     return res.status(500).json({msg: 'error', e});
   })
-
-
 }
 
 exports.tokenReceived = (req, res) => {
@@ -133,14 +149,12 @@ function isValidToken(token){
   );
 }
 
-function sendNotification(obj){
+function sendNotification(obj, msg){
 
   return new Promise((resolve, reject)=> {
     if(!isValidToken(token)){
       reject("invalid token");
     }
-
-    const msg = (obj.boolDrops) ? ("Time to take your drops") : ("Time to patch");
 
     const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
 
@@ -167,5 +181,44 @@ function sendNotification(obj){
       reject(e);
     })
   })
+}
+
+exports.sendFullRecordsEJS = (req, res) => {
+
+  const tokenId = req.params.tokenId;
+  let timeNowMili = new Date().getTime();
+
+  reminderModel.find({ token: tokenId, remindAt: {$lt: timeNowMili} } ).then( (data)=> {
+    return res.status(200).render("eyeRememberTable", {data} );
+  })
+
+
+}
+
+exports.sendFullRecordsJSON = (req, res) => {
+  const tokenId = req.params.tokenId;
+  let timeNowMili = new Date().getTime();
+
+  reminderModel.find({ token: tokenId, remindAt: {$gt: timeNowMili} } ).then( (data)=> {
+    return res.status(200).json({erMsg: false, data});
+  })
+  .catch(e => {
+    return res.status(400).json({erMsg: true, e})
+  })
+}
+
+exports.deleteAlarm = (req, res) => {
+
+  reminderModel.remove({token: req.body.token.value, id: req.body.id.value}).then( () => {
+    reminderModel.find({token: req.body.token.value, id: req.body.id.value}).then( (data) => {
+      if(data === null){
+          return res.status(205).json({erMsg: false, msg: "finished"});
+      }else{
+          return res.status(400).json({erMsg: true, msg: "error deleting item", data});
+      }
+    })
+  })
+
+
 
 }

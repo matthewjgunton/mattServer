@@ -5,7 +5,7 @@ a{
   transition: 0.2s;
 }
 
-a:hover{
+#navbar a:hover{
   font-size: 20px;
 }
 

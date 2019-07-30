@@ -6,11 +6,11 @@
   box-shadow: 10px 10px 103px 0px rgba(138, 141, 144, 0.75);
   margin: auto;
   /* color: black; */
-
 }
 
 #testimonials{
-  height: 50vh;
+  /* height: 50vh; */
+  padding: 5px;
 }
 
 .mySlidesNew{

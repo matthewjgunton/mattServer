@@ -17,4 +17,23 @@
   display: inline-block;
   width: 40%;
   background-image: url("/bg4.png");
+
+  position: relative;
+opacity: 0.65;
+background-attachment: scroll;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+@media only screen and (max-width: 1000px){
+  #descrip {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (max-width: 350px){
+  #descrip {
+    font-size: 15px;
+  }
 }
