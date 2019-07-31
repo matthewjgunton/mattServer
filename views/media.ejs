@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ./partials/header.ejs %>
+
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/landing.css" rel ='stylesheet' />
+  <link href = "/css/blog/entry.css" rel = "stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <div id = "navbar">
+    <a data-aos="fade-up" data-aos-delay="50" href = "/">Home</a>
+    <a data-aos="fade-up" data-aos-delay="70" href = "/blog">Blog</a>
+    <a data-aos="fade-up" data-aos-delay="150" href = "/projects">Projects</a>
+    <a data-aos="fade-up" data-aos-delay="330" href = "/media">Media</a>
+  </div>
+
+  <div id = "splash">
+    <div id = 'text'>
+      <h1 class='fadein'>Media</h1>
+        <p class="fadein2">My friends and I love creating videos and podcasts.</p>
+      </div>
+  </div>
+
+  <div class = 'blog-article'>
+    <a href = "/blog/1"><div class = 'left'>
+      <h1>Title</h1>
+      <h4>Date</h4>
+    </div>
+    <div class = 'right'>
+      <span>The first few sentences of my blog post...</span>
+    </div></a>
+  </div>
+
+  <% include ./partials/footer.ejs %>
+
+</body>
+
+</html>

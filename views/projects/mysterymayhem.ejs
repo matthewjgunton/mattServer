@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <!-- <meta name="google-site-verification" content="xG8lCsXIU0hTHhH6Cj41yyo_tqyfsoszTugkHA93Kg0" /> -->
+  <!-- <meta name="msvalidate.01" content="129B059FC9FD8F76F9BCBEFA4B897CE5" /> -->
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/project/common.css" rel = "stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <div>
+    <a href = "/">Home</a>
+    <a href = "/blog">Blog</a>
+    <a href = "/projects">Projects</a>
+    <a href = "/media">Media</a>
+  </div>
+
+  <h1>Mystery Mayhem</h1>
+  <h4>Story-Telling | Alexa Skill</h4>
+
+  <center><img src = "/mysteryMayhem.png"/></center>
+  <div id = "text">
+    <p>Mystery Mayhem is a choose your own adventure story I created during my Freshmen Spring Break.</p>
+  </div>
+
+  <div id = "tech">
+    <span>Tech Used</span>
+    <ul>
+      <li>Node.JS</li>
+      <li>ASK</li>
+    </ul>
+  </div>
+  <div id = "mid">
+    <p>
+      Spring break at Lehigh is about a week long, and it just so happened to coincide with Squash Nationals at UVA. For those who don't know, my brother is a great squash player. He was invited to play at nationals, and I knew I was going to be there to support him. The only issue was that squash nationals was at UVA––a roughly 5 hour drive from our house. Having nothing to do for that time would drive me crazy, so I decided to bring my computer and alexa into the car with me to pass the time. After playing a few choose your own adventure stories, I felt like creating one of my own.
+      <br/><br/>
+      With my dad and brother, we created the story of a detective who has to interview suspects for a bank robbery. It was the kind of mystery that was interesting without being too dark. We wanted to make sure that anyone could play this game, no matter their age. Creating the suspects from our favorite movie characters, we then went about creating different paths. The best choose your own adventures have the story completely change with each decision. In other words, with each decision the user makes, the person who robbed the bank changes. With a doubt, this was the most difficult part of the story to code.
+      <br/><br/>
+      After brainstorming for about an hour, I went about creating the actual skill. This being my second time creating a skill, I knew how to set myself up well. Alexa coding has a file that keeps track of all the phrases that can trigger certain responses. To make the story feel fun and interactive, I had to think of every possible phrase that could trigger a response. This meant more than just asking the user to pick one of 3 options at the end of every story stage. Rather, the goal was to create responses that users would naturally say without being prompted. Once the story skeleton was laid out, I created a system for keeping track of choices. The choice selection would then alter which aspect of the story skeleton was part of the story. For instance, if you choose to interview the track star, he'll give you evidence against one of the other two suspects. That evidence will be critical in taking down the robber. However, he only says that evidence if you ask him the right question. The variation is what makes it fun.
+      <br/><br/>
+      The coding took the entire trip down, and most of the trip back up. Afterwards, I had my family and friends at Lehigh test it for me before putting it on the Alexa store. If you are curious about it, you can download it here: <a href = "https://www.amazon.com/Mystery-Mayhem-Robberty-Drinker-Bank/dp/B07PQ694CY/ref=sr_1_2?keywords=matthew+gunton&qid=1564589705&s=digital-skills&sr=1-2">Amazon Skill Store</a>
+    </p>
+  </div>
+  <% include ../partials/footer.ejs%>
+
+
+</body>
+
+</html>

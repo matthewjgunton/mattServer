@@ -10,29 +10,31 @@ exports.googleCallback = passport.authenticate('google', {
     })
 
 exports.indexPage = function(req, res){
-  res.status(200).sendFile(path.join(__dirname+'/../views/index.html'));
+  res.status(200).render('index');
 }
 
 exports.projectPage = (req, res) => {
-  res.status(200).sendFile(path.join(__dirname+'/../views/projects.html'));
+    res.status(200).render('projects');
 }
 
 exports.projectSpecific = (req, res) => {
   console.log(req.params.project);
   let a = req.params.project;
-  res.status(200).sendFile(path.join(__dirname+'/../views/projects/'+a+'.html'));
+  res.status(200).render('projects/'+a);
+  // res.status(200).sendFile(path.join(__dirname+'/../views/projects/'+a+'.html'));
 }
 
 exports.blogPage = (req, res) => {
-  res.status(200).sendFile(path.join(__dirname+'/../views/blog.html'));
+  res.status(200).render('blog');
 }
 
 exports.blogSpecific = (req, res) => {
   console.log(req.params.project);
   let a = req.params.num;
-  res.status(200).sendFile(path.join(__dirname+'/../views/blogs/'+a+'.html'));
+  res.status(200).render('blogs/'+a);
+  // res.status(200).sendFile(path.join(__dirname+'/../views/blogs/'+a+'.html'));
 }
 
 exports.mediaPage = (req, res) => {
-  res.status(200).sendFile(path.join(__dirname+'/../views/media.html'));
+  res.status(200).render('media');
 }

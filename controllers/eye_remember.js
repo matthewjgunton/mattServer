@@ -152,7 +152,7 @@ function isValidToken(token){
 function sendNotification(obj, msg){
 
   return new Promise((resolve, reject)=> {
-    if(!isValidToken(token)){
+    if(!isValidToken(obj.token)){
       reject("invalid token");
     }
 
@@ -209,8 +209,12 @@ exports.sendFullRecordsJSON = (req, res) => {
 
 exports.deleteAlarm = (req, res) => {
 
-  reminderModel.remove({token: req.body.token.value, id: req.body.id.value}).then( () => {
-    reminderModel.find({token: req.body.token.value, id: req.body.id.value}).then( (data) => {
+  let timeNowMili = new Date().getTime();
+
+  //only delete the ones that haven't happened yet
+
+  reminderModel.remove( {token: req.body.token.value, id: req.body.id.value, remindAt: {$gt: timeNowMili} } ).then( () => {
+    reminderModel.find( {token: req.body.token.value, id: req.body.id.value, remindAt: {$gt: timeNowMili} } ).then( (data) => {
       if(data === null){
           return res.status(205).json({erMsg: false, msg: "finished"});
       }else{
