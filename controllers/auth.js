@@ -1,6 +1,8 @@
 var User = require("../models/users.js");//allows us to search the userbase, and register new ones
-var path = require("path");
 var passport = require("passport");//because we cannot pass it through on app.js
+
+const projectPath = require("../config/projectPath.json");
+const blogPath = require("../config/blogPath.json");
 
 exports.googleLogin = passport.authenticate('google', {scope: ['profile', 'email']});
 
@@ -18,10 +20,18 @@ exports.projectPage = (req, res) => {
 }
 
 exports.projectSpecific = (req, res) => {
-  console.log(req.params.project);
   let a = req.params.project;
-  res.status(200).render('projects/'+a);
-  // res.status(200).sendFile(path.join(__dirname+'/../views/projects/'+a+'.html'));
+  for(let i = 0; i < projectPath.length; i++){
+    let test = projectPath[i].substring(0, projectPath[i].indexOf('.'));
+    if(a === test){
+      return res.status(200).render('projects/'+a);
+      break;
+    }
+    if(i == projectPath.length - 1){
+      return res.status(200).redirect('/projects');
+      break;
+    }
+  }
 }
 
 exports.blogPage = (req, res) => {
@@ -29,10 +39,19 @@ exports.blogPage = (req, res) => {
 }
 
 exports.blogSpecific = (req, res) => {
-  console.log(req.params.project);
+
   let a = req.params.num;
-  res.status(200).render('blogs/'+a);
-  // res.status(200).sendFile(path.join(__dirname+'/../views/blogs/'+a+'.html'));
+  for(let i = 0; i < blogPath.length; i++){
+    let test = blogPath[i].substring(0, blogPath[i].indexOf('.'));
+    if(a === test){
+      return res.status(200).render('blogs/'+a);
+      break;
+    }
+    if(i == projectPath.length - 1){
+      return res.status(200).redirect('/blog');
+      break;
+    }
+  }
 }
 
 exports.mediaPage = (req, res) => {

@@ -11,7 +11,7 @@ var j = schedule.scheduleJob('00 * * * *', function(){
   let hourPlus = timeNowMili + 1000 * 60 * 60;
 
   reminderModel.find({remindAt: {$gt: timeNowMili, $lt: hourPlus} } ).sort({remindAt: 1}).then( (data)=> {
-    console.log("j'arive",data.length);
+    console.log("j'arive",data.length, timeNowMili+" patrol");
     //here's our spinner
     for(let i = 0; i < data.length; i++){
       //we'll need to convert d into seconds, milisceonds is too big for setTimeout
@@ -19,12 +19,13 @@ var j = schedule.scheduleJob('00 * * * *', function(){
 
       console.log("reached", data[i]);
       const time = data.remindAt - new Date().getTime();
+      console.log(time);
       // promises.push()
       setTimeout(()=>{preSendNotification(data[i])}, time);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 1000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 2000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 3000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 4000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 1 * 1000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 2 * 1000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 3 * 1000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, time + 4 * 1000 * 60);
       if(data[i].boolPatch){
         setTimeout(()=>{reminderNotification(data[i])},time + 1000 * 60 * data[i].patchLength);
       }
@@ -45,8 +46,8 @@ function reminderNotification(data){
 }
 
 function preSendNotification(data){
-
-  console.log("activated presend", data);
+  const d = new Date().getTime();
+  console.log("activated presend", d);
 
   // return new Promise ((resolve, reject) => {
     reminderModel.findOne({remindAt: data.remindAt, token: data.token}).then( (confData)=>{

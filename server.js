@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const passport = require("passport");//for identification
 const minify = require('express-minify');
 const compression = require('compression');
+const path = require("path");
+const fs = require('fs');
 
 app.set("view engine", "ejs");
 
@@ -41,6 +43,35 @@ app.use(compression());
 app.use(minify());
 app.use(express.static(__dirname+"/public"));
 
+
+//have it figure out how many pages are in what
+const projectPath = path.join(__dirname+'/views/projects/');
+const blogPath = path.join(__dirname+'/views/projects/');
+
+fs.readdir(projectPath, function(err, items) {
+
+    fs.writeFile(path.join(__dirname+"/config/projectPath.json"), JSON.stringify(items), (err, file) => {
+      if(err){
+        //throw an err,this is bad!
+        throw(err);
+      }else{
+        console.log('projectPath file created');
+      }
+    });
+});
+
+fs.readdir(blogPath, function(err, items) {
+    fs.writeFile(path.join(__dirname+"/config/blogPath.json"), JSON.stringify(items), (err, file) => {
+      if(err){
+        //throw an err,this is bad!
+        throw(err);
+      }else{
+        console.log('projectPath file created');
+      }
+    });
+});
+
+
 const rtAuth = require("./routes/rtAuth.js");
 const rtEyeRemember = require("./routes/rtEyeRemember");
 
@@ -56,10 +87,9 @@ app.use("/eye_remember", rtEyeRemember);
 
 app.use(function(req, res){
   res.status(404);
-  console.log("redirected");
   // respond with html page
   if (req.accepts('html')) {
-    console.log(req.url);
+    console.log("redirected", req.url);
     res.redirect("/");
     return;
   }
