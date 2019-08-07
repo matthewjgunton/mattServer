@@ -9,9 +9,9 @@ const mPresentSchema = new schema ({
   boolPatch: Boolean,
   patchLength: Number,
   taken: Boolean,
-  finished: Boolean
+  id: Number
 });
 
 const mattModel = mongoose.model("reminderModel", mPresentSchema);
-
+console.log("reminder model online");
 module.exports = mattModel;

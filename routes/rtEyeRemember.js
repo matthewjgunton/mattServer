@@ -16,8 +16,8 @@ sendRoutes.route("/records/:tokenId")
 sendRoutes.route("/json/:tokenId")
   .get(controller.sendFullRecordsJSON);
 
-sendRoutes.route("/delete/")
-  .get(controller.deleteAlarm);
+sendRoutes.route("/delete")
+  .post(controller.deleteAlarm);
 
 sendRoutes.route("/treated")
   .post(controller.wasReminded);

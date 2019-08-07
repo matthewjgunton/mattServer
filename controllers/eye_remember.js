@@ -3,8 +3,10 @@ const reminderModel = require("../models/reminderModel");
 const schedule = require('node-schedule');
 const path = require("path");
 
+var rule = new schedule.RecurrenceRule();
+rule.minute = 17;
 
-var j = schedule.scheduleJob('00 * * * *', function(){
+var j = schedule.scheduleJob(rule, function(){
   //every hour
   console.log('arrived at test');
   let timeNowMili = new Date().getTime();
@@ -15,19 +17,24 @@ var j = schedule.scheduleJob('00 * * * *', function(){
     //here's our spinner
     for(let i = 0; i < data.length; i++){
       //we'll need to convert d into seconds, milisceonds is too big for setTimeout
+      const time = data[i].remindAt - timeNowMili;
+      const a = time + 1 * 1000 * 60;
+      const b = time + 1.25 * 1000 * 60;
+      const c = time + 1.5 * 1000 * 60;
+      const d = time + 1.75 * 1000 * 60;
+      const f = time + 2 * 1000 * 60;
 
-
-      console.log("reached", data[i]);
-      const time = data.remindAt - new Date().getTime();
-      console.log(time);
+      console.log(time, a, b, c, d);
       // promises.push()
       setTimeout(()=>{preSendNotification(data[i])}, time);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 1 * 1000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 2 * 1000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 3 * 1000 * 60);
-      setTimeout(()=>{preSendNotification(data[i])}, time + 4 * 1000 * 60);
+      setTimeout(()=>{preSendNotification(data[i])}, a);
+      setTimeout(()=>{preSendNotification(data[i])}, b);
+      setTimeout(()=>{preSendNotification(data[i])}, c);
+      setTimeout(()=>{preSendNotification(data[i])}, d);
+      setTimeout(()=>{preSendNotification(data[i])}, f);
       if(data[i].boolPatch){
-        setTimeout(()=>{reminderNotification(data[i])},time + 1000 * 60 * data[i].patchLength);
+        const e = time + 1000 * 60 * 60 * data[i].patchLength;
+        setTimeout(()=>{reminderNotification(data[i])}, e);
       }
     }
   })
@@ -70,13 +77,14 @@ function preSendNotification(data){
 
 exports.reminderReceived = (req, res) => {
 
-  console.log(Object.keys(req.body).length);
+  //find a way to get new reminders into the firing range if they missed the hourly check
   if(Object.keys(req.body).length != 5){
     // console.log(req.body.length, "not big enough");
     return res.status(400).json({msg: "bad request!"});
   }
 
   let body = {};
+  console.log(req.body.id.value);
   if(req.body.boolPatch.value){
     body = {
       token: req.body.token.value,
@@ -107,7 +115,6 @@ exports.reminderReceived = (req, res) => {
 }
 
 exports.tokenReceived = (req, res) => {
-  console.log("token!", req.params.tokenId);
   let tokenId = req.params.tokenId;
   if(tokenId == null){
     return res.status(400).json({msg: 'bad request'})
@@ -116,7 +123,6 @@ exports.tokenReceived = (req, res) => {
     let a = tdate.getTime();
     //>later we'll create a function to grab all the data, for now it's only forward looking
     reminderModel.find({token: tokenId, remindAt: {$gte: a - (1000 * 60 * 7)}, taken: false }).sort({remindAt: 1}).then( (data) => {
-      console.log(data.taken, "ought to be false or empty");
       return res.status(200).json({msg: 'data for user '+tokenId, data})
     })
     .catch( (e) => {
@@ -212,18 +218,14 @@ exports.deleteAlarm = (req, res) => {
 
   let timeNowMili = new Date().getTime();
 
-  //only delete the ones that haven't happened yet
-
   reminderModel.remove( {token: req.body.token.value, id: req.body.id.value, remindAt: {$gt: timeNowMili} } ).then( () => {
     reminderModel.find( {token: req.body.token.value, id: req.body.id.value, remindAt: {$gt: timeNowMili} } ).then( (data) => {
-      if(data === null){
+      if(data == null){
           return res.status(205).json({erMsg: false, msg: "finished"});
       }else{
           return res.status(400).json({erMsg: true, msg: "error deleting item", data});
       }
     })
   })
-
-
 
 }

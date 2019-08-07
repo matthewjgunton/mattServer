@@ -3,7 +3,7 @@ const app = express();
 // const session = require('express-session');//to store information between links from user
 // const MongoStore = require('connect-mongo')(session);
 // const mongoStore = new MongoStore({url: 'mongodb://localhost/mPresent'});
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 // const passport = require("passport");//for identification
 const minify = require('express-minify');
 const compression = require('compression');
@@ -13,15 +13,10 @@ app.set("view engine", "ejs");
 
 //connecting to db
 
-mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/mPresent", function(err){
-  if(err){
-		console.log("failed to connect to DB");
+// mongoose.Promise = global.Promise;
 
-	}else{
-		console.log("connection success");
-	}
-});
+const db = require("./db.js");
+db.run();
 
 // require("./config/dbConfig.js");
 // require("./config/passport.js")(passport);
@@ -38,23 +33,20 @@ app.use(bodyParser.json());//it now says body works
 // }));//for authenticating users
 // app.use(passport.initialize());//starts passport
 // app.use(passport.session());//allows authentication info to pass between pages
-app.use(compression());
-app.use(minify());
-app.use(express.static(__dirname+"/public"));
+app.use( compression() );
+app.use( minify() );
+app.use( express.static(__dirname+"/public") );
 
 
 //have it figure out how many pages are in what
 const a = require("./createFiles.js");
 const projectPath = path.join(__dirname+'/views/projects/');
-const blogPath = path.join(__dirname+'/views/projects/');
-
-let rtAuth;
-let rtEyeRemember;
+const blogPath = path.join(__dirname+'/views/blogs/');
 
 a.createFiles(projectPath, 'projectPath').then( () => {
   a.createFiles(blogPath, 'blogPath').then( () => {
-    rtAuth = require("./routes/rtAuth.js");
-    rtEyeRemember = require("./routes/rtEyeRemember");
+    const rtAuth = require("./routes/rtAuth.js");
+    const rtEyeRemember = require("./routes/rtEyeRemember");
     app.use("/", rtAuth);
     app.use("/eye_remember", rtEyeRemember);
     app.use(function(req, res){
@@ -72,8 +64,6 @@ a.createFiles(projectPath, 'projectPath').then( () => {
     console.log("lift off");
   })
 })
-
-
 
 
 //enabling an offline development mode
