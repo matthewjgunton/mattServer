@@ -3,6 +3,18 @@ const reminderModel = require("../models/reminderModel");
 const schedule = require('node-schedule');
 const path = require("path");
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'mgunton7@gmail.com',
+    pass: 'udvyhnbrcmlpsqkf'
+  }
+});
+
+getHelp("MattServer online");
+
 var rule = new schedule.RecurrenceRule();
 rule.minute = 17;
 
@@ -44,12 +56,28 @@ function reminderNotification(data){
 
   sendNotification(data, "Your Patching Time Is Over").then( (data)=> {
     console.log(data, "hooray sent");
-    // resolve("sent!");
   })
   .catch( (e)=> {
     console.log(e, "oh no something is wrong");
-    // reject(e);
+    getHelp(e);
   })
+}
+
+function getHelp(e){
+  var mailOptions = {
+    from: 'mgunton7@gmail.com',
+    to: 'mgunton7@gmail.com',
+    subject: 'EyeRemember Notification System Error',
+    text: e
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 }
 
 function preSendNotification(data){
@@ -65,11 +93,11 @@ function preSendNotification(data){
       const msg = (data.boolPatch) ? ("Time to patch") : ("Time to take your drops");
       sendNotification(data, msg).then( (data)=> {
         console.log(data, "hooray sent");
-        // resolve("sent!");
+
       })
       .catch( (e)=> {
         console.log(e, "oh no something is wrong");
-        // reject(e);
+        getHelp(e);
       })
     } )
   // });
@@ -110,6 +138,7 @@ exports.reminderReceived = (req, res) => {
   })
   .catch( (e)=>{
     console.log("error saving reminder",e);
+    getHelp(e);
     return res.status(500).json({msg: 'error', e});
   })
 }
@@ -126,6 +155,7 @@ exports.tokenReceived = (req, res) => {
       return res.status(200).json({msg: 'data for user '+tokenId, data})
     })
     .catch( (e) => {
+      getHelp(e);
       return res.status(500).json({error: true, msg: 'error getting '+tokenId+"'s data"})
     })
   }
@@ -142,6 +172,7 @@ exports.wasReminded = (req, res) => {
     return res.status(201).json({msg: 'successfully checked off '+remindAt+" reminder", data})
   })
   .catch( (e) => {
+    getHelp(e);
     console.log(e, "error updating");
     return res.status(500).json({msg: 'error', e});
   })
@@ -210,6 +241,7 @@ exports.sendFullRecordsJSON = (req, res) => {
     return res.status(200).json({erMsg: false, data});
   })
   .catch(e => {
+    getHelp(e);
     return res.status(400).json({erMsg: true, e})
   })
 }

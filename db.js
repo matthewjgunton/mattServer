@@ -11,6 +11,8 @@ function retry(){
     if (err) {
       console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
       setTimeout(retry, 5000);
+    }else{
+      console.log("connected to db");
     }
   });
 }
