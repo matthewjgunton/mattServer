@@ -1,17 +1,1 @@
-h1, h4{
-  text-align: center;
-}
-
-h1{
-  padding-top: 50px;
-}
-
-.text{
-  display: flex;
-  justify-content: center;
-}
-
-p{
-  width: 70%;
-  text-align: justify;
-}
+h1, h4{text-align: center;}h1{padding-top: 50px;}.text{display: flex; justify-content: center;}p{width: 70%; text-align: justify;}

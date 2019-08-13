@@ -1,6 +1,6 @@
 {
   "name": "mattserver",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "programs for matt's personal server, mostly for programs i will find immediately useful",
   "main": "server.js",
   "scripts": {
