@@ -1,7 +1,0 @@
-
-1.0:
-
-1) FredIsFed incorporation
-2) Create universal navbar
-3) req.flash added into everything
-4) way to delete items & subjects & finish schedule
