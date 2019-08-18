@@ -31,10 +31,10 @@ var j = schedule.scheduleJob(rule, function(){
       //we'll need to convert d into seconds, milisceonds is too big for setTimeout
       const time = data[i].remindAt - timeNowMili;
       const a = time + 1 * 1000 * 60;
-      const b = time + 1.25 * 1000 * 60;
-      const c = time + 1.5 * 1000 * 60;
-      const d = time + 1.75 * 1000 * 60;
-      const f = time + 2 * 1000 * 60;
+      const b = time + 1.5 * 1000 * 60;
+      const c = time + 2 * 1000 * 60;
+      const d = time + 2.5 * 1000 * 60;
+      const f = time + 3 * 1000 * 60;
 
       console.log(time, a, b, c, d);
       // promises.push()
@@ -44,8 +44,11 @@ var j = schedule.scheduleJob(rule, function(){
       setTimeout(()=>{preSendNotification(data[i])}, c);
       setTimeout(()=>{preSendNotification(data[i])}, d);
       setTimeout(()=>{preSendNotification(data[i])}, f);
+
+      console.log(data[i].boolPatch);
       if(data[i].boolPatch){
         const e = time + 1000 * 60 * 60 * data[i].patchLength;
+        console.log("patch ending reminder",e);
         setTimeout(()=>{reminderNotification(data[i])}, e);
       }
     }
@@ -59,7 +62,7 @@ function reminderNotification(data){
   })
   .catch( (e)=> {
     console.log(e, "oh no something is wrong");
-    getHelp(e);
+    getHelp("saying patching time is over error"+e);
   })
 }
 
@@ -86,20 +89,22 @@ function preSendNotification(data){
 
   // return new Promise ((resolve, reject) => {
     reminderModel.findOne({remindAt: data.remindAt, token: data.token}).then( (confData)=>{
-      if(confData.taken){
+      if(confData.taken || confData == null){
         return;
       }
 
       const msg = (data.boolPatch) ? ("Time to patch") : ("Time to take your drops");
       sendNotification(data, msg).then( (data)=> {
         console.log(data, "hooray sent");
-
       })
       .catch( (e)=> {
         console.log(e, "oh no something is wrong");
-        getHelp(e);
+        getHelp("sending notification normal error"+e);
       })
     } )
+    .catch( (e) => {
+      getHelp(" error getting record"+e);
+    })
   // });
 }
 
@@ -138,7 +143,7 @@ exports.reminderReceived = (req, res) => {
   })
   .catch( (e)=>{
     console.log("error saving reminder",e);
-    getHelp(e);
+    getHelp("error saving reminder "+e);
     return res.status(500).json({msg: 'error', e});
   })
 }
@@ -161,6 +166,27 @@ exports.tokenReceived = (req, res) => {
   }
 }
 
+exports.checkIfNew = (req, res) => {
+
+  let tokenId = req.body.value.token;
+  if(tokenId == null){
+    return res.status(400).json({msg: 'bad request'})
+  }else{
+    reminderModel.findOne({token: tokenId}).then( (data)=> {
+      if(data.length > 0){
+        return res.status(200).json({new: false});
+      }else{
+        return res.status(200).json({new: true});
+      }
+    })
+    .catch( (e)=> {
+      getHelp("Checking if new"+e);
+    })
+
+
+  }
+}
+
 exports.wasReminded = (req, res) => {
   //give me the tokenId and the time
   const tokenId = req.body.token.value;
@@ -172,7 +198,7 @@ exports.wasReminded = (req, res) => {
     return res.status(201).json({msg: 'successfully checked off '+remindAt+" reminder", data})
   })
   .catch( (e) => {
-    getHelp(e);
+    getHelp("updated reminder error"+e);
     console.log(e, "error updating");
     return res.status(500).json({msg: 'error', e});
   })
@@ -225,8 +251,9 @@ exports.sendFullRecordsEJS = (req, res) => {
 
   const tokenId = req.params.tokenId;
   let timeNowMili = new Date().getTime();
-
+  console.log(timeNowMili);
   reminderModel.find({ token: tokenId, remindAt: {$lt: timeNowMili} } ).then( (data)=> {
+    console.log('data', data);
     return res.status(200).render("eyeRememberTable", {data} );
   })
 
@@ -241,7 +268,7 @@ exports.sendFullRecordsJSON = (req, res) => {
     return res.status(200).json({erMsg: false, data});
   })
   .catch(e => {
-    getHelp(e);
+    getHelp("Getting records JSON error"+e);
     return res.status(400).json({erMsg: true, e})
   })
 }
