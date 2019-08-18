@@ -6,6 +6,9 @@ var controller = require("../controllers/auth.js");
 sendRoutes.route("/")
   .get(controller.indexPage);
 
+sendRoutes.route("/speed")
+  .get(controller.speedTest);
+
 sendRoutes.route("/projects")
   .get(controller.projectPage);
 

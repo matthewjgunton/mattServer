@@ -33,13 +33,17 @@
       <tr>
         <td>This Is Where You Can Show Your Doctor How Good You've Been About Treating</td>
       </tr>
-    <% } %>
+    <% }else{ %>
+      <tr>
+        <th>Reminders</th>
+        <th>Taken</th>
+      </tr>
     <% for(var i = 0; i < data.length; i++){%>
       <tr>
         <td><%=time(data[i].remindAt)%> Reminder to <%=verb(data[i].boolPatch)%></td>
         <td><%=data[i].taken%></td>
       </tr>
-    <% } %>
+    <% }} %>
   </table></center>
 
   <% function time(remindAt) {

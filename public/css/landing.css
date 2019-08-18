@@ -121,6 +121,18 @@ a{
             animation-delay: 6s;
 }
 
+@media only screen and (max-width: 350px){
+  #splash h1{
+    font-size: 14vw;
+    text-align: center;
+  }
+
+  #splash h3{
+    text-align: center;
+    font-size: 8vw;
+    opacity: 0;
+  }
+}
 
 
 @keyframes fadein {

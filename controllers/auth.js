@@ -15,6 +15,15 @@ exports.indexPage = function(req, res){
   res.status(200).render('index');
 }
 
+exports.speedTest = (req, res) => {
+  //timezone is east coast
+  let date = new Date();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let seconds = date.getSeconds();
+  return res.status(200).json({hour, minute, seconds, date});
+}
+
 exports.projectPage = (req, res) => {
     res.status(200).render('projects');
 }
