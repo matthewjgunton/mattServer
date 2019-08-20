@@ -139,6 +139,10 @@ exports.reminderReceived = (req, res) => {
 
   new reminderModel(body).save().then( (proof) => {
     console.log(proof, " we saved it");
+    //we need to check if we need to throw this thing into the cycle
+
+    
+
     return res.status(201).json({msg: 'success! we saved '+proof.token})
   })
   .catch( (e)=>{
@@ -167,7 +171,10 @@ exports.tokenReceived = (req, res) => {
 }
 
 exports.checkIfNew = (req, res) => {
-
+  if(Object.keys(req.body).length != 1){
+    // console.log(req.body.length, "not big enough");
+    return res.status(400).json({msg: "bad request!"});
+  }
   let tokenId = req.body.value.token;
   if(tokenId == null){
     return res.status(400).json({msg: 'bad request'})
@@ -189,6 +196,10 @@ exports.checkIfNew = (req, res) => {
 
 exports.wasReminded = (req, res) => {
   //give me the tokenId and the time
+  if(Object.keys(req.body).length != 2){
+    // console.log(req.body.length, "not big enough");
+    return res.status(400).json({msg: "bad request!"});
+  }
   const tokenId = req.body.token.value;
   const remindAt = req.body.remindAt.value;
 
