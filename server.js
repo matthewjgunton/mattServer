@@ -5,8 +5,8 @@ const app = express();
 // const mongoStore = new MongoStore({url: 'mongodb://localhost/mPresent'});
 // const mongoose = require("mongoose");
 // const passport = require("passport");//for identification
-const minify = require('express-minify');
-const compression = require('compression');
+// const minify = require('express-minify');
+// const compression = require('compression');
 const path = require("path");
 
 app.set("view engine", "ejs");
@@ -33,8 +33,8 @@ app.use(bodyParser.json());//it now says body works
 // }));//for authenticating users
 // app.use(passport.initialize());//starts passport
 // app.use(passport.session());//allows authentication info to pass between pages
-app.use( compression() );
-app.use( minify() );
+// app.use( compression() );
+// app.use( minify() );
 app.use( express.static(__dirname+"/public") );
 
 
