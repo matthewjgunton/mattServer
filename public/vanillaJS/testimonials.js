@@ -1,6 +1,3 @@
-
-//testimonials
-
 var slideIndexNew = 1;
 let x0 = null;
 

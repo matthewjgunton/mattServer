@@ -45,7 +45,6 @@
       </tr>
     <% }} %>
   </table></center>
-
   <% function time(remindAt) {
     let wholeDate = new Date(remindAt);
     let day = wholeDate.toString().substring(0,15);
@@ -59,16 +58,11 @@
     }
     return (day+" "+hours+":"+minutes+' '+suffix);
   } %>
-
   <% function verb(boolPatch) {
         return boolPatch ? ("patch") : ("take your drops");
   } %>
-
-
     <script>
       AOS.init();
     </script>
-
 </body>
-
 </html>

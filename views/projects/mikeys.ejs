@@ -23,37 +23,39 @@
     <a href = "/media">Media</a>
   </div>
 
-  <h1>Lehigh Consulting Competition</h1>
-  <h4>Consulting | Data-Analytics</h4>
+  <h1>Mystery Mayhem</h1>
+  <h4>Story-Telling | Alexa Skill</h4>
 
-  <center><img src = "/images/mikey.jpg"/></center>
+  <center><img src = "/images/mysteryMayhem.jpg"/></center>
   <div id = "text">
-    <p>Consulting Work to Help Mikey's Expand Their Customer Base</p>
+    <p>Mystery Mayhem is a choose your own adventure story I created during my Freshmen Spring Break.</p>
   </div>
 
   <div id = "tech">
-    <span>Partnered With</span>
+    <span>Tech Used</span>
     <ul>
-      <a href = "https://www.linkedin.com/in/dave-j-bab901140/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_project_contributors%3BJobV6CNZSEWeIbLg4uOHFg%3D%3D&licu=urn%3Ali%3Acontrol%3Ad_flagship3_profile_view_project_contributors-profile_link"><li>Dave Jha</li></a>
-      <a href = "https://www.linkedin.com/in/aidangales/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_project_contributors%3BJobV6CNZSEWeIbLg4uOHFg%3D%3D&licu=urn%3Ali%3Acontrol%3Ad_flagship3_profile_view_project_contributors-profile_link"><li>Aidan Gales</li></a>
-      <a href = "https://www.linkedin.com/in/josephjmin/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_project_contributors%3BJobV6CNZSEWeIbLg4uOHFg%3D%3D&licu=urn%3Ali%3Acontrol%3Ad_flagship3_profile_view_project_contributors-profile_link"><li>Joe Minh</li></a>
+      <li>Node.JS</li>
+      <li>ASK</li>
     </ul>
   </div>
-
   <div id = "mid">
     <p>
-      Our consulting team began in a physics 11 lecture when Joe Minh asked me if I had heard about this consulting competition. Always eager to try new things, I replied that I hadn't, but would love to enter it with him. Assembling two of our other good friends, we began working on the project.
+      Spring break at Lehigh is about a week long, and it just so happened to coincide with Squash Nationals at UVA. For those who don't know, my brother is a great squash player. He was invited to play at nationals, and I knew I was going to be there to support him. The only issue was that squash nationals was at UVA––a roughly 5 hour drive from our house. Having nothing to do for that time would drive me crazy, so I decided to bring my computer and alexa into the car with me to pass the time. After playing a few choose your own adventure stories, I felt like creating one of my own.
       <br/><br/>
-      The deliverable of the competition was to create a <a href = "https://maurelius.com/ConsultingCompetition/presentation.pdf">presentation</a> and <a href = "https://maurelius.com/ConsultingCompetition/ExecutiveSummary.pdf">executive summary</a> that helps the Mikey's team figure out how to reach price conscious consumers.
+      With my dad and brother, we created the story of a detective who has to interview suspects for a bank robbery. It was the kind of mystery that was interesting without being too dark. We wanted to make sure that anyone could play this game, no matter their age. Creating the suspects from our favorite movie characters, we then went about creating different paths. The best choose your own adventures have the story completely change with each decision. In other words, with each decision the user makes, the person who robbed the bank changes. With a doubt, this was the most difficult part of the story to code.
       <br/><br/>
-      <center><img style = "width: 80%" src = "/images/mikey2.jpg" /></center>
-      Our team began by doing thorough research into the market of health conscious food by digging through statistics and interviewing people who were buyers. I got to interview a few good friends of mine who were gluten-sensitive and find out lots about the what matters to them. If nothing else, they were upset that the fad dieters had made gluten-free a less respected diet choice. A few of my friends had Celiac's Disease, and thus would suffer severe health costs if they chose to eat gluten products. Thus, it became clear to me that grouping everyone into the health conscious food market was overgeneralizing. One had to start looking at the market as 3 distinct segments, so a major part of our presentation became the 3 segments of the market we believed we saw.
+      After brainstorming for about an hour, I went about creating the actual skill. This being my second time creating a skill, I knew how to set myself up well. Alexa coding has a file that keeps track of all the phrases that can trigger certain responses. To make the story feel fun and interactive, I had to think of every possible phrase that could trigger a response. This meant more than just asking the user to pick one of 3 options at the end of every story stage. Rather, the goal was to create responses that users would naturally say without being prompted. Once the story skeleton was laid out, I created a system for keeping track of choices. The choice selection would then alter which aspect of the story skeleton was part of the story. For instance, if you choose to interview the track star, he'll give you evidence against one of the other two suspects. That evidence will be critical in taking down the robber. However, he only says that evidence if you ask him the right question. The variation is what makes it fun.
       <br/><br/>
-      Nonetheless, we wouldn't have gone as far in the competition without having a great team. Dave designed all the visuals that appear on the powerpoint slide, making sure the aesthetic highlights the segments point in the presentation. Aidan Gales did deep research into elastic and inelastic demands, finding data that was beyond his schooling to help support our claims. Finally, Joseph Minh was instrumental in finding the hard data that supports virtually every one of our claims in the executive summary. We did the work for the competition largely over spring break and at late hours of the night after our work for the day was over. I'm very thankful to have been part of such a hard working team.
+      The coding took the entire trip down, and most of the trip back up. Afterwards, I had my family and friends at Lehigh test it for me before putting it on the Alexa store.
     </p>
-  </div>
 
+    <center><a href = "https://www.amazon.com/Mystery-Mayhem-Robberty-Drinker-Bank/dp/B07PQ694CY/ref=sr_1_1?keywords=mystery+mayhem&qid=1564670041&s=digital-skills&sr=1-1">Try It For Yourself!</a></center>
+    <br/><br/>
+    <a href = "/PrivacyPolicy.pdf">Privacy Policy for the Skill</a><br/>
+    <a href = "/TOS.pdf">Terms of Service for the Skill</a>
+  </div>
   <% include ../partials/footer.ejs%>
+
 
 </body>
 
