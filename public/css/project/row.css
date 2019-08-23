@@ -1,1 +1,44 @@
-.big{/* padding-left: 50px; */ display: inline-block; height: 660px; width: 55%; padding-right: 2%; padding-left: 2%; transition: 0.2s;}img:hover{box-shadow: 10px 10px 103px 0px rgba(138, 141, 144, 0.75);}.big img, .small img{width: 100%; height: 100%;}.lil{transition: 0.2s;}.small{display: inline-block; width: 35%;}@media only screen and (max-width: 1000px){.big{height: 450px;}}@media only screen and (max-width: 768px){.big{height: 360px;}}@media only screen and (max-width: 400px){.big{height: 270px;}}
+.big{
+  /* padding-left: 50px; */
+  display: inline-block;
+  height: 660px;
+  width: 55%;
+  padding-right: 2%;
+  padding-left: 2%;
+  transition: 0.2s;
+}
+
+img:hover{
+    box-shadow: 10px 10px 103px 0px rgba(138, 141, 144, 0.75);
+}
+
+.big img, .small img{
+  width: 100%;
+  height: 100%;
+}
+
+.lil{
+    transition: 0.2s;
+}
+
+.small{
+  display: inline-block;
+  width: 35%;
+}
+
+@media only screen and (max-width: 1000px){
+  .big{
+    height: 450px;
+  }
+}
+
+@media only screen and (max-width: 768px){
+  .big{
+    height: 360px;
+  }
+}
+
+@media only screen and (max-width: 400px){
+  .big{
+    height: 270px;
+  }
