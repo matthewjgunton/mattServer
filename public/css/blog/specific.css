@@ -6,6 +6,11 @@ h1{
   padding-top: 50px;
 }
 
+.gist{
+  width: 70%;
+  margin: 0px auto;
+}
+
 .text{
   display: flex;
   justify-content: center;
