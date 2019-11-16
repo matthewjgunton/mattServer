@@ -12,6 +12,7 @@ h1{
 }
 
 .text{
+  font-size: 20px;
   display: flex;
   justify-content: center;
 }
