@@ -3,15 +3,24 @@ const schema = mongoose.Schema;
 
 //create schema for each item
 
-const mPresentSchema = new schema ({
-  token: String,
-  remindAt: Number,
-  boolPatch: Boolean,
-  patchLength: Number,
-  taken: Boolean,
-  id: Number
-});
 
-const mattModel = mongoose.model("reminderModel", mPresentSchema);
+const reminderSchema = new schema ({
+  token: String,
+  isDrops: Boolean,
+  duration: Number,
+  days: [{
+    day: String
+  }],
+  length: Number,
+  time: Number,
+  taken: Boolean
+})
+
+//token is synonymous with user (Expo token)
+//isDrops, lets us know what treatment type
+//duration is how many hours is being patched, length is how many weeks patient is treating
+//time is unix standard time
+
+const mattModel = mongoose.model("reminderModel", reminderSchema);
 console.log("reminder model online");
 module.exports = mattModel;
