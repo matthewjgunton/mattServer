@@ -17,13 +17,12 @@ getHelp("MattServer online");
 
 exports.create = (req, res) => {
   //this will have to be changed
-    if(Object.keys(req.body).length != 5){
+    if(Object.keys(req.body).length != 7 && Object.keys(req.body).length != 6){
       return res.status(400).json({msg: "bad request!"});
     }
-
     let body = {};
-    console.log(req.body.id.value);
-    if(req.body.isDrops.value){
+
+    if(req.body.isDrops){
       body = {
         token: String,
         isDrops: Boolean,
@@ -48,7 +47,6 @@ exports.create = (req, res) => {
         taken: Boolean
       }
     }
-
     new reminderModel(body).save().then( (proof) => {
       console.log(proof, " we saved it");
       return res.status(201).json({msg: 'success! we saved '+proof.token})
