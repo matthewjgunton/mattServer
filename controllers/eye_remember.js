@@ -13,40 +13,60 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const dayToIndex = (day) => {
+  switch(day){
+    case "Sunday":
+      return 0;
+      case "Monday":
+        return 1;
+        case "Tuesday":
+          return 2;
+          case "Wednesday":
+            return 3;
+            case "Thursday":
+              return 4;
+              case "Friday":
+                return 5;
+                case "Saturday":
+                  return 6;
+                  default:
+                    getHelp("Bad day");
+  }
+
+};
 getHelp("MattServer online");
 
 exports.create = (req, res) => {
   //this will have to be changed
-    if(Object.keys(req.body).length != 7 && Object.keys(req.body).length != 6){
+    if(Object.keys(req.body).length != 5 && Object.keys(req.body).length != 6){
       return res.status(400).json({msg: "bad request!"});
     }
-    let body = {};
+    let obj = req.body;
 
     if(req.body.isDrops){
       body = {
-        token: String,
-        isDrops: Boolean,
-        duration: Number,
-        days: [{
-          day: String
-        }],
-        length: Number,
-        time: Number,
-        taken: Boolean
+        token: obj.token,
+        isDrops: obj.isDrops,
+        days: obj.days[0],
+        length: obj.length,
+        time: obj.time,
+        timesAsked: 0,
+        taken: 0
       }
     }else{
       body = {
-        token: String,
-        isDrops: Boolean,
-        duration: Number,
-        days: [{
-          day: String
-        }],
-        length: Number,
-        time: Number,
-        taken: Boolean
+        token: obj.token,
+        isDrops: obj.isDrops,
+        duration: obj.duration,
+        days: obj.days[0],
+        length: obj.length,
+        time: obj.time,
+        timesAsked: 0,
+        taken: 0
       }
     }
+
     new reminderModel(body).save().then( (proof) => {
       console.log(proof, " we saved it");
       return res.status(201).json({msg: 'success! we saved '+proof.token})
@@ -56,16 +76,41 @@ exports.create = (req, res) => {
       getHelp("error saving reminder "+e);
       return res.status(500).json({msg: 'error', e});
     })
-  }
-
 }
 
+function getHelp(e){
+  var mailOptions = {
+    from: 'mgunton7@gmail.com',
+    to: 'mgunton7@gmail.com',
+    subject: 'EyeRemember Notification System Error',
+    text: e
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
+
+exports.update = (req, res) => {
 
 
+    // reminderModel.findOneAndUpdate({token: tokenId, remindAt}, {taken: true})
+    // .then( (data)=>{
+    //   console.log(data, "here is what we found with the tokenId and remindAt");
+    //   return res.status(201).json({msg: 'successfully checked off '+remindAt+" reminder", data})
+    // })
+    // .catch( (e) => {
+    //   getHelp("updated reminder error"+e);
+    //   console.log(e, "error updating");
+    //   return res.status(500).json({msg: 'error', e});
+    // })
+}
 
-
-
-
+//rotational functions
 
 
 
@@ -124,22 +169,6 @@ exports.create = (req, res) => {
 //   })
 // }
 //
-// function getHelp(e){
-//   var mailOptions = {
-//     from: 'mgunton7@gmail.com',
-//     to: 'mgunton7@gmail.com',
-//     subject: 'EyeRemember Notification System Error',
-//     text: e
-//   };
-//
-//   transporter.sendMail(mailOptions, function(error, info){
-//     if (error) {
-//       console.log(error);
-//     } else {
-//       console.log('Email sent: ' + info.response);
-//     }
-//   });
-// }
 //
 // function preSendNotification(data){
 //   const d = new Date().getTime();

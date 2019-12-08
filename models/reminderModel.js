@@ -8,12 +8,11 @@ const reminderSchema = new schema ({
   token: String,
   isDrops: Boolean,
   duration: Number,
-  days: [{
-    day: String
-  }],
+  days: [String],
   length: Number,
   time: Number,
-  taken: Boolean
+  timesAsked: Number,
+  taken: Number
 })
 
 //token is synonymous with user (Expo token)
