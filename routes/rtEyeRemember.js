@@ -13,8 +13,8 @@ sendRoutes.route("/delete")
 sendRoutes.route("/update")
   .post(controller.create);
 
-sendRoutes.route("/delete")
-  .post(controller.create);
+sendRoutes.route("/read")
+  .post(controller.read);
 
 
 /////////////////////////

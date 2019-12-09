@@ -78,6 +78,36 @@ exports.create = (req, res) => {
     })
 }
 
+exports.read = (req, res) => {
+
+    if(Object.keys(req.body).length != 1){
+      return res.status(400).json({msg: "bad request!"});
+    }
+
+    let obj = req.body;
+    if( !isValidToken(obj.token)){
+      return res.status(400).json({msg: "bad request!"});
+    }
+    //we need to now remove all those that have already expired
+    reminderModel.find({ token: obj.token, $where: "this.timesAsked != this.length" } ).then( (data)=> {
+      return res.status(200).json({erMsg: false, data});
+    })
+    //reminderModel.aggregate([
+    //   {"$match":{"timesAsked":{"$exists":true},"length":{"$exists":true}}},
+    //   {"$project": {
+    //       "a1":1,
+    //       "a2":1,
+    //       "aEq": {"$eq":["$a1.a","$a2.a"]}
+    //     }
+    //   },
+    //   {"$match":{"aEq": false}}
+    // ])
+    .catch(e => {
+      getHelp("Getting records JSON error"+e);
+      return res.status(400).json({erMsg: true, e})
+    })
+}
+
 function getHelp(e){
   var mailOptions = {
     from: 'mgunton7@gmail.com',
@@ -93,6 +123,15 @@ function getHelp(e){
       console.log('Email sent: ' + info.response);
     }
   });
+}
+
+function isValidToken(token){
+  return (
+    typeof token === 'string' &&
+    (((token.startsWith('ExponentPushToken[') || token.startsWith('ExpoPushToken[')) &&
+      token.endsWith(']')) ||
+      /^[a-z\d]{8}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{12}$/i.test(token))
+  );
 }
 
 exports.update = (req, res) => {
