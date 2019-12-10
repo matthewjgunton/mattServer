@@ -16,6 +16,127 @@ const transporter = nodemailer.createTransport({
 const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 getHelp("MattServer online");
 
+var rule = new schedule.RecurrenceRule();
+rule.minute = 59;
+const queue = [];
+var grabData = schedule.scheduleJob(rule, function(){
+  let whole = new Date();
+  let day = whole.getDay();
+  let hour = whole.getHours() + 1 * 60;
+  let stringDay = indexToDay[day];
+  reminderModel.find({days: [stringDay], time: hour, $where: "this.timesAsked != this.length"}).then((data)=>{
+    for(let i = 0; i < data.length; i++){
+      queue.push(data[i]);
+    }
+  })
+});
+
+var rule1 = new schedule.RecurrenceRule();
+rule1.minute = 00;
+var reminder1 = schedule.scheduleJob(rule1, async function(){
+  let promises = [];
+  //this works really well for drops, what about patches?
+  queue.forEach((obj)=>{
+        promises.push(sendNotification(obj));
+  })
+  await Promise.all(promises);
+
+  queue.forEach((obj)=>{
+    obj.timesAsked++;
+    reminderModel.findByIdAndUpdate(obj.id, obj, {new: true}, (e, proof)=>{
+      if(e){
+        getHelp("updated reminder error"+e);
+      }
+    })
+  })
+});
+
+var rule2 = new schedule.RecurrenceRule();
+rule2.minute = 01;
+var reminder2 = schedule.scheduleJob(rule2, async function(){
+  let promises = [];
+  //this works really well for drops, what about patches?
+  queue.forEach((obj)=>{
+        promises.push(sendNotification(obj));
+  })
+  await Promise.all(promises);
+});
+
+var rule3 = new schedule.RecurrenceRule();
+rule3.minute = 02;
+var reminder3 = schedule.scheduleJob(rule3, async function(){
+  let promises = [];
+  //this works really well for drops, what about patches?
+  queue.forEach((obj)=>{
+        promises.push(sendNotification(obj));
+  })
+  await Promise.all(promises);
+});
+
+function sendNotification(obj){
+
+  return new Promise((resolve, reject)=> {
+    if(!isValidToken(obj.token)){
+      reject("invalid token");
+    }
+
+    const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
+
+    fetch(PUSH_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: obj.token,
+        sound: 'default',
+        title: 'Eye Remember',
+        body: msg,
+        data: {
+          body: msg,
+          id: obj._id
+        }
+      }),
+    })
+    .then(response => response.json())
+    .then( (data) => {
+      resolve(data);
+    }).catch( (e)=> {
+      reject(e);
+    })
+  })
+}
+
+exports.updateTaken = (req, res) => {
+
+  //expecting id
+  if(Object.keys(req.body).length != 1){
+    return res.status(400).json({msg: "bad request!"});
+  }
+  //this may be inefficient, worth 2.0
+  reminderModel.findById(req.body.id).then((data)=>{
+    data.taken++;
+    for(let i = 0; i < queue.length; i++){
+      if(queue[i]._id == req.body.id){
+        queue.splice(i,1);
+      }
+    }
+    reminderModel.findByIdAndUpdate(data._id, data).then((res)=>{
+      return res.status(201).json({msg: "successfully recorded"});
+    }).catch( (e)=>{
+        console.log("error updating reminder",e);
+        getHelp("error updating reminder "+e);
+        return res.status(500).json({msg: 'error', e});
+      })
+  }).catch( (e)=>{
+      console.log("error finding reminder",e);
+      getHelp("error finding reminder "+e);
+      return res.status(500).json({msg: 'error', e});
+    })
+
+}
+
 exports.create = (req, res) => {
   //this will have to be changed
     if(Object.keys(req.body).length != 5 && Object.keys(req.body).length != 6){
@@ -159,12 +280,6 @@ function dayToIndex (day) {
   }
 
 };
-
-//rotational functions
-
-
-
-
 ////////////////////////////////
 //old
 //

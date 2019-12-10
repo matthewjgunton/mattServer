@@ -13,6 +13,9 @@ sendRoutes.route("/delete")
 sendRoutes.route("/update")
   .post(controller.update);
 
+sendRoutes.route("/update/taken")
+  .post(controller.updateTaken)
+
 sendRoutes.route("/read")
   .post(controller.read);
 
