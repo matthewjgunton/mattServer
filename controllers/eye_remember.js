@@ -81,15 +81,14 @@ exports.update = (req, res) => {
       }
     }
     console.log(body);
-    reminderModel.findOneAndUpdate({_id: obj.id}, {body}, {returnNewDocument: true})
-    .then( (proof)=>{
-      console.log(proof, "updated");
+    reminderModel.findByIdAndUpdate(obj.id, body, {new: true}, (e, proof)=>{
+      if(e){
+        getHelp("updated reminder error"+e);
+        console.log(e, "error updating");
+        return res.status(500).json({msg: 'error', e});
+      }
+      console.log(proof, " <updated?");
       return res.status(201).json({msg: "succesfully updated "+proof._id})
-    })
-    .catch( (e) => {
-      getHelp("updated reminder error"+e);
-      console.log(e, "error updating");
-      return res.status(500).json({msg: 'error', e});
     })
 }
 
