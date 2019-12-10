@@ -14,27 +14,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const dayToIndex = (day) => {
-  switch(day){
-    case "Sunday":
-      return 0;
-      case "Monday":
-        return 1;
-        case "Tuesday":
-          return 2;
-          case "Wednesday":
-            return 3;
-            case "Thursday":
-              return 4;
-              case "Friday":
-                return 5;
-                case "Saturday":
-                  return 6;
-                  default:
-                    getHelp("Bad day");
-  }
-
-};
 getHelp("MattServer online");
 
 exports.create = (req, res) => {
@@ -43,12 +22,12 @@ exports.create = (req, res) => {
       return res.status(400).json({msg: "bad request!"});
     }
     let obj = req.body;
-
+    let body;
     if(req.body.isDrops){
       body = {
         token: obj.token,
         isDrops: obj.isDrops,
-        days: obj.days[0],
+        days: obj.days,
         length: obj.length,
         time: obj.time,
         timesAsked: 0,
@@ -59,7 +38,7 @@ exports.create = (req, res) => {
         token: obj.token,
         isDrops: obj.isDrops,
         duration: obj.duration,
-        days: obj.days[0],
+        days: obj.days,
         length: obj.length,
         time: obj.time,
         timesAsked: 0,
@@ -78,6 +57,42 @@ exports.create = (req, res) => {
     })
 }
 
+exports.update = (req, res) => {
+
+    if(Object.keys(req.body).length != 5 && Object.keys(req.body).length != 6){
+      return res.status(400).json({msg: "bad request!"});
+    }
+    let obj = req.body;
+    let body;
+    if(req.body.isDrops){
+      body = {
+        isDrops: obj.isDrops,
+        days: obj.days,
+        length: obj.length,
+        time: obj.time,
+      }
+    }else{
+      body = {
+        isDrops: obj.isDrops,
+        duration: obj.duration,
+        days: obj.days,
+        length: obj.length,
+        time: obj.time,
+      }
+    }
+    console.log(body);
+    reminderModel.findOneAndUpdate({_id: obj.id}, {body}, {returnNewDocument: true})
+    .then( (proof)=>{
+      console.log(proof, "updated");
+      return res.status(201).json({msg: "succesfully updated "+proof._id})
+    })
+    .catch( (e) => {
+      getHelp("updated reminder error"+e);
+      console.log(e, "error updating");
+      return res.status(500).json({msg: 'error', e});
+    })
+}
+
 exports.read = (req, res) => {
 
     if(Object.keys(req.body).length != 1){
@@ -92,16 +107,6 @@ exports.read = (req, res) => {
     reminderModel.find({ token: obj.token, $where: "this.timesAsked != this.length" } ).then( (data)=> {
       return res.status(200).json({erMsg: false, data});
     })
-    //reminderModel.aggregate([
-    //   {"$match":{"timesAsked":{"$exists":true},"length":{"$exists":true}}},
-    //   {"$project": {
-    //       "a1":1,
-    //       "a2":1,
-    //       "aEq": {"$eq":["$a1.a","$a2.a"]}
-    //     }
-    //   },
-    //   {"$match":{"aEq": false}}
-    // ])
     .catch(e => {
       getHelp("Getting records JSON error"+e);
       return res.status(400).json({erMsg: true, e})
@@ -134,20 +139,27 @@ function isValidToken(token){
   );
 }
 
-exports.update = (req, res) => {
+function dayToIndex (day) {
+  switch(day){
+    case "Sunday":
+      return 0;
+      case "Monday":
+        return 1;
+        case "Tuesday":
+          return 2;
+          case "Wednesday":
+            return 3;
+            case "Thursday":
+              return 4;
+              case "Friday":
+                return 5;
+                case "Saturday":
+                  return 6;
+                  default:
+                    getHelp("Bad day");
+  }
 
-
-    // reminderModel.findOneAndUpdate({token: tokenId, remindAt}, {taken: true})
-    // .then( (data)=>{
-    //   console.log(data, "here is what we found with the tokenId and remindAt");
-    //   return res.status(201).json({msg: 'successfully checked off '+remindAt+" reminder", data})
-    // })
-    // .catch( (e) => {
-    //   getHelp("updated reminder error"+e);
-    //   console.log(e, "error updating");
-    //   return res.status(500).json({msg: 'error', e});
-    // })
-}
+};
 
 //rotational functions
 
