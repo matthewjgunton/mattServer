@@ -14,47 +14,49 @@ const transporter = nodemailer.createTransport({
 });
 
 const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-getHelp("MattServer online");
+const timeToRemind = new Date().getMinutes()+1; //this is useless rn
+// getHelp("MattServer online");
+const queue = [];
+const patchQueue = [];//this is where things start to spin
 
 var rule = new schedule.RecurrenceRule();
-rule.minute = 59;
-const queue = [];
+rule.minute = timeToRemind;
 var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
-  let hour = whole.getHours() + 1 * 60;
+  let hour = whole.getHours() * 60;//remember to add back in the one +1
   let stringDay = indexToDay[day];
-  reminderModel.find({days: [stringDay], time: hour, $where: "this.timesAsked != this.length"}).then((data)=>{
+  console.log("grabbing data at ",hour);
+  reminderModel.find({days: {$all: [stringDay]}, time: hour, $where: "this.timesAsked < this.length"}).then((data)=>{
     for(let i = 0; i < data.length; i++){
       queue.push(data[i]);
+      data[i].timesAsked++;
+      reminderModel.findByIdAndUpdate(data[i]._id, data, {new: true}, (e, proof)=>{
+        if(e){
+          getHelp("updated reminder error"+e);
+        }
+      })
     }
   })
 });
 
 var rule1 = new schedule.RecurrenceRule();
-rule1.minute = 00;
+rule1.minute = timeToRemind+1;
 var reminder1 = schedule.scheduleJob(rule1, async function(){
   let promises = [];
   //this works really well for drops, what about patches?
+  console.log("sending out reminder 1 for all the queued",queue);
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
   })
   await Promise.all(promises);
-
-  queue.forEach((obj)=>{
-    obj.timesAsked++;
-    reminderModel.findByIdAndUpdate(obj.id, obj, {new: true}, (e, proof)=>{
-      if(e){
-        getHelp("updated reminder error"+e);
-      }
-    })
-  })
 });
 
 var rule2 = new schedule.RecurrenceRule();
-rule2.minute = 01;
+rule2.minute = timeToRemind+2;
 var reminder2 = schedule.scheduleJob(rule2, async function(){
   let promises = [];
+  console.log("sending out reminder 2 for all the queued",queue);
   //this works really well for drops, what about patches?
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
@@ -63,14 +65,24 @@ var reminder2 = schedule.scheduleJob(rule2, async function(){
 });
 
 var rule3 = new schedule.RecurrenceRule();
-rule3.minute = 02;
+rule3.minute = timeToRemind+3;
 var reminder3 = schedule.scheduleJob(rule3, async function(){
   let promises = [];
   //this works really well for drops, what about patches?
+  console.log("sending out reminder 3 for all the queued",queue);
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
   })
+
   await Promise.all(promises);
+});
+
+var rule4 = new schedule.RecurrenceRule();
+let window = 1;
+rule4.minute = timeToRemind+3+window;//window is how long until you are no longer able to take it
+var reminder3 = schedule.scheduleJob(rule4, async function(){
+  console.log("clearing queue");
+  queue.length = 0;
 });
 
 function sendNotification(obj){
@@ -81,6 +93,8 @@ function sendNotification(obj){
     }
 
     const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
+    let msg = (obj.isDrops) ? ("Remember to Take Your Drops") : ("Remember to Patch");
+
 
     fetch(PUSH_ENDPOINT, {
       method: 'POST',
@@ -116,25 +130,24 @@ exports.updateTaken = (req, res) => {
   }
   //this may be inefficient, worth 2.0
   reminderModel.findById(req.body.id).then((data)=>{
-    data.taken++;
-    for(let i = 0; i < queue.length; i++){
-      if(queue[i]._id == req.body.id){
-        queue.splice(i,1);
+      data.taken++;
+      for(let i = 0; i < queue.length; i++){
+        if(queue[i]._id == req.body.id){
+          queue.splice(i,1);
+        }
       }
-    }
-    reminderModel.findByIdAndUpdate(data._id, data).then((res)=>{
-      return res.status(201).json({msg: "successfully recorded"});
-    }).catch( (e)=>{
-        console.log("error updating reminder",e);
-        getHelp("error updating reminder "+e);
-        return res.status(500).json({msg: 'error', e});
-      })
+      reminderModel.findByIdAndUpdate(data._id, data).then((result)=>{
+        return res.status(201).json({msg: "successfully recorded"});
+      }).catch( (e)=>{
+          console.log("error updating reminder",e);
+          getHelp("error updating reminder "+e);
+          return res.status(500).json({msg: 'error', e});
+        })
   }).catch( (e)=>{
       console.log("error finding reminder",e);
       getHelp("error finding reminder "+e);
       return res.status(500).json({msg: 'error', e});
     })
-
 }
 
 exports.create = (req, res) => {
@@ -213,6 +226,27 @@ exports.update = (req, res) => {
     })
 }
 
+exports.readAlarm = (req, res) => {
+  //expecting a tokenId
+  if(Object.keys(req.body).length != 1){
+    return res.status(400).json({msg: "bad request!"});
+  }
+
+  let obj = req.body;
+  if( !isValidToken(obj.token)){
+    return res.status(400).json({msg: "bad request!"});
+  }
+
+  let alarm = false;
+  for(let i = 0; i < queue.length; i++){
+    if(queue[i].token == obj.token){
+      alarm = queue[i];
+    }
+  }
+  console.log(alarm);
+  return res.status(200).json({data: alarm});
+}
+
 exports.read = (req, res) => {
 
     if(Object.keys(req.body).length != 1){
@@ -231,6 +265,25 @@ exports.read = (req, res) => {
       getHelp("Getting records JSON error"+e);
       return res.status(400).json({erMsg: true, e})
     })
+}
+
+exports.readRecords = (req, res) => {
+  if(Object.keys(req.body).length != 1){
+    return res.status(400).json({msg: "bad request!"});
+  }
+
+  let obj = req.body;
+  if( !isValidToken(obj.token)){
+    return res.status(400).json({msg: "bad request!"});
+  }
+  reminderModel.find({ token: obj.token, $where: "this.timesAsked != 0" } ).then( (data)=> {
+    return res.status(200).json({erMsg: false, data});
+  })
+  .catch(e => {
+    getHelp("Getting records JSON error"+e);
+    return res.status(400).json({erMsg: true, e})
+  })
+
 }
 
 function getHelp(e){

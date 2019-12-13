@@ -19,6 +19,12 @@ sendRoutes.route("/update/taken")
 sendRoutes.route("/read")
   .post(controller.read);
 
+sendRoutes.route("/read/alarm")
+  .post(controller.readAlarm);
+
+sendRoutes.route("/read/records")
+  .post(controller.readRecords);
+
 
 /////////////////////////
 // old
