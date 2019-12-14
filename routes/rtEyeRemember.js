@@ -8,13 +8,16 @@ sendRoutes.route("/create")
   .post(controller.create);
 
 sendRoutes.route("/delete")
-  .post(controller.create);
+  .post(controller.delete);
 
 sendRoutes.route("/update")
   .post(controller.update);
 
 sendRoutes.route("/update/taken")
   .post(controller.updateTaken)
+
+sendRoutes.route("/update/removeFromPatchQueue")
+  .post(controller.updateRemoveFromPatchQueue)
 
 sendRoutes.route("/read")
   .post(controller.read);

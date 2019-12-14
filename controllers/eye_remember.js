@@ -17,19 +17,25 @@ const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fri
 const timeToRemind = new Date().getMinutes()+1; //this is useless rn
 // getHelp("MattServer online");
 const queue = [];
-const patchQueue = [];//this is where things start to spin
+const patchQueue = [];
+let hour = 0;
 
 var rule = new schedule.RecurrenceRule();
 rule.minute = timeToRemind;
 var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
-  let hour = whole.getHours() * 60;//remember to add back in the one +1
+  hour = whole.getHours() * 60;//remember to add back in the one +1
   let stringDay = indexToDay[day];
   console.log("grabbing data at ",hour);
   reminderModel.find({days: {$all: [stringDay]}, time: hour, $where: "this.timesAsked < this.length"}).then((data)=>{
     for(let i = 0; i < data.length; i++){
       queue.push(data[i]);
+      if(!data[i].isDrops){
+        let obj = data[i];
+        obj.time = data[i].time + 60 * data[i].duration;
+        patchQueue.push(obj)
+      }
       data[i].timesAsked++;
       reminderModel.findByIdAndUpdate(data[i]._id, data, {new: true}, (e, proof)=>{
         if(e){
@@ -49,6 +55,18 @@ var reminder1 = schedule.scheduleJob(rule1, async function(){
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
   })
+
+  patchQueue.forEach((obj, i)=>{
+    if(obj.time == hour){
+      console.log("sending out patching reminder 2");
+      promises.push(sendNotification(obj));
+    }
+    //check if we should remove from queue
+    if(hour > obj.time){
+      patchQueue.splice(i, 1);
+    }
+  })
+
   await Promise.all(promises);
 });
 
@@ -61,6 +79,14 @@ var reminder2 = schedule.scheduleJob(rule2, async function(){
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
   })
+
+  patchQueue.forEach((obj)=>{
+    if(obj.time == hour){
+      console.log("sending out patching reminder 2");
+      promises.push(sendNotification(obj));
+    }
+  })
+
   await Promise.all(promises);
 });
 
@@ -72,6 +98,13 @@ var reminder3 = schedule.scheduleJob(rule3, async function(){
   console.log("sending out reminder 3 for all the queued",queue);
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
+  })
+
+  patchQueue.forEach((obj)=>{
+    if(obj.time == hour){
+      console.log("sending out patching reminder 2");
+      promises.push(sendNotification(obj));
+    }
   })
 
   await Promise.all(promises);
@@ -95,6 +128,10 @@ function sendNotification(obj){
     const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
     let msg = (obj.isDrops) ? ("Remember to Take Your Drops") : ("Remember to Patch");
 
+    // let data = {
+    //   body: msg,
+    //   id: obj._id;
+    // };
 
     fetch(PUSH_ENDPOINT, {
       method: 'POST',
@@ -106,11 +143,7 @@ function sendNotification(obj){
         to: obj.token,
         sound: 'default',
         title: 'Eye Remember',
-        body: msg,
-        data: {
-          body: msg,
-          id: obj._id
-        }
+        body: msg
       }),
     })
     .then(response => response.json())
@@ -122,13 +155,26 @@ function sendNotification(obj){
   })
 }
 
+exports.updateRemoveFromPatchQueue = (req, res) => {
+  if(Object.keys(req.body).length != 1){
+    return res.status(400).json({msg: "bad request!"});
+  }
+
+  for(let i = 0; i < patchQueue.length; i++){
+    if(patchQueue[i].id == req.body.id){
+      patchQueue.splice(i,1);
+    }
+  }
+  return res.status(202).json({msg: "successfully recorded"});
+
+}
+
 exports.updateTaken = (req, res) => {
 
   //expecting id
   if(Object.keys(req.body).length != 1){
     return res.status(400).json({msg: "bad request!"});
   }
-  //this may be inefficient, worth 2.0
   reminderModel.findById(req.body.id).then((data)=>{
       data.taken++;
       for(let i = 0; i < queue.length; i++){
@@ -226,6 +272,22 @@ exports.update = (req, res) => {
     })
 }
 
+exports.delete = (req, res) => {
+  //expecting id
+  if(Object.keys(req.body).length != 1){
+    return res.status(400).json({msg: "bad request!"});
+  }
+
+  reminderModel.findByIdAndDelete(req.body.id).then((data)=>{
+    return res.status(202).json({data});
+  })
+  .catch(e=>{
+    getHelp("deleting error "+e);
+    console.log(e, "error deleting");
+    return res.status(500).json({msg: 'error', e});
+  });
+}
+
 exports.readAlarm = (req, res) => {
   //expecting a tokenId
   if(Object.keys(req.body).length != 1){
@@ -241,6 +303,14 @@ exports.readAlarm = (req, res) => {
   for(let i = 0; i < queue.length; i++){
     if(queue[i].token == obj.token){
       alarm = queue[i];
+    }
+  }
+  //we're only letting one alarm go at a time
+  if(!alarm){
+    for(let i = 0; i < patchQueue.length; i++){
+      if(patchQueue[i].token == obj.token){
+        alarm = patchQueue[i];
+      }
     }
   }
   console.log(alarm);
