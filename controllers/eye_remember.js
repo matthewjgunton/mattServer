@@ -14,14 +14,15 @@ const transporter = nodemailer.createTransport({
 });
 
 const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const timeToRemind = new Date().getMinutes()+1; //this is for debugging
-// getHelp("MattServer online");
+// const timeToRemind = new Date().getMinutes()+1; //this is for debugging
+const timeToRemind = -1;
+getHelp("MattServer online");
 const queue = [];
 const patchQueue = [];
 let hour = 0;
 
 var rule = new schedule.RecurrenceRule();
-rule.minute = timeToRemind;
+rule.minute = 59;
 var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
