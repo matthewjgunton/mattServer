@@ -24,11 +24,8 @@ sendRoutes.route("/blog/:num")
 sendRoutes.route("/media")
   .get(controller.mediaPage);
 
-sendRoutes.route("/auth/google")
-  .get(controller.googleLogin);
-
-sendRoutes.route("/auth/google/callback")
-  .get(controller.googleCallback);
+  sendRoutes.route("/media/:num")
+    .get(controller.mediaSpecific);
 
 
 
