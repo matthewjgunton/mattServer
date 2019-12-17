@@ -5,7 +5,6 @@ const path = require("path");
 app.set("view engine", "ejs");
 const db = require("./db.js");
 db.run();
-
 const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
