@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/landing.css" rel ='stylesheet' />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href = "/css/blog/specific.css" rel = "stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <% include ../partials/navbar %>
+
+  <h1>An Introduction to Pointers in C</h1>
+  <h4>October 10th, 2019</h4>
+
+  <center><img src = "/images/code.jpg" /></center>
+
+  <div class = "text">
+    <p>
+As a self-taught programmer, I gravitated towards Javascript as my first language. It's powerful, fast, and prolific. Nonetheless, even javascript is not without its drawbacks. One of those is simply that it is still not a systems langauge. A systems langauge operates less abstractly and allows the programmer to have far greater precision with their commands. This may seem small when written out, but when you see the implications of moving bytes around at scale, it becomes clear why langauges like C are still extremely relevant today.<br/><br/>
+While I've been learning C, one of the more challenging aspects I've had to deal with are pointers. Coming from javascript where you don't have to worry about things like memory allocation or variable types, pointers are a huge departure. The best way to describe pointers starts by visualizing a computer's memory.<br/><br/>
+Computers represent both code & data in sequences of 0s and 1s called bytes. The only way to distinguish between these bytes is the context in which they're stored. So memory that is designed to store variables is kept in a certain place, and memory that is desinged to store executable code is kept in a separate place. As you can imagine, keeping these places in memory distinct is essential.<br/><br/>
+So how do you know where you stored something? You simply look at the variables address in memory. So if you have<br/><br/>
+</p></div>
+<script src="https://gist.github.com/matthewjgunton/f5cc1d327d663e66ed05523e326a5e46.js"></script>
+<div class = "text">
+  <p>
+What we are really doing is storing the binary value of 10 at a specific address in memory. Then whenver we call the variable 10, our computer goes to that address to find the value.<br/><br/>
+What I just described to you is present is nearly every imperative language. Where C starts to differ from languages like Java & especially javascript is when it comes to passing values bewteen functions.<br/><br/>
+If we have a program such as:<br/><br/>
+</p></div>
+<script src="https://gist.github.com/matthewjgunton/8f315d07d5c66452b0bb761f26fbdff6.js"></script>
+<div class = "text">
+  <p>
+You will find that the values of m & g do not swap. This is because when we have a function call in C, we create a new section of memory for that function. When we create this new section, the parameters we pass through get treated like new variables. In fact, you can imagine the commands like this:<br/><br/>
+</p></div>
+<script src="https://gist.github.com/matthewjgunton/cd963a144b17edc19d0f928da257151b.js"></script>
+<div class = "text">
+  <p>
+As you can see, all the operations you do on a & b will have no effect on m & g in the main function. But obviously we will want to create functions that effect their variables. Do we just return everything? In C, this is where pointers come in.<br/><br/>
+Pointers are 1 byte addresses that tell the compiler to go to that address when looking for the value. Pointers are declared as an asterisk next to the datatype the pointer points to. In the case of our program:<br/><br/>
+</p></div>
+<script src="https://gist.github.com/matthewjgunton/c781cbb47232dedc1ae9b7e600e532ac.js"></script>
+<div class = "text">
+  <p>
+When we pass in the address of the function, we are telling the program that we don't want a copy, we want the specific address in memory. That way in our function, we can edit the values and have the changes appear in main. Now the only question left is why does the asterisk appear again inside of swap? One major use case of pointers is called dereferencing. Whenever you want to access the value stored at the pointer's address, you write an asterisk before the pointer's variable name. Thus, when we say<br/><br/>
+</p></div>
+<script src="https://gist.github.com/matthewjgunton/a3f462045233e9dbfab71f29add89011.js"></script>
+<div class = "text">
+  <p>
+We're storing the value of b now where the value of a is.<br/><br/>
+Other topics worth looking into are segmentation faults, where memory is attempted to be accessed by a pointer where the program is not allowed to go, and how pointers allow for the creation of strings.<br/><br/>
+Hope you enjoyed!<br/><br/>
+    </p>
+  </div>
+    <% include ../partials/footer.ejs%>
+
+
+</body>
