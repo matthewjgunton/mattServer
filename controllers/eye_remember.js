@@ -28,15 +28,10 @@ var grabData = schedule.scheduleJob(rule, function(){
   let day = whole.getDay();
   hour = whole.getHours() * 60;//remember to add back in the one +1
   let stringDay = indexToDay[day];
-  console.log("grabbing data at ",hour);
+  console.log("grabbing data for "+indexToDay[day]+" at "+hour);
   reminderModel.find({days: {$all: [stringDay]}, time: hour, $where: "this.timesAsked < this.length"}).lean().then((data)=>{
     for(let i = 0; i < data.length; i++){
       queue.push(data[i]);
-      if(!data[i].isDrops){
-        let obj = extend({}, data[i]);
-        obj.time = data[i].time + 60 * data[i].duration;
-        patchQueue.push(obj)
-      }
       data[i].timesAsked++;
       reminderModel.findByIdAndUpdate(data[i]._id, data[i], {new: true}, (e, proof)=>{
         if(e){
@@ -52,14 +47,14 @@ rule1.minute = timeToRemind+1;
 var reminder1 = schedule.scheduleJob(rule1, async function(){
   let promises = [];
   //this works really well for drops, what about patches?
-  console.log("sending out reminder 1 for all the queued",queue);
+  console.log("sending out reminder 1:",queue);
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
   })
 
   patchQueue.forEach((obj, i)=>{
     if(obj.time == hour){
-      console.log("sending out patching reminder 2");
+      console.log("sending out patching reminder 1");
       promises.push(sendNotification(obj));
     }
     //check if we should remove from queue
@@ -75,7 +70,7 @@ var rule2 = new schedule.RecurrenceRule();
 rule2.minute = timeToRemind+2;
 var reminder2 = schedule.scheduleJob(rule2, async function(){
   let promises = [];
-  console.log("sending out reminder 2 for all the queued",queue);
+  console.log("sending out reminder 2:",queue);
   //this works really well for drops, what about patches?
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
@@ -96,7 +91,7 @@ rule3.minute = timeToRemind+3;
 var reminder3 = schedule.scheduleJob(rule3, async function(){
   let promises = [];
   //this works really well for drops, what about patches?
-  console.log("sending out reminder 3 for all the queued",queue);
+  console.log("sending out reminder 3:",queue);
   queue.forEach((obj)=>{
         promises.push(sendNotification(obj));
   })
@@ -175,6 +170,11 @@ exports.updateTaken = (req, res) => {
       data.taken++;
       for(let i = 0; i < queue.length; i++){
         if(queue[i]._id == req.body.id){
+          if(!queue[i].isDrops){
+              let obj = extend({}, queue[i]);
+              obj.time = queue[i].time + 60 * queue[i].duration;
+              patchQueue.push(obj);
+          }
           queue.splice(i,1);
         }
       }
@@ -204,7 +204,7 @@ exports.create = (req, res) => {
         token: obj.token,
         isDrops: obj.isDrops,
         days: obj.days,
-        length: obj.length,
+        length: (obj.length * obj.days.length),
         time: obj.time,
         timesAsked: 0,
         taken: 0
@@ -215,7 +215,7 @@ exports.create = (req, res) => {
         isDrops: obj.isDrops,
         duration: obj.duration,
         days: obj.days,
-        length: obj.length,
+        length: (obj.length * obj.days.length),
         time: obj.time,
         timesAsked: 0,
         taken: 0
