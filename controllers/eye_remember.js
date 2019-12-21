@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 // const timeToRemind = new Date().getMinutes()+1; //this is for debugging
-const timeToRemind = -1;
+// const timeToRemind = -1;
 getHelp("MattServer online");
 const queue = [];
 const patchQueue = [];
@@ -26,7 +26,7 @@ rule.minute = 59;
 var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
-  hour = whole.getHours() * 60;//remember to add back in the one +1
+  hour = (whole.getHours() +1) * 60;//remember to add back in the one +1
   let stringDay = indexToDay[day];
   console.log("grabbing data for "+indexToDay[day]+" at "+hour);
   reminderModel.find({days: {$all: [stringDay]}, time: hour, $where: "this.timesAsked < this.length"}).lean().then((data)=>{
@@ -43,7 +43,7 @@ var grabData = schedule.scheduleJob(rule, function(){
 });
 
 var rule1 = new schedule.RecurrenceRule();
-rule1.minute = timeToRemind+1;
+rule1.minute = 00;
 var reminder1 = schedule.scheduleJob(rule1, async function(){
   let promises = [];
   //this works really well for drops, what about patches?
@@ -67,7 +67,7 @@ var reminder1 = schedule.scheduleJob(rule1, async function(){
 });
 
 var rule2 = new schedule.RecurrenceRule();
-rule2.minute = timeToRemind+2;
+rule2.minute = 01;
 var reminder2 = schedule.scheduleJob(rule2, async function(){
   let promises = [];
   console.log("sending out reminder 2:",queue);
@@ -87,7 +87,7 @@ var reminder2 = schedule.scheduleJob(rule2, async function(){
 });
 
 var rule3 = new schedule.RecurrenceRule();
-rule3.minute = timeToRemind+3;
+rule3.minute = 02;
 var reminder3 = schedule.scheduleJob(rule3, async function(){
   let promises = [];
   //this works really well for drops, what about patches?
@@ -108,7 +108,7 @@ var reminder3 = schedule.scheduleJob(rule3, async function(){
 
 var rule4 = new schedule.RecurrenceRule();
 let window = 1;
-rule4.minute = timeToRemind+3+window;//window is how long until you are no longer able to take it
+rule4.minute = 03+window;//window is how long until you are no longer able to take it
 var reminder3 = schedule.scheduleJob(rule4, async function(){
   console.log("clearing queue");
   queue.length = 0;
