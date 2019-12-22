@@ -27,6 +27,9 @@ var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
   hour = whole.getHours() * 60;
+  if(hour == 0){
+    hour = 24*60;
+  }
   let stringDay = indexToDay[day];
   console.log("grabbing data for "+indexToDay[day]+" at "+hour);
   reminderModel.find({days: {$all: [stringDay]}, time: hour, $where: "this.timesAsked < this.length"}).lean().then((data)=>{
