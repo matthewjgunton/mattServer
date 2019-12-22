@@ -26,7 +26,7 @@ rule.minute = 59;
 var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
-  hour = whole.getHours() * 60;
+  hour = (whole.getHours() + 1) * 60;
   if(hour == 0){
     hour = 24*60;
   }
