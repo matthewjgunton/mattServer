@@ -160,7 +160,6 @@ exports.updateRemoveFromPatchQueue = (req, res) => {
     }
   }
   return res.status(202).json({msg: "successfully recorded"});
-
 }
 
 exports.updateTaken = (req, res) => {
@@ -177,6 +176,7 @@ exports.updateTaken = (req, res) => {
               let obj = extend({}, queue[i]);
               obj.time = queue[i].time + 60 * queue[i].duration;
               patchQueue.push(obj);
+              console.log(patchQueue, "OK");
           }
           queue.splice(i,1);
         }
