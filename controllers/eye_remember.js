@@ -153,9 +153,10 @@ exports.updateRemoveFromPatchQueue = (req, res) => {
   if(Object.keys(req.body).length != 1){
     return res.status(400).json({msg: "bad request!"});
   }
-
+  console.log("Reached remove from queue");
   for(let i = 0; i < patchQueue.length; i++){
     if(patchQueue[i].id == req.body.id){
+      console.log("removing ",patchQueue[i]);
       patchQueue.splice(i,1);
     }
   }
