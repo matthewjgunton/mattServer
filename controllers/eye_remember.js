@@ -23,10 +23,13 @@ let hour = 0;
 
 var rule = new schedule.RecurrenceRule();
 rule.minute = 59;
+// rule.minute = timeToRemind;
 var grabData = schedule.scheduleJob(rule, function(){
   let whole = new Date();
   let day = whole.getDay();
+  // hour = (15) * 60;
   hour = (whole.getHours() + 1) * 60;
+
   if(hour == 0){
     hour = 24*60;
   }
@@ -58,7 +61,7 @@ var reminder1 = schedule.scheduleJob(rule1, async function(){
   patchQueue.forEach((obj, i)=>{
     if(obj.time == hour){
       console.log("sending out patching reminder 1", patchQueue);
-      promises.push(sendNotification(obj));
+      promises.push(sendNotification(obj, true));
     }
     //check if we should remove from queue
     if(hour > obj.time){
@@ -68,56 +71,59 @@ var reminder1 = schedule.scheduleJob(rule1, async function(){
 
   await Promise.all(promises);
 });
-
-var rule2 = new schedule.RecurrenceRule();
-rule2.minute = timeToRemind+2;
-var reminder2 = schedule.scheduleJob(rule2, async function(){
-  let promises = [];
-  console.log("sending out reminder 2:",queue);
-  //this works really well for drops, what about patches?
-  queue.forEach((obj)=>{
-        promises.push(sendNotification(obj));
-  })
-
-  patchQueue.forEach((obj)=>{
-    if(obj.time == hour){
-      console.log("sending out patching reminder 2", patchQueue);
-      promises.push(sendNotification(obj));
-    }
-  })
-
-  await Promise.all(promises);
-});
-
-var rule3 = new schedule.RecurrenceRule();
-rule3.minute = timeToRemind+3;
-var reminder3 = schedule.scheduleJob(rule3, async function(){
-  let promises = [];
-  //this works really well for drops, what about patches?
-  console.log("sending out reminder 3:",queue);
-  queue.forEach((obj)=>{
-        promises.push(sendNotification(obj));
-  })
-
-  patchQueue.forEach((obj)=>{
-    if(obj.time == hour){
-      console.log("sending out patching reminder 2", patchQueue);
-      promises.push(sendNotification(obj));
-    }
-  })
-
-  await Promise.all(promises);
-});
-
+//
+// var rule2 = new schedule.RecurrenceRule();
+// rule2.minute = timeToRemind+2;
+// var reminder2 = schedule.scheduleJob(rule2, async function(){
+//   let promises = [];
+//   console.log("sending out reminder 2:",queue);
+//   //this works really well for drops, what about patches?
+//   queue.forEach((obj)=>{
+//         promises.push(sendNotification(obj));
+//   })
+//
+//   patchQueue.forEach((obj)=>{
+//     if(obj.time == hour){
+//       console.log("sending out patching reminder 2", patchQueue);
+//       promises.push(sendNotification(obj));
+//     }
+//   })
+//
+//   await Promise.all(promises);
+// });
+//
+/////////
+//rule3 is used for TESTING
+/////////
+// var rule3 = new schedule.RecurrenceRule();
+// rule3.minute = timeToRemind+3;
+// var reminder3 = schedule.scheduleJob(rule3, async function(){
+//   let promises = [];
+//   //this works really well for drops, what about patches?
+//   console.log("sending out reminder 3:",queue);
+//   queue.forEach((obj)=>{
+//         promises.push(sendNotification(obj));
+//   })
+//
+//   patchQueue.forEach((obj)=>{
+//     if(obj.time == hour){
+//       console.log("sending out patching reminder 2", patchQueue);
+//       promises.push(sendNotification(obj, true));
+//     }
+//   })
+//
+//   await Promise.all(promises);
+// });
+//
 var rule4 = new schedule.RecurrenceRule();
-let window = 1;
-rule4.minute = timeToRemind+4+window;//window is how long until you are no longer able to take it
+let window = 11;
+rule4.minute = timeToRemind+window;//window is how long until you are no longer able to take it
 var reminder3 = schedule.scheduleJob(rule4, async function(){
   console.log("clearing queue ",hour);
   queue.length = 0;
 });
 
-function sendNotification(obj){
+function sendNotification(obj, remind){
 
   return new Promise((resolve, reject)=> {
     if(!isValidToken(obj.token)){
@@ -126,6 +132,11 @@ function sendNotification(obj){
 
     const PUSH_ENDPOINT = "https://exp.host/--/api/v2/push/send";
     let msg = (obj.isDrops) ? ("Remember to Take Your Drops") : ("Remember to Patch");
+
+    console.log( remind != undefined , "OK");
+    if(remind != undefined){
+      msg = "You're Done Patching!";
+    }
 
     fetch(PUSH_ENDPOINT, {
       method: 'POST',
@@ -153,9 +164,9 @@ exports.updateRemoveFromPatchQueue = (req, res) => {
   if(Object.keys(req.body).length != 1){
     return res.status(400).json({msg: "bad request!"});
   }
-  console.log("Reached remove from queue");
+  console.log("Reached remove from queue", req.body.id, patchQueue);
   for(let i = 0; i < patchQueue.length; i++){
-    if(patchQueue[i].id == req.body.id){
+    if(patchQueue[i]._id == req.body.id){
       console.log("removing ",patchQueue[i]);
       patchQueue.splice(i,1);
     }
@@ -175,6 +186,7 @@ exports.updateTaken = (req, res) => {
         if(queue[i]._id == req.body.id){
           if(!queue[i].isDrops){
               let obj = extend({}, queue[i]);
+              // obj.time = queue[i].time;
               obj.time = queue[i].time + 60 * queue[i].duration;
               patchQueue.push(obj);
               console.log(patchQueue, "OK");
