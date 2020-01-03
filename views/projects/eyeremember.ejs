@@ -16,7 +16,7 @@
   <% include ../partials/navbar.ejs %>
     <h1>EyeRemember</h1>
     <h4>Healthcare | App-Design</h4>
-    <center><img src="/images/eyeremember.jpg" /></center>
+    <center><img src = "/images/erbg.jpg" /></center>
     <div id="text">
         <p>A Mobile App to help patients keep track of when they need to take their medication. Also lets them show their doctors their results.</p>
     </div>
@@ -27,8 +27,47 @@
             <li>MongoDB</li>
         </ul>
     </div>
+    <style>
+    #mid .stills img{
+      width: 30%
+    }
+    @media only screen and (max-width: 1000px){
+      #mid .stills img {
+        width: 80%;
+      }
+    }
+    </style>
     <div id="mid">
         <p>
+          Eye Remember began as a seemingly simple request from my mother. She had found her patients often didn't take their medication at the same time everyday. For both the patient and the doctor's sake, my mother wanted an app that could remind patients when to take their medicine.
+          <br/>
+          <br/>
+          All the app had to do was poll the user for how they were treating (for eye surgery it comes down to patching or using eye drops), how many weeks they were treating for, and what days were they taking medication. All of this was trivial for me to visualize.
+          I had never made a mobile app before, so leaning on my web experience I started looking in React Native. There was lots of community support for the framework and required significantly less learning time to get going for me. When I started thinking about how to design the app, I realized the challenge was how I was going to alert the user. I could not find a way for React Native to create a persisting timer on the device to act as a timer. In other words, if the user closed the app or locked their phone, their alarm wouldn't go off. This was horrible news! The way I got around this was by employing notifications. If the app was in the foreground, then no trouble the app would go to an alarm screen. However, if the app was in the background or even if the phone was locked, I would have a system send the user push notifications (1 every minute for 3 minutes) to remind them to patch or take drops. With this solution in mind, I began coding.
+          <br/>
+          <br/>
+          I built out a custom notification system on my server over the summer. By August, I even had a working prototype. You can see the still below:
+          <br/>
+          <center><img src="/images/eyeremember.jpg" /></center>
+          <br/>
+          <br/>
+          Nonetheless, I was not happy with the way the notification system had turned out. There were too many calls to the database, making it horrible to scale. Furthermore, the app had too many calls to my server for my liking. So I decided to put the project on hold as I went back to school.
+          <br/>
+          <br/>
+          About two months later, I decided to try a second time on the project. I completely redesigned the user interface, and went to work building the app from scratch. I had gotten much better at abstracting and organizing code, so it was easier for me to build out the app. Nonetheless, I again ran into the issue of the notifications system. I asked many of my computer science friends for advice. A few of them suggested I utilize third party systems. Then, my friend Andre-Jacques DeBeer gave me a phone call one night. He gave me a phenomenal idea, and I ran with it. Within two weeks, the app was ready for beta testing.
+          <br/>
+          <center class= 'stills'>
+            <img src="/images/er1.jpg" />
+            <img src="/images/er2.jpg" />
+            <img src="/images/er3.jpg" />
+          </center>
+          <br/>
+          <br/>
+          This project really forced me to get out of my comfort zone. I had spent a lot of time in web development where I don't have to worry as much about memory usage. Building out the notification system really forced me to be efficient with my code and use as little memory as possible. I'm also rather proud of how clean the UI came out. Even if you build a perfect backend, if your UI is bad, you've really built nothing. Feel free to try out the app, available on both the Google Play Store & Apple App Store
+          <br/><br/>
+          You can try it out for free on both the App Store and Google Play Store:
+          <a href = ""></a>
+          <a href = ""></a>
 
 
         </p>
