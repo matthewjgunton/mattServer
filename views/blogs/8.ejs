@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/landing.css" rel ='stylesheet' />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href = "/css/blog/specific.css" rel = "stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <% include ../partials/navbar %>
+
+  <h1>Thoughts on Plaid Deal</h1>
+  <h4>January 16th, 2020</h4>
+
+  <center><img src = "/images/visaplaid.jpg" /></center>
+
+  <div class = "text">
+    <p>
+      Recently, news broke that Visa had bought FinTech giant Plaid for roughly $5 billion dollars. Personally, I think this was a genius move on the part of Visa. I’ll run through what Plaid does that makes them so valuable, what Visa does that makes them valuable to consumers, and then explain where these two companies could go.
+      <br/><br/>
+      For those who don't know, Plaid is involved in practically every major piece of financial technology. Their idea was very simple. Create an easy to use API that lets developers access user's bank accounts. Everybody, from more established fintech companies like Robinhood to startups that haven't released an MVP, makes use of Plaid. I’m using it for my next project, and I can tell you that it is an extremely versatile and stable product. For nearly all purposes, it is indispensable for development. Why does this niche exist? Don’t all banks have computer systems running? Because all the banks independently built their systems, developers would have to effectively build new interfaces for each bank they connected to. Creating an interface would be extremely difficult, as not only would you have to dive through thousands of pages of documentation, but you would also need to be certain that you were handling the data securely. The worst part is all this effort building interfaces distracts you from building the ultimate value of your app. In other words, if your goal is to create an app that helps users trade stocks, your programmer's efforts should mostly go into building a reliable exchange backend. Thus, when Plaid built a system that would interface with all banks for developers, people took notice. Put simply, it makes sense to outsource the dealing with banks to another company if their prices are reasonable. Plaid has become a fundmental building block of FinTech.
+      <br/><br/>
+      Turning to Visa, from high up, Visa's value is making transactions happen more seamlessly. Whether you’re a consumer or a merchant, you have likely come into contact with their systems. The natural question is how do they make money? Visa controls the VisaNet, which processes upwards of 65 thousand transactions a second. For access to this network, they charge different players inside the transaction world different fees. One significant fee type for my analysis was merchant fees. In order for merchants (shop owners, etc) to accept debit and credit cards, they have to pay Visa a percentage fee. While merchants can do business without partnering with Visa, if they want to accept credit or debit cards, it is all but required. Similar to how startups would rather spend their time adding value to their app than building out a way to connect to banks, likewise entrepreneurs would rather focus on their business than on building a way to receive payments via card. Visa's challenge is making sure that card carriers use their platform. Merchants will only willingly add Visa carriers to their payment system if their customers have Visa cards they want to use. In other words, if merchants think sales will increase enough to offset the cost Visa imposes, they will add Visa.
+      <br/><br/>
+      It is because of this vulnerability that I think Plaid was a brilliant acquisition by Visa. Plaid represents a growth area for Visa. The two companies both rely on high performance programming and strong connections to the world of finance. Partnering together may inject new energy and opportunities into Visa. If nothing else, Visa has forced their major rival, MasterCard, to play catchup. Look for MasterCard to find new ways to enter into the new FinTech space. In the meantime, Plaid should rejoice. They’ve built a phenomenal service, and the sky is now the limit.
+      <br/><br/>
+      Onwards & Upwards
+    </p>
+  </div>
+
+    <% include ../partials/footer.ejs%>
+
+
+</body>
