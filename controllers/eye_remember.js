@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const indexToDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 // const timeToRemind = new Date().getMinutes()+1; //this is for debugging
 const timeToRemind = -1;
-getHelp("MattServer online");
+// getHelp("MattServer online");
 const queue = [];
 const patchQueue = [];
 let hour = 0;
