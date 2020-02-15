@@ -1,4 +1,5 @@
 var User = require("../models/rabbitUsersModel.js");//allows us to search the userbase, and register new ones
+var Egg = require("../models/rabbitEggModel.js");
 
 var passport = require("passport");//because we cannot pass it through on app.js
 
@@ -10,9 +11,65 @@ exports.googleCallback = passport.authenticate('google', {
     })
 
 exports.indexPage = function(req, res){
-  res.render("rabbit/index.ejs");
+  if (!req.user){
+    return res.render("rabbit/index.ejs");
+  }
+  return res.status(200).render("rabbit/home.ejs",{user: req.user});
+
 }
 
 exports.homePage = function(req, res){
-  res.render("rabbit/home.ejs");
+  if (!req.user){
+    return res.redirect("/rabbit/index.ejs");
+  }
+  return res.status(200).render("rabbit/home.ejs",{user: req.user});
+}
+
+exports.foundEgg = (req, res) => {
+  console.log(req.body, "legit?");
+
+  if(Object.keys(req.body).length != 2){
+    return res.status(400).json({msg: "bad request!"});
+  }
+
+  let digitVal = 11;
+  for(let i = 0; i < req.body.code.length; i++){
+    digitVal += req.body.code.charCodeAt(i);
+  }
+  if(digitVal % 11 != 2){
+    return res.status(400).json({msg: "bad request!"});
+  }
+  //now we know it's a good code, we look up the kid and give him the points
+  User.findOne({userid: req.body.userid}).then((data)=>{
+    if(!data){
+      return res.status(400).json({msg: "bad request!"});
+    }
+    Egg.findOne({number: req.body.code}).then((eggData)=>{
+      if(!eggData){
+        return res.status(400).json({msg: "nse"});
+      }
+      if(eggData.found){
+        return res.status(400).json({msg: "fAl"});
+      }
+      let newEggsFound = data.eggsFound+1;
+      User.findOneAndUpdate({userid: req.body.userid}, {eggsFound: newEggsFound}).then(()=>{
+        Egg.findOneAndUpdate({number: req.body.code}, {found: true}).then(()=>{
+          return res.status(201).json({msg: "success!"});
+        }).catch((e)=>{
+          console.log("internal error updating egg info on egg");
+          return res.status(400).json({msg: "bad request!"});
+        })
+      }).catch((e)=>{
+        console.log("internal error updating egg info on user");
+        return res.status(400).json({msg: "bad request!"});
+      })
+    }).catch((e)=>{
+      console.log("internal error finding egg");
+      return res.status(400).json({msg: "bad request!"});
+    })
+  })
+  .catch((e)=>{
+    console.log("internal error finding user");
+    return res.status(400).json({msg: "bad request!"});
+  })
 }

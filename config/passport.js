@@ -44,6 +44,7 @@ passport.use(new googleStrategy({
           newUser.name.familyName = profile.name.familyName;
           newUser.name.fullName = profile.name.givenName+" "+profile.name.familyName;
           newUser.email = profile.emails[0].value;
+          newUser.eggsFound = 0;
 
           newUser.save(function(err, result){
             if(err){

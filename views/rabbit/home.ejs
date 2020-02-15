@@ -17,12 +17,65 @@
 
 <body>
 
-  <!--Google OAuth button and description of event-->
+  <!--Leaderboard component, personal score, enter eggs piece-->
 
+  <h1>Welcome <%=user.name.givenName%></h1>
+
+  <div>
+    <h3>Found an Egg?</h3>
+    <h5>Enter Its Code Here:</h5>
+    <input id='code' name='code' placeholder="Secret Code"></input>
+    <button type="button" onclick="checkDig()">Submit</button>
+  <div>
+
+  <div id = "leaderboard">
+  </div>
 
   <% include ../partials/footer.ejs %>
 
   <script src = "/vanillaJS/testimonials.js"></script>
+  <script>
+    function checkDig(val){
+      let code = document.getElementById("code").value;
+      let digitVal = 11;
+      for(let i = 0; i < code.length; i++){
+        digitVal += code.charCodeAt(i);
+      }
+      if(digitVal % 11 != 2){
+        alert("Don't put in bad codes");
+        document.getElementById("code").value = "";
+        return false;
+      }else{
+        var xhr = new XMLHttpRequest();
+        var url = "/rabbit/foundEgg";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                console.log(json.email + ", " + json.password);
+            }
+        };
+        var data = JSON.stringify({"userid": "<%=user.userid%>", "code": code});
+        xhr.send(data);
+        xhr.onload = function() {
+          if(data.msg === "success!"){
+            alert("We got it! Keep it up!");
+          }
+          if(data.msg === "nse"){
+            alert("That egg doesn't exist");
+          }
+          if(data.msg === "fAl"){
+            alert("Someone has already found this egg");
+          }
+          if(data.msg === "bad request!"){
+            alert("Bad Internet Connection. Please try again later");
+          }
+          document.getElementById("code").value = "";
+        }
+      }
+    }
+  </script>
 
 </body>
 

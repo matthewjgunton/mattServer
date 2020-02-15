@@ -15,4 +15,7 @@ sendRoutes.route("/oauth/callback")
 sendRoutes.route("/home")
   .get(controller.homePage);
 
+sendRoutes.route("/foundEgg")
+  .post(controller.foundEgg);
+
 module.exports = sendRoutes;

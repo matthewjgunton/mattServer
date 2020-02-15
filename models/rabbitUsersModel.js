@@ -10,7 +10,8 @@ const userSchema = new schema({
       givenName: String,
       familyName: String,
       fullName: String
-    }
+    },
+    eggsFound: Number
 });
 
 const uModel = mongoose.model("rabbitUsers", userSchema);
