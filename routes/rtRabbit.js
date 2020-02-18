@@ -18,4 +18,7 @@ sendRoutes.route("/home")
 sendRoutes.route("/foundEgg")
   .post(controller.foundEgg);
 
+sendRoutes.route("/enterEggCodes")
+  .post(controller.enterEggs);//very important this route is shut down before game begins
+
 module.exports = sendRoutes;

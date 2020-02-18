@@ -25,6 +25,13 @@ exports.homePage = function(req, res){
   return res.status(200).render("rabbit/home.ejs",{user: req.user});
 }
 
+exports.leaderBoard = (req, res) => {
+  User.find({}).sort({'eggsFound': -1}).limit(8).exec(function(err, data)=>{
+    if(err) return res.status(400).json({msg: "Bad request!"});
+    return res.status(200).json({data, msg: "success!"});
+  })
+}
+
 exports.foundEgg = (req, res) => {
   console.log(req.body, "legit?");
 
@@ -44,7 +51,7 @@ exports.foundEgg = (req, res) => {
     if(!data){
       return res.status(400).json({msg: "bad request!"});
     }
-    Egg.findOne({number: req.body.code}).then((eggData)=>{
+    Egg.findOne({code: req.body.code}).then((eggData)=>{
       if(!eggData){
         return res.status(400).json({msg: "nse"});
       }
@@ -53,7 +60,7 @@ exports.foundEgg = (req, res) => {
       }
       let newEggsFound = data.eggsFound+1;
       User.findOneAndUpdate({userid: req.body.userid}, {eggsFound: newEggsFound}).then(()=>{
-        Egg.findOneAndUpdate({number: req.body.code}, {found: true}).then(()=>{
+        Egg.findOneAndUpdate({code: req.body.code}, {found: true}).then(()=>{
           return res.status(201).json({msg: "success!"});
         }).catch((e)=>{
           console.log("internal error updating egg info on egg");
@@ -72,4 +79,21 @@ exports.foundEgg = (req, res) => {
     console.log("internal error finding user");
     return res.status(400).json({msg: "bad request!"});
   })
+}
+
+exports.enterEggs = (req, res) => {
+  console.log(Object.keys(req.body).length);
+  let promises = [];
+
+  for(let i = 0; i < Object.keys(req.body).length; i++){
+    let obj = new reminderModel({code: req.body[i].code, found: false});
+    promises.push(obj.save());
+  }
+
+  Promise.all(promises).then((value)=>{
+    return res.status(200).json({msg: "success!"});
+  }).catch((e)=>{
+    return res.status(500).json({msg: "bad:",e});
+  })
+
 }

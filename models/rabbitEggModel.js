@@ -3,7 +3,7 @@ const schema = mongoose.Schema;
 //create schema and model
 
 const userSchema = new schema({
-    number: String,
+    code: String,
     found: Boolean
 });
 
