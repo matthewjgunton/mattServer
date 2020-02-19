@@ -1,5 +1,8 @@
 var User = require("../models/rabbitUsersModel.js");//allows us to search the userbase, and register new ones
 var Egg = require("../models/rabbitEggModel.js");
+var fs = require("fs");
+const path = require("path");
+
 
 var passport = require("passport");//because we cannot pass it through on app.js
 
@@ -25,9 +28,10 @@ exports.homePage = function(req, res){
   return res.status(200).render("rabbit/home.ejs",{user: req.user});
 }
 
-exports.leaderBoard = (req, res) => {
-  User.find({}).sort({'eggsFound': -1}).limit(8).exec(function(err, data)=>{
+exports.leaderboard = (req, res) => {
+  User.find({}).sort({'eggsFound': -1}).limit(8).exec(function(err, data){
     if(err) return res.status(400).json({msg: "Bad request!"});
+    console.log(data);
     return res.status(200).json({data, msg: "success!"});
   })
 }
@@ -82,11 +86,17 @@ exports.foundEgg = (req, res) => {
 }
 
 exports.enterEggs = (req, res) => {
-  console.log(Object.keys(req.body).length);
-  let promises = [];
 
-  for(let i = 0; i < Object.keys(req.body).length; i++){
-    let obj = new reminderModel({code: req.body[i].code, found: false});
+  if(req.params.check != 1312020523){
+    return res.status(400).json({msg: "bad request"});
+  }
+
+  var contents = fs.readFileSync(path.resolve(__dirname, '../config/data.json'));
+  let eggCodes = JSON.parse(contents);
+  console.log(eggCodes);
+  let promises = [];
+  for(let i = 0; i < eggCodes.length; i++){
+    let obj = new Egg({code: eggCodes[i].code, found: false});
     promises.push(obj.save());
   }
 
@@ -95,5 +105,6 @@ exports.enterEggs = (req, res) => {
   }).catch((e)=>{
     return res.status(500).json({msg: "bad:",e});
   })
+
 
 }

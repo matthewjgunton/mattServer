@@ -29,12 +29,34 @@
   <div>
 
   <div id = "leaderboard">
+
   </div>
 
   <% include ../partials/footer.ejs %>
 
   <script src = "/vanillaJS/testimonials.js"></script>
   <script>
+
+  getLeaderboard('/rabbit/leaderboard');
+
+  function getLeaderboard(theUrl)
+  {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", theUrl, true); // true for asynchronous
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200){
+              console.log("going");
+              var json = JSON.parse(xhr.responseText);
+              for(let i = 0; i < json.data.length; i++){
+                console.log(json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+". ");
+                
+              }
+            }
+      }
+      xhr.send(null);
+  }
+
     function checkDig(val){
       let code = document.getElementById("code").value;
       let digitVal = 11;
