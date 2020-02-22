@@ -31,13 +31,11 @@ exports.homePage = function(req, res){
 exports.leaderboard = (req, res) => {
   User.find({}).sort({'eggsFound': -1}).limit(8).exec(function(err, data){
     if(err) return res.status(400).json({msg: "Bad request!"});
-    console.log(data);
     return res.status(200).json({data, msg: "success!"});
   })
 }
 
 exports.foundEgg = (req, res) => {
-  console.log(req.body, "legit?");
 
   if(Object.keys(req.body).length != 2){
     return res.status(400).json({msg: "bad request!"});
@@ -93,7 +91,6 @@ exports.enterEggs = (req, res) => {
 
   var contents = fs.readFileSync(path.resolve(__dirname, '../config/data.json'));
   let eggCodes = JSON.parse(contents);
-  console.log(eggCodes);
   let promises = [];
   for(let i = 0; i < eggCodes.length; i++){
     let obj = new Egg({code: eggCodes[i].code, found: false});

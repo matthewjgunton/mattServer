@@ -19,17 +19,28 @@
 
   <!--Leaderboard component, personal score, enter eggs piece-->
 
-  <h1>Welcome <%=user.name.givenName%></h1>
+  <center>
+  <h3>Welcome, <%=user.name.givenName%></h3>
 
+  <div style="border-top: 2px solid white; border-bottom: 2px solid white">
+    <h1>Found an Egg?</h1>
+    <h2>Enter Its Code Here:</h2>
+    <input style = "padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id='code' name='code' placeholder="Secret Code"></input><br/>
+    <button style = "background-color: white; font-size: 12px; border-radius: 20px; width: 30%;" type="button" onclick="checkDig()">Submit</button><br/><br/>
   <div>
-    <h3>Found an Egg?</h3>
-    <h5>Enter Its Code Here:</h5>
-    <input id='code' name='code' placeholder="Secret Code"></input>
-    <button type="button" onclick="checkDig()">Submit</button>
-  <div>
 
-  <div id = "leaderboard">
+    </center>
 
+  <div style = "text-align: center" id = "leaderboard">
+    <h2>You've found <%=user.eggsFound%> Egg(s)</h2>
+  </div>
+
+  <div style = "text-align: center; border-top: 2px solid white;">
+    <h1>Prizes</h1>
+      <h3>1st & 2nd - $200</h3>
+      <h3>3rd & 4th - $150</h3>
+      <h3>5th & 6th - $100</h3>
+      <h3>7th & 8th - $50</h3>
   </div>
 
   <% include ../partials/footer.ejs %>
@@ -47,7 +58,7 @@
       xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200){
               var json = JSON.parse(xhr.responseText);
-              let text = "<h2>Leaderboard</h2><ol>";
+              let text = "<h1>Leaderboard</h1><ol>";
               for(let i = 0; i < json.data.length; i++){
                 text += "<li>"+json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+".  | "+json.data[i].eggsFound+" Eggs</li>";
                 if(i == 7){
