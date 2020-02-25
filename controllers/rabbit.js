@@ -18,14 +18,18 @@ exports.indexPage = function(req, res){
     return res.render("rabbit/index.ejs");
   }
   return res.status(200).render("rabbit/home.ejs",{user: req.user});
+}
 
+exports.logOut = function(req, res){
+  req.logout();
+  return res.redirect('/rabbit');
 }
 
 exports.homePage = function(req, res){
   if (!req.user){
-    return res.redirect("/rabbit/index.ejs");
+    return res.redirect("/rabbit/index");
   }
-  return res.status(200).render("rabbit/home.ejs",{user: req.user});
+  return res.status(201).render("rabbit/home.ejs",{user: req.user});
 }
 
 exports.leaderboard = (req, res) => {

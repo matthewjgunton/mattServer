@@ -24,4 +24,7 @@ sendRoutes.route("/leaderboard")
 sendRoutes.route("/enterEggCodes/:check")
   .get(controller.enterEggs);//very important this route is shut down before game begins
 
+sendRoutes.route("/out")
+  .get(controller.logOut);
+
 module.exports = sendRoutes;
