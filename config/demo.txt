@@ -1,0 +1,4 @@
+change:
+
+auth callback so that it goes to ngrok
+change google api so that ngrok is one of the cool domains

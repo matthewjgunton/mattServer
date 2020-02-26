@@ -33,10 +33,10 @@ passport.use(new googleStrategy({
           return done(err);
         }
         if(user){
-          console.log("returning user", user);
+          // console.log("returning user", user);
           return done(null, user);
         }else{
-          console.log('new google user');
+          // console.log('new google user');
           var newUser = new User();
           newUser.userid = profile.id;
           newUser.token = accessToken;
@@ -51,7 +51,7 @@ passport.use(new googleStrategy({
               throw err;
             }
             else{
-              console.log("new google "+result);
+              console.log(result.email," registered");
               return done(null, newUser);
             }
           })

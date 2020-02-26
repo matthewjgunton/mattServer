@@ -67,6 +67,7 @@ exports.foundEgg = (req, res) => {
       let newEggsFound = data.eggsFound+1;
       User.findOneAndUpdate({userid: req.body.userid}, {eggsFound: newEggsFound}).then(()=>{
         Egg.findOneAndUpdate({code: req.body.code}, {found: true}).then(()=>{
+          console.log(req.user.email," found egg: ",req.body.code);
           return res.status(201).json({msg: "success!"});
         }).catch((e)=>{
           console.log("internal error updating egg info on egg");
