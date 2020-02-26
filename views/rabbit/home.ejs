@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <link href = "/css/common.css" rel ="stylesheet" />
+  <link href = "/css/landing.css" rel="stylesheet" />
+  <link href = "/css/bg.css" rel="stylesheet" />
+  <link href = "/css/bio.css" rel="stylesheet" />
+  <link href = "/css/testimonials.css" rel="stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <!--Leaderboard component, personal score, enter eggs piece-->
+
+  <center>
+  <h3>Welcome, <%=user.name.givenName%></h3>
+
+  <div style="border-top: 2px solid white; border-bottom: 2px solid white">
+    <h1>Found an Egg?</h1>
+    <h2>Enter Its Code Here:</h2>
+    <input style = "padding: 12px 20px; margin: 8px 0; box-sizing: border-box; width: 45%;" id='code' name='code' placeholder="Secret Code"></input><br/>
+    <button style = "background-color: white; font-size: 12px; border-radius: 20px; width: 30%;" type="button" onclick="checkDig()">Submit</button><br/><br/>
+  <div>
+
+    </center>
+
+  <div style = "text-align: center" id = "leaderboard">
+    <h2>You've found <%=user.eggsFound%> Egg(s)</h2>
+  </div>
+
+  <div style = "text-align: center; border-top: 2px solid white;">
+    <h1>Prizes</h1>
+      <h3>1st & 2nd - $200</h3>
+      <h3>3rd & 4th - $150</h3>
+      <h3>5th & 6th - $100</h3>
+      <h3>7th & 8th - $50</h3>
+  </div>
+
+  <% include ../partials/footer.ejs %>
+
+  <script src = "/vanillaJS/testimonials.js"></script>
+  <script>
+
+  getLeaderboard('/rabbit/leaderboard');
+
+  function getLeaderboard(theUrl)
+  {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", theUrl, true); // true for asynchronous
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200){
+              var json = JSON.parse(xhr.responseText);
+              let text = "<h1>Leaderboard</h1><ol>";
+              for(let i = 0; i < json.data.length; i++){
+                text += "<li>"+json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+".  | "+json.data[i].eggsFound+" Eggs</li>";
+                if(i == 7){
+                  text+= "<span>______________</span>";
+                }
+              }
+              text += "</ol>";
+              $("#leaderboard").append(text);
+            }
+      }
+      xhr.send(null);
+  }
+  let boot = 0;
+    function checkDig(val){
+      if(boot >= 2){
+        window.location.href = "/rabbit/out";
+      }
+      let code = document.getElementById("code").value;
+      let digitVal = 11;
+      for(let i = 0; i < code.length; i++){
+        digitVal += code.charCodeAt(i);
+      }
+      if(digitVal % 11 != 2){
+        alert("Don't put in bad codes");
+        boot++;
+        document.getElementById("code").value = "";
+        return false;
+      }else{
+        var xhr = new XMLHttpRequest();
+        var url = "/rabbit/foundEgg";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                console.log(json.email + ", " + json.password);
+            }
+        };
+        var data = JSON.stringify({"userid": "<%=user.userid%>", "code": code});
+        xhr.send(data);
+        xhr.onload = function() {
+          if(data.msg === "success!"){
+            alert("We got it! Keep it up!");
+          }
+          if(data.msg === "nse"){
+            alert("That egg doesn't exist");
+            boot++;
+          }
+          if(data.msg === "fAl"){
+            alert("Someone has already found this egg");
+            boot++;
+          }
+          if(data.msg === "bad request!"){
+            alert("Bad Internet Connection. Please try again later");
+          }
+          document.getElementById("code").value = "";
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>

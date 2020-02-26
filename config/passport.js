@@ -1,6 +1,6 @@
 
 var googleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var User = require('../models/users.js');//allows me to store only things I care about, as specified in the model, ont random things passed through
+var User = require('../models/rabbitUsersModel.js');//allows me to store only things I care about, as specified in the model, ont random things passed through
 
 var configAuth = require("./auth.js");
 
@@ -27,52 +27,40 @@ passport.use(new googleStrategy({
 },
   function(accessToken, refreshToken, profile, done){
 
-    //make it so only I can log on
-
     process.nextTick(function(){
-      User.findOne({'matthew.id': profile.id}, function(err, user){
+      User.findOne({'userid': profile.id}, function(err, user){
         if(err){
           return done(err);
         }
         if(user){
-          console.log("returning user", user);
+          // console.log("returning user", user);
           return done(null, user);
         }else{
-          if(profile.name.familyName == "Gunton"){
-
-
-          console.log('new google user');
+          // console.log('new google user');
           var newUser = new User();
-          newUser.matthew.id = profile.id;
-          newUser.matthew.token = accessToken;
-          newUser.matthew.name.givenName = profile.name.givenName;
-          newUser.matthew.name.familyName = profile.name.familyName;
-          newUser.matthew.name.fullName = profile.name.givenName+" "+profile.name.familyName;
-          newUser.matthew.email = profile.emails[0].value;
+          newUser.userid = profile.id;
+          newUser.token = accessToken;
+          newUser.name.givenName = profile.name.givenName;
+          newUser.name.familyName = profile.name.familyName;
+          newUser.name.fullName = profile.name.givenName+" "+profile.name.familyName;
+          newUser.email = profile.emails[0].value;
+          newUser.eggsFound = 0;
 
           newUser.save(function(err, result){
             if(err){
               throw err;
             }
             else{
-              console.log("new google "+result);
+              console.log(result.email," registered");
               return done(null, newUser);
             }
           })
-        }else{
-          console.log('somebody besides me tried to access');
-          console.log(profile.name.familyName, " ", profile.name.givenName);
-          console.log("full profile: ",profile);
-          return done("nope");
         }
           //
-        }
       })
     })
   }
 ))
-
-
   console.log("passport has loaded");
 
 }
