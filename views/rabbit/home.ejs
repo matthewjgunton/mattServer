@@ -102,6 +102,7 @@
         xhr.onload = function() {
           if(data.msg === "success!"){
             alert("We got it! Keep it up!");
+            window.location.href = "/rabbit";
           }
           if(data.msg === "nse"){
             alert("That egg doesn't exist");
