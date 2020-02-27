@@ -17,7 +17,7 @@ exports.indexPage = function(req, res){
   if (!req.user){
     return res.render("rabbit/index.ejs");
   }
-  return res.status(200).render("rabbit/home.ejs",{user: req.user});
+  return res.status(201).render("rabbit/home.ejs",{user: req.user});
 }
 
 exports.logOut = function(req, res){
