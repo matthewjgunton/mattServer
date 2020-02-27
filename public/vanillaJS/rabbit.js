@@ -1,4 +1,3 @@
-getLeaderboard('/rabbit/leaderboard');
 let boot = 0;
 function getLeaderboard(theUrl){
     var xhr = new XMLHttpRequest();
@@ -18,7 +17,7 @@ function getLeaderboard(theUrl){
             $("#leaderboard").append(text);
           }
     }
-    /* xhr.send(null);*/
+    xhr.send(null);
 }
 function checkDig(val){
   if(boot >= 2){
@@ -42,7 +41,6 @@ function checkDig(val){
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var json = JSON.parse(xhr.responseText);
-            console.log(json.email + ", " + json.password);
         }
     };
     var data = JSON.stringify({"userid": "<%=user.userid%>", "code": code});
