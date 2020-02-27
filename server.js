@@ -16,6 +16,7 @@ require("./config/passport.js")(passport);
 const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());//it now says body works
+app.set('etag', false);//prevent caching
 app.use(session({//set up session to our specifications
   secret: 'secret',
   store: mongoStore,
