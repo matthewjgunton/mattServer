@@ -53,7 +53,7 @@
   function getLeaderboard(theUrl)
   {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", theUrl, true); // true for asynchronous
+      xhr.open("GET", theUrl, true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200){
