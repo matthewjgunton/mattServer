@@ -37,6 +37,11 @@ passport.use(new googleStrategy({
           return done(null, user);
         }else{
           // console.log('new google user');
+
+          if(profile._json.hd !== 'lehigh.edu'){
+            return done("Hey, You!\nLOGIN WITH YOUR LEHIGH EMAIL");
+          }
+
           var newUser = new User();
           newUser.userid = profile.id;
           newUser.token = accessToken;

@@ -2,7 +2,48 @@
 <html>
 
 <head>
-  <% include ../partials/header.ejs%>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144941895-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-144941895-1');
+  </script>
+  <title>Egg Hunt - UP</title>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no">
+  <meta property=og:image:width>
+  <meta property=og:image:height>
+  <meta property="og:site_name" content="Egg Hunt - UP"/>
+  <meta property="og:title" content="Egg Hunt - UP" />
+  <meta property="og:image" content="https://maurelius.com/images/egg.png" />
+  <meta property=og:description content="Campus Wide Egg Hunt- Onwards & Upwards!">
+  <meta name=description content="Campus Wide Egg Hunt- Onwards & Upwards!">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Campus Wide Egg Hunt- Onwards & Upwards!" />
+  <meta name="keywords" content="Matthew Gunton, Gunton, Matthew, Lehigh University, Lawrenceville, Lawrenceville School, iOS, Eye Remember, Reshwap, You Choose, Alexa, Computer Science and Business, Onwards & Upwards, Onwards, Upwards" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name=twitter:image content="https://maurelius.com/images/egg.jpg" />
+  <meta name=twitter:description value="Campus Wide Egg Hunt- Onwards & Upwards!">
+  <meta property=og:title content="Egg Hunt - UP">
+  <meta name=twitter:title value="Egg Hunt - UP">
+  <meta name=twitter:card content=summary_large_image>
+  <meta name=twitter:domain value=maurelius.com>
+  <meta name=twitter:site content=@matthewjgunton>
+  <meta name=twitter:creator content=@matthewjgunton>
+  <meta name=twitter:url value=http://www.maurelius.com>
+  <meta name=twitter:label1 value="Onwards & Upwards!">
+  <meta name=twitter:data1 value=me@maurelius.com>
+  <link rel="apple-touch-icon-precomposed" href="/favicon.png"></link>
+  <link rel="shortcut icon" href="/favicon.png"></link>
+  <link rel=mask-icon href="/favicon.png" color=#000000>
+  <link rel="icon" href="/favicon.png"></link>
+  <link rel=icon type=image/png sizes=32x32 href="/favicon.png">
+  <link rel=icon type=image/png sizes=16x16 href="/favicon.png">
+  <meta name=msapplication-TileColor content=#ffffff>
+  <meta name=msapplication-config content="/favicon.png">
+  <meta name=theme-color content=#1c1c1d>
+
   <link href = "/css/common.css" rel ="stylesheet" />
   <link href = "/css/landing.css" rel="stylesheet" />
   <link href = "/css/bg.css" rel="stylesheet" />
@@ -20,8 +61,7 @@
   <!--Leaderboard component, personal score, enter eggs piece-->
 
   <center>
-  <h3>Welcome, <%=user.name.givenName%></h3>
-  <h4>Be Sure to Use the Same Email:<br/><%=user.email%></h4>
+  <h3>Welcome, <%=user.name.givenName%> <%=user.name.familyName.charAt(0)%></h3>
 
   <div style="border-top: 2px solid white; border-bottom: 2px solid white">
     <h1>Found an Egg?</h1>
@@ -36,8 +76,8 @@
     <h2>You've found <%=user.eggsFound%> Egg(s)</h2>
   </div>
 
-  <div style = "text-align: center; border-top: 2px solid white;">
-    <h1>Rules</h1>
+  <div style = "text-align: left; border-top: 2px solid white;">
+    <h1 style="text-align: center;">Rules</h1>
     <ol>
       <li>Find eggs, and put the code you find in that egg into the website</li>
       <li>Throw out eggs after you find them</li>
@@ -65,7 +105,13 @@
               let text = "<h1>Leaderboard</h1><ol>";
               for(let i = 0; i < json.data.length; i++){
                 text += "<li>";
+                if(json.data[i].userid === <%=user.userid%>){
+                  text += "<b>";
+                }
                 text += json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+"  : "+json.data[i].eggsFound+" Eggs";
+                if(json.data[i].userid === <%=user.userid%>){
+                  text += "</b>";
+                }
                 if(i == 0 || i == 1){
                   text += " - $200";
                 }
