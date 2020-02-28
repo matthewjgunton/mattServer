@@ -30,18 +30,21 @@
     <button style = "background-color: white; font-size: 12px; border-radius: 20px; width: 30%;" type="button" onclick="checkDig()">Submit</button><br/><br/>
   <div>
 
-    </center>
+  </center>
 
   <div style = "text-align: center" id = "leaderboard">
     <h2>You've found <%=user.eggsFound%> Egg(s)</h2>
   </div>
 
   <div style = "text-align: center; border-top: 2px solid white;">
-    <h1>Prizes</h1>
-      <h3>1st & 2nd - $200</h3>
-      <h3>3rd & 4th - $150</h3>
-      <h3>5th & 6th - $100</h3>
-      <h3>7th & 8th - $50</h3>
+    <h1>Rules</h1>
+    <ol>
+      <li>Find eggs, and put the code you find in that egg into the website</li>
+      <li>Throw out eggs after you find them</li>
+      <li>No throwing eggs</li>
+      <li>No sabotaging eggs by moving them after game start; Especially when putting them in areas outside of the initial guidelines.</li>
+      <li>No trying to guess codes to put into the website</li>
+    </ol>
   </div>
 
   <% include ../partials/footer.ejs %>

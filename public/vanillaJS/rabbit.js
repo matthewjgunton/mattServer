@@ -6,12 +6,24 @@ function getLeaderboard(theUrl){
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200){
             var json = JSON.parse(xhr.responseText);
+            console.log("data", json);
             let text = "<h1>Leaderboard</h1><ol>";
             for(let i = 0; i < json.data.length; i++){
-              text += "<li>"+json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+"  : "+json.data[i].eggsFound+" Eggs</li>";
-              if(i == 7){
-                text+= "<span>______________</span>";
+              text += "<li>";
+              text += json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+"  : "+json.data[i].eggsFound+" Eggs";
+              if(i == 0 || i == 1){
+                text += " - $200";
               }
+              if(i == 2 || i == 3){
+                text += " - $150";
+              }
+              if(i == 4 || i == 5){
+                text += " - $100";
+              }
+              if(i == 6 || i == 7){
+                text += " - $200";
+              }
+              text += "</li>"
             }
             text += "</ol>";
             $("#leaderboard").append(text);
