@@ -33,7 +33,7 @@ exports.homePage = function(req, res){
 }
 
 exports.leaderboard = (req, res) => {
-  User.find({}).sort({'eggsFound': -1}).limit(8).exec(function(err, data){
+  User.find({}).sort({'eggsFound': -1}).limit(10).exec(function(err, data){
     if(err) return res.status(400).json({msg: "Bad request!"});
     return res.status(200).json({data, msg: "success!"});
   })
