@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <!-- <meta name="google-site-verification" content="xG8lCsXIU0hTHhH6Cj41yyo_tqyfsoszTugkHA93Kg0" /> -->
+  <!-- <meta name="msvalidate.01" content="129B059FC9FD8F76F9BCBEFA4B897CE5" /> -->
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/project/common.css" rel = "stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <% include ../partials/navbar.ejs %>
+
+  <h1>Egg Hunt</h1>
+  <h4>Cryptographic Security | Scale | Real World Implementation</h4>
+
+  <center><img src = "/images/rabbit.jpg"/></center>
+  <div id = "text">
+    <p>
+      As Special Events Director, I created an egg hunt that 2000+ Students participated in
+    </p>
+  </div>
+
+  <div id = "tech">
+    <span>Tech Used</span>
+    <ul>
+      <li>NodeJS</li>
+      <li>MongoDB</li>
+      <li>HTML/CSS/JS</li>
+    </ul>
+  </div>
+  <div id = "mid">
+    <p>
+      As the Special Events director for University Productions, I am in charge of putting events that attract people from all over Lehigh's Campus. I view this as putting on events that create a greater sense of culture at Lehigh. When we spoke to students of all ages and alumni, they all agreed a defining part of Lehigh is the Le-Laf football game. Nonetheless, after that one event, people couldn't agree on what else was a defining feature for everyone. It was here that I began my work. After being promoted from ThirdSpace to Special Events, I had significantly more budget and two enormous events behind me proving I could get things done. This was the time to go for something big.
+      <br/><br/>
+      	At Lawrenceville, I helped coordinate our school-wide game of Splash. I got to see first hand how it brought the school together; giving people the opportunity to go outside their comfort zone in a fun way. Moreover, it gave people a reason to meet new people. With the weather getting nicer outside, I decided we were going to try and find a campus-wide game we could all play. Thinking back to my childhood, my mother would always go above and beyond hiding eggs for us. She always found ingenious hiding places around my house. After Nick gave his blessing, I began work.
+      <br/><br/>
+      	The difficulty of an egg hunt is two fold. One, finding the people to power the event, and two, creating a system that prevents cheating. In this projects piece, I’m going to cover how I created that system using Maurelius. To find how I put together the people portion of the event, please go to the ////blog part\\\\.
+      <br/><br/>
+      	For the system, I leaned back on my web development skills. Maurelius, the website you’re currently on, already is publicly accessible and protected. It was the ideal starting point to start building the egg system on. Calling it code-name rabbit, I started thinking about what the system had to do. The contest was simply about finding the most eggs, so I figured we could put a unique code into each egg and then have them type that into Maurelius.
+      <br/><br/>
+      	This actualization would require solving 3 critical problems. 1, how people login, 2 how codes are made, and 3 how to prevent against brute force hackers. Dealing with the login problem first, I will explain the difficulty. For any web service, the most critical security measure is logging in. If someone hacks access to an account, you have already lost some critical information. You want to protect accounts at all costs. Nonetheless, users don’t want to wait forever for software to be run to defraud logins. For many developers, the solution is simply to outsource. Companies like Google, Facebook, and others have enormous user bases, and thus already have truly enormous protective measures around those accounts in place. Via a process called OAuth, I can make it so people login to Maurelius using their google credentials. This way, I don’t have to worry about the most challenging part of building a web service. Furthermore, especially for an egg hunt, it makes sense to keep things simple. The only concern became that too many people had Google accounts and could use the ease of getting one to potentially launch an attack. To counter this, I simply forced every user to have a Lehigh email. Thus, login attacks were no longer any concern.
+      <br/><br/>
+      	That moves us to the most critical engineering challenge specifically for the egg hunt: generating the codes. The challenge was writing a program that could generate unique codes, while also making the pattern to generate thousands of them very complex. We had 2000 eggs we had to find codes for! For instance, if the codes were simply in sequential order, the game would quickly get hacked; if a bad person found the third egg with code 3, he/she could quickly type in that they also found codes 4,5,6 and we would have no way to stop him/her. This would allow cheating and would ruin the fun for everyone. A solution had to be found. This was an extremely challenging part of the task, but I think I found an elegant solution. Even knowing the sample space, it would takes years upon years to decipher the exact algorithm that churned out the codes. The only concern now was someone would try to brute force their way to getting codes.
+      <br/><br/>
+      	To brute force your way through, a hacker attacks the input part of the website. For the egg hunt, that means they would attack the input for egg codes. They spam the input with every possible answer for an egg code, and keep going until they find all of them. Naturally this is very dangerous for Maurelius, so I implemented a few ways to protect against that. First and foremost, I used industry standard spam protection, which worked phenomenally well, catching 2 million bad SSH requests! Then I put in code into the system to block any person found to attack the site at a certain threshold. With those security in place, I did one more thing to build the system.
+      <br/><br/>
+      	I told all of my friends before the contest that if they could hack my site, I would pay them $10. The idea being that I gave my best effort in building this system, so if someone could find a problem with it, I could genuinely learn from the experience.
+      <br/><br/>
+      With those measures in place, the egg hunt began. To put it mildly, it was an incredible success! My website saw a 1000% increase in traffic over the course of 3 days! Multiple people came up to me saying they loved the game and appreciated the engineering design behind the game. Thankfully, Maurelius didn’t go down for a second during the game. In closing, I was incredibly happy to apply all the programming skills I’ve been developing in my classes. It was incredible rewarding to see all these academic concepts come together into a real world application and see how much my skill as a programmer has evolved from where I was even a year ago!
+    </p>
+  </div>
+
+<% include ../partials/footer.ejs%>
+
+</body>
+
+</html>
