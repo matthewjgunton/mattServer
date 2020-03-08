@@ -14,7 +14,6 @@ catch(e){
   console.log(e);
 }
 
-
 function minify (pathway) {
 
   return new Promise((resolve, reject)=> {
@@ -37,16 +36,13 @@ function minify (pathway) {
             newContent = newContent.replace(/\r?\n|\r/g, '');
             newContent = newContent.replace(/\s\s+/g, ' ');
 
-            console.log("\n"+newContent);
-
             fs.writeFile(pathway+"/"+items[i], newContent, function(err) {
               if(err) {
                 reject("error writing file",err);
               }
-              console.log("The file was saved!");
+              console.log(items[i]+" was minified");
               resolve(true);
             });
-
           });
         }else{
           minify(pathway+"/"+items[i]);
