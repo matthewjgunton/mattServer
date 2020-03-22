@@ -12,8 +12,7 @@ const userSchema = new schema({
     email: String,
     name: {
       givenName: String,
-      familyName: String,
-      fullName: String
+      familyName: String
     }
   }
   //every field does not have to be filled out
