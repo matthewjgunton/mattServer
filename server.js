@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const http = require('https').createServer(app);
+const server = require('http').createServer(app);
 const path = require("path");
-const io = require("socket.io").listen(http);
+const io = require("socket.io")(server);
 
 // rabbit libraries
 var session = require('express-session');//to store information between links from user
@@ -50,18 +50,18 @@ a.createFiles(projectPath, 'projectPath').then( () => {
       app.use("/eye_remember", rtEyeRemember);
       app.use("/paper", rtPaper);
       //app.use("/rabbit", rtRabbit);
+      app.locals.io = io
       app.use(function(req, res){
         res.status(404);
         // respond with html page
         if (req.accepts('html')) {
           console.log("redirected", req.url);
-          res.redirect("/");
-          return;
+          return res.redirect("/");
         }else{
           res.send("Please view Maurelius on a web browser");
         }
       });
-      app.listen(5000);
+      server.listen(5000);
       console.log("lift off");
     })
   })

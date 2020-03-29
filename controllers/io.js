@@ -1,10 +1,16 @@
+let users = 0;
+
 module.exports = (io) => {
-    // console.log('IO: ', io);
-    io.on('connect', socket => {
+    io.on('connection', socket => {
        // handle various socket connections here
+       socket.on("arrival", email => {
+         console.log("Registered!",email);
+         socket.emit('arrive', email);
+         //will make this broadcast later
+         users++;
+       })
+       socket.on("disconnect", (reason) => {
+         // users--;
+       })
     });
-
-    // put any other code that wants to use the io variable
-    // in here
-
 };

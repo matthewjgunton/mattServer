@@ -36,11 +36,17 @@ passport.use(new googleStrategy({
           return done(null, user);
         }else{
 
+          if(profile._json.hd !== 'lehigh.edu'){
+            console.log("bad google account ",profile.emails[0].value);
+            return done("Hey, You!\nLOGIN WITH YOUR LEHIGH EMAIL");
+          }
+
           var newUser = new User();
           newUser.userid = profile.id;
           newUser.token = accessToken;
-          newUser.name.givenName = profile.name.givenName;
-          newUser.name.familyName = profile.name.familyName;
+          console.log(">",profile.name);
+          newUser.givenName = profile.name.givenName;
+          newUser.familyName = profile.name.familyName;
           newUser.email = profile.emails[0].value;
 
           newUser.save(function(err, result){
