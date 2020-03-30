@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs%>
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/project/common.css" rel="stylesheet" />
+        <link href="/css/start.css" rel="stylesheet" />
+        <link href="/css/icons.css" rel="stylesheet" />
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <h3>Hi <%=user.givenName%></h3>
+  <h1>Welcome to the Maurelius Grocery Service</h1>
+
+  <a href = "/grocery/pastOrders">View Orders</a>
+  <a href = "/grocery/newOrder">New Order</a>
+  <b><a href = "/grocery/user">Delivery Settings</a></b>
+
+  <form>
+    <h2>Delivery Address:</h2>
+    <input id="addr" name="address"></input>
+    <h2>Delivery Preferences</h2>
+    <input name="instructions" placeholder="leave on the porch and ring the door bell..."></input>
+  </form>
+
+  <% include ../partials/footer.ejs%>
+</body>
+
+<script>
+  $(document).ready(()=>{
+    let curAddress = "<%=user.address%>"
+    if(curAddress === "null"){
+      alert("Please enter your address");
+    }else{
+      $("#addr").value(curAddress);
+    }
+  })
+</script>
+
+</html>
