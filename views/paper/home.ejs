@@ -22,7 +22,9 @@
   <!--Offense determines speed & angle of ball--->
   <!--Defense determines the offset (equivalent of wind in a lot of these games)-->
 
-  <center><canvas onmousemove="directionalKick(event)" id = "field"></canvas></center>
+  <center><canvas onmousemove="directionalKick(event)" onmousedown="setKick(event)" id = "field"></canvas></center>
+  <input hidden type="range" min="1" max="1100" value="1" id="power" onchange="setPower()">
+  <button onclick="hike()">Set Move</button>
 
     <% include ../partials/footer.ejs%>
 </body>
@@ -30,8 +32,11 @@
 <script src="https://cdn.socket.io/socket.io-1.7.0.js"></script>
 <script>
   const socket = io();
-  const max = 40;//will adjust
-  let canvas, ctx, x, y, direction;//direction 1 or -1
+  const offsetX = 35;
+  const offsetY = 141;
+  let canvas, ctx, x, y, direction, angle, power;//direction 1 or -1
+  let allowed = true;
+  let onOffense = true;
   $(document).ready(()=>{
     socket.emit('arrival', '<%=user.email%>');
   })
@@ -52,39 +57,71 @@
     drawBall();
     //how is the game going to be handled backend? >> Hit event & Defense event
   });
+  socket.on('move', (obj)=>{
+    x += obj.power*direction;
+    y += obj.power*direction*obj.angle;
+
+    //falloff check
+    if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
+      console.log(37+y, direction*45+x);
+      socket.emit("interception");
+      return;
+    }
+    //touchdown check
+    if( (direction*45+x > 1104 && direction == 1) || (direction*45+x < 93 && direction == -1) ){
+      //touch down
+      alert("TOUCHDOWN to ",obj.user);
+      socket.emit("touchdown");
+    }
+    drawField();
+    drawBall();
+    //logic for next offense
+    allowed = true;
+  })
+  socket.on("turnover", (obj)=>{
+    direction *= -1;
+    $("#users").empty();
+    for(let i = 0; i < obj.user.length; i++){
+      $("#users").append("<li>"+obj.user[i]+" "+obj.score[i]+"</li>");
+    }
+    onOffense = (obj.user === "<%=user.email%>") ? (true) : (false);
+  })
+
+function hike(){
+  console.log(angle, power, "go");
+  socket.emit('offenseGo', {angle, power});
+}
+
+function setKick(event){
+  if(onOffense){
+    allowed = !allowed;
+    console.log(event.clientY - offsetY - y-35);
+    //we want horizontal to be = to 1;
+    angle = (event.clientY - offsetY - y-35)/(event.clientX - offsetX - x);
+    //display power field
+    $("#power").show();
+  }
+}
+
+function setPower(){
+  power = $("#power").val();
+}
 
 function directionalKick(event){
+  if(allowed && onOffense){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawField();
     drawBall();
-    const CONSTRAINT = 200;
     ctx.beginPath();
-    ctx.moveTo(x, y + 35);
-    let offsetX = 7;
-    let offsetY = 141;
+    ctx.moveTo(x, y+35);
     let eventX = event.clientX - offsetX;
     let eventY = event.clientY - offsetY;
-
-    let angle = eventX/eventY;
-    let length = Math.sqrt((eventX-x) * (eventX-x) + (eventY-y) * (eventY-y));
-    let i = 0;
-    while(length > CONSTRAINT && i < 50){
-      i++;
-      console.log(length);
-      //calculate y = mx+b
-      let m = (eventY - y)/(eventX - x);
-      let b = y - m;
-      let dx = (m > 0) ? (-1) : (1);
-      eventY += (m + b);
-      eventX += dx;
-      length = Math.sqrt((eventX-x) * (eventX-x) + (eventY-y) * (eventY-y));
-    }
-    console.log("angle ",angle,"\n length ",length,"\n eventX ",eventX, "\n eventY ",eventY);
     ctx.lineTo(eventX, eventY);
     ctx.closePath();
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 7;
     ctx.strokeStyle = "#d05050";
     ctx.stroke();
+  }
 }
 
 function drawBall(){
@@ -105,6 +142,7 @@ function drawBall(){
 
 function drawField(){
   //field
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.moveTo(100,20);
       ctx.lineTo(1100, 20);
