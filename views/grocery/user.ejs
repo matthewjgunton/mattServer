@@ -17,14 +17,17 @@
   <h1>Welcome to the Maurelius Grocery Service</h1>
 
   <a href = "/grocery/pastOrders">View Orders</a>
-  <a href = "/grocery/newOrder">New Order</a>
+  <a href = "/grocery/shop">New Order</a>
   <b><a href = "/grocery/user">Delivery Settings</a></b>
 
   <form>
     <h2>Delivery Address:</h2>
     <input id="addr" name="address"></input>
+    <h2>Phone Number:</h2>
+    <input id="num" name="phone"></input>
     <h2>Delivery Preferences</h2>
-    <input name="instructions" placeholder="leave on the porch and ring the door bell..."></input>
+    <input id = "inst" name="instruction" placeholder="leave on the porch and ring the door bell..."></input>
+    <button type="button" onclick="check()">Send</button>
   </form>
 
   <% include ../partials/footer.ejs%>
@@ -32,13 +35,64 @@
 
 <script>
   $(document).ready(()=>{
-    let curAddress = "<%=user.address%>"
+    let curAddress = "<%=user.address%>";
+    let curInstruction = "<%=user.instruction%>";
+    let curPhone = "<%=user.phone%>";
+    // if(curInstruction) what if it's empty?
     if(curAddress === "null"){
       alert("Please enter your address");
     }else{
-      $("#addr").value(curAddress);
+      $("#addr").val(curAddress);
+    }
+    if(curInstruction !== "null"){
+      $("#inst").val(curInstruction);
+    }
+    if(curPhone !== "null"){
+      $("#num").val(curPhone);
     }
   })
+  const phoneReg = new RegExp(/^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/g);
+  // const addrReg = new RegExp("");//How are we to check address?
+  function check(){
+    // if(!addrReg.check($("#addr").val())){
+    //   alert("Please enter in a valid address");
+    //   return;
+    // }
+
+    if($("#num").val().length == 0 || $("#addr").val().length == 0){
+      alert("Please fill in both phone and address");
+      return;
+    }
+
+    let phone = $("#num").val().replace(/\s+/g, '');
+    if(!phoneReg.test(phone)){
+      alert("Please enter in a valid phone number");
+      return;
+    }
+    var xhr = new XMLHttpRequest();
+    var url = "/grocery/settings";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var json = JSON.parse(xhr.responseText);
+        }
+    };
+    var data = JSON.stringify({"phone": phone, "address": $("#addr").val(), "instruction": $("#inst").val()});
+    xhr.send(data);
+    xhr.onload = function() {
+      console.log(typeof xhr.responseText);
+      let data = JSON.parse(xhr.responseText);
+      if(data.msg === "success"){
+        alert("Your account has been updated!");
+        window.location.href="/grocery/home";
+      }
+      if(data.msg === "failed"){
+        alert("Bad Internet Connection. Please try reloading the page");
+      }
+    }
+  }
+
 </script>
 
 </html>

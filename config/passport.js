@@ -50,6 +50,8 @@ passport.use(new googleStrategy({
           newUser.familyName = profile.name.familyName;
           newUser.email = profile.emails[0].value;
           newUser.address = "null";
+          newUser.phone = "null";
+          newUser.instruction = "null";
 
           newUser.save(function(err, result){
             if(err){

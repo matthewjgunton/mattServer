@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <% include ../partials/header.ejs%>
+      <link href="/css/common.css" rel="stylesheet" />
+      <link href="/css/project/common.css" rel="stylesheet" />
+      <link href="/css/start.css" rel="stylesheet" />
+      <link href="/css/icons.css" rel="stylesheet" />
+      <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+   </head>
+   <body>
+      <h3>Hi <%=user.givenName%></h3>
+      <h1>Welcome to the Maurelius Grocery Service</h1>
+      <a href = "/grocery/pastOrders">View Orders</a>
+      <b><a href = "/grocery/shop">New Order</a></b>
+      <a href = "/grocery/user">Delivery Settings</a>
+
+         <!--We'll have to stay very on top of this-->
+        <table>
+
+          <% for(let i = 0; i < data.length; i+=2){ %>
+            <%let places = ["Fruit", "", "Vegetable", "", "Bread", "", "Drink"];%>
+
+            <tr><th><%=places[i]%></th></tr>
+            <%for(let m = 0; m < data[i].length; m++){%>
+              <%let id = data[i][m].replace(/\s+/g, '');%>
+              <tr>
+                <td><input id="c<%=id%>" type="checkbox" name="<%=id%>" id="<%=id%>"><td>
+                <td><label for="<%=data[i][m]%>"><%=data[i][m]%></td>
+                <td>$<%=data[i+1][m]%></td>
+                <td><div hidden id = "d<%=id%>"><input id="num_<%=id%>"type="number" min=0 max=10></input></div></td>
+              </tr>
+            <%}%>
+          <%}%>
+
+
+        </table>
+            <!--User Suggestion (no guarantees)-->
+            <h3>Have something special you want us to look for?</h3>
+            <input></input>
+
+            <h3>Your Cart:</h3>
+            <div id="cart">
+            </div>
+
+            <button id = 'p'>Purchase</button>
+
+            <p>
+            DISCLAIMERS:
+            *about special
+            *about food overall
+            *about payment
+            </p>
+
+
+      <% include ../partials/footer.ejs%>
+   </body>
+   <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+    <script src="https://js.braintreegateway.com/web/3.39.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.39.0/js/paypal-checkout.min.js"></script>
+    <script>
+    paypal.Button.render({
+      braintree: braintree,
+      client: {
+        // production: 'CLIENT_TOKEN_FROM_SERVER',
+        sandbox: '<%=token%>'
+      },
+      env: 'production', // Or 'sandbox'
+      commit: true, // This will add the transaction amount to the PayPal button
+
+      payment: function (data, actions) {
+        return actions.braintree.create({
+          flow: 'checkout', // Required
+          amount: 10.00, // Required
+          currency: 'USD', // Required
+        });
+      },
+      onAuthorize: function (payload) {
+        // Submit `payload.nonce` to your server.
+      },
+    }, '#p');
+    </script>
+   <script>
+   let items = [];
+   let amount = [];
+   //way for number to only appear when the checked box has been selected
+   $(function () {
+     <%for(let i = 0; i < data.length; i+=2){%>
+       <%for(let m = 0; m < data[i].length; m++){%>
+         <%let id = data[i][m].replace(/\s+/g, '');%>
+         $("#c<%=id%>").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#d<%=id%>").show();
+                    $("#num_<%=id%>").val(1);
+                    items.push("<%=id%>");
+                    addToCart($("#num_<%=id%>").val(), $("#cart<%=id%>"), <%=data[i+1][m]%>, "<%=id%>", "<%=data[i][m]%>");
+                } else {
+                    $("#d<%=id%>").hide();
+                    $("#num_<%=id%>").val(0);
+                    addToCart($("#num_<%=id%>").val(), $("#cart<%=id%>"), <%=data[i+1][m]%>, "<%=id%>", "<%=data[i][m]%>");
+                }
+            });
+        $("#num_<%=id%>").change(()=>{
+          addToCart($("#num_<%=id%>").val(), $("#cart<%=id%>"), <%=data[i+1][m]%>, "<%=id%>", "<%=data[i][m]%>");
+        })
+       <%}%>
+     <%}%>
+   });
+
+  //checkout function
+  function addToCart(value, cart, price, id, item){
+    cart.remove();
+    if(value != 0){
+      let cost = price * value;
+      $("#cart").append("<div id = 'cart"+id+"'>"+item+" - $"+cost+"</div>");
+    }
+  }
+
+  function computeTotal(){
+    for(let i = 0; i < items.length; i++){
+      let num = $("#num_"+items[i]).val();
+    }
+  }
+
+   </script>
+</html>

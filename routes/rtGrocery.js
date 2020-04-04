@@ -18,6 +18,15 @@ sendRoutes.route("/home")
 sendRoutes.route("/user")
   .get(controller.userPage);
 
+sendRoutes.route("/shop")
+  .get(controller.shopPage);
+
+sendRoutes.route("/checkout")
+  .post(controller.checkout);
+
+sendRoutes.route("/settings")
+  .post(controller.updateUser);
+
 sendRoutes.route("/out")
   .get(controller.logOut);
 

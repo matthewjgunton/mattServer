@@ -9,6 +9,7 @@ const userSchema = new schema({
     givenName: String,
     familyName: String,
     address: String,
+    phone: String,
     instruction: String
 });
 
