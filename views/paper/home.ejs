@@ -24,6 +24,7 @@
 
   <center><canvas onmousemove="directionalKick(event)" onmousedown="setKick(event)" id = "field"></canvas></center>
   <input hidden type="range" min="1" max="1100" value="1" id="power" onchange="setPower()">
+  <!-- <input hidden type="range" min="0" max="100" value="50" id="defense" onchange="setDefense()"> -->
   <button onclick="hike()">Set Move</button>
 
     <% include ../partials/footer.ejs%>
@@ -40,9 +41,9 @@
   $(document).ready(()=>{
     socket.emit('arrival', '<%=user.email%>');
   })
-  socket.on('arrive', function(email){
-    console.log("hit", email);
-    $('#users').append($('<li>').text(email));
+  socket.on('arrive', function(data){
+    console.log("hit", data.email);
+    $('#users').append($('<li>').text(data.email));
     canvas = document.getElementById('field');
     //build the field, build the ball, build the interface
     //build offense, then defense
@@ -50,7 +51,7 @@
     ctx = canvas.getContext('2d');
     canvas.width  = 1200;
     canvas.height = 500;
-    x = 550;
+    x = 200;
     y = 150;
     direction = 1;
     drawField();
@@ -60,7 +61,6 @@
   socket.on('move', (obj)=>{
     x += obj.power*direction;
     y += obj.power*direction*obj.angle;
-
     //falloff check
     if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
       console.log(37+y, direction*45+x);
@@ -80,25 +80,24 @@
   })
   socket.on("turnover", (obj)=>{
     direction *= -1;
+    onOffense = !onOffense;
     $("#users").empty();
-    for(let i = 0; i < obj.user.length; i++){
-      $("#users").append("<li>"+obj.user[i]+" "+obj.score[i]+"</li>");
+    for(let i = 0; i < obj.users.length; i++){
+      $("#users").append("<li>"+obj.users[i]+" "+obj.score[i]+"</li>");
     }
     onOffense = (obj.user === "<%=user.email%>") ? (true) : (false);
   })
 
 function hike(){
   console.log(angle, power, "go");
-  socket.emit('offenseGo', {angle, power});
+  socket.emit('offenseGo', {angle, power, "<%=user.email%>"});
 }
 
 function setKick(event){
   if(onOffense){
     allowed = !allowed;
     console.log(event.clientY - offsetY - y-35);
-    //we want horizontal to be = to 1;
     angle = (event.clientY - offsetY - y-35)/(event.clientX - offsetX - x);
-    //display power field
     $("#power").show();
   }
 }
@@ -127,8 +126,7 @@ function directionalKick(event){
 function drawBall(){
   //ball
       ctx.beginPath();
-      let angle = 15;//in degrees
-      //we'll adjust for angle later
+      let angle = 15;
       ctx.moveTo(x, y);
       ctx.lineTo(x, 80+y);
       ctx.lineTo(direction*45+x, 37+y);
