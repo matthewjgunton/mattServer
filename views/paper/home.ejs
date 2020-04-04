@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs%>
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/project/common.css" rel="stylesheet" />
+        <link href="/css/start.css" rel="stylesheet" />
+        <link href="/css/icons.css" rel="stylesheet" />
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <h1>Welcome to Paper Games <%=user.givenName%>!</h1>
+
+  <h3>Paper Football</h3>
+  <div id = "users">
+  </div>
+
+  <!--Offense determines speed & angle of ball--->
+  <!--Defense determines the offset (equivalent of wind in a lot of these games)-->
+
+  <center><canvas onmousemove="directionalKick(event)" onmousedown="setKick(event)" id = "field"></canvas></center>
+  <input hidden type="range" min="1" max="1100" value="1" id="power" onchange="setPower()">
+  <!-- <input hidden type="range" min="0" max="100" value="50" id="defense" onchange="setDefense()"> -->
+  <button onclick="hike()">Set Move</button>
+
+    <% include ../partials/footer.ejs%>
+</body>
+
+<script src="https://cdn.socket.io/socket.io-1.7.0.js"></script>
+<script>
+  const socket = io();
+  const offsetX = 35;
+  const offsetY = 141;
+  let canvas, ctx, x, y, direction, angle, power;//direction 1 or -1
+  let allowed = true;
+  let onOffense = true;
+  $(document).ready(()=>{
+    socket.emit('arrival', '<%=user.email%>');
+  })
+  socket.on('arrive', function(data){
+    console.log("hit", data.email);
+    $('#users').append($('<li>').text(data.email));
+    canvas = document.getElementById('field');
+    //build the field, build the ball, build the interface
+    //build offense, then defense
+    $("#field").css("background-color", 'green');
+    ctx = canvas.getContext('2d');
+    canvas.width  = 1200;
+    canvas.height = 500;
+    x = 200;
+    y = 150;
+    direction = 1;
+    drawField();
+    drawBall();
+    //how is the game going to be handled backend? >> Hit event & Defense event
+  });
+  socket.on('move', (obj)=>{
+    x += obj.power*direction;
+    y += obj.power*direction*obj.angle;
+    //falloff check
+    if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
+      console.log(37+y, direction*45+x);
+      socket.emit("interception");
+      return;
+    }
+    //touchdown check
+    if( (direction*45+x > 1104 && direction == 1) || (direction*45+x < 93 && direction == -1) ){
+      //touch down
+      alert("TOUCHDOWN to ",obj.user);
+      socket.emit("touchdown");
+    }
+    drawField();
+    drawBall();
+    //logic for next offense
+    allowed = true;
+  })
+  socket.on("turnover", (obj)=>{
+    direction *= -1;
+    onOffense = !onOffense;
+    $("#users").empty();
+    for(let i = 0; i < obj.users.length; i++){
+      $("#users").append("<li>"+obj.users[i]+" "+obj.score[i]+"</li>");
+    }
+    onOffense = (obj.user === "<%=user.email%>") ? (true) : (false);
+  })
+
+function hike(){
+  console.log(angle, power, "go");
+  socket.emit('offenseGo', {angle, power, "<%=user.email%>"});
+}
+
+function setKick(event){
+  if(onOffense){
+    allowed = !allowed;
+    console.log(event.clientY - offsetY - y-35);
+    angle = (event.clientY - offsetY - y-35)/(event.clientX - offsetX - x);
+    $("#power").show();
+  }
+}
+
+function setPower(){
+  power = $("#power").val();
+}
+
+function directionalKick(event){
+  if(allowed && onOffense){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawField();
+    drawBall();
+    ctx.beginPath();
+    ctx.moveTo(x, y+35);
+    let eventX = event.clientX - offsetX;
+    let eventY = event.clientY - offsetY;
+    ctx.lineTo(eventX, eventY);
+    ctx.closePath();
+    ctx.lineWidth = 7;
+    ctx.strokeStyle = "#d05050";
+    ctx.stroke();
+  }
+}
+
+function drawBall(){
+  //ball
+      ctx.beginPath();
+      let angle = 15;
+      ctx.moveTo(x, y);
+      ctx.lineTo(x, 80+y);
+      ctx.lineTo(direction*45+x, 37+y);
+      ctx.closePath();
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = '#a7863b';
+      ctx.stroke();
+      ctx.fillStyle = "#FFCC00";
+      ctx.fill();
+}
+
+function drawField(){
+  //field
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.moveTo(100,20);
+      ctx.lineTo(1100, 20);
+      ctx.lineTo(1100, 480);
+      ctx.lineTo(100, 480);
+      ctx.closePath();
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+}
+
+</script>
+
+</html>

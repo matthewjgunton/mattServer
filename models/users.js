@@ -5,17 +5,11 @@ const schema = mongoose.Schema;
 //create schema and model
 
 const userSchema = new schema({
-  matthew:{
-    provider: String,
-    id: String,
+    userid: String,
     token: String,
     email: String,
-    name: {
-      givenName: String,
-      familyName: String,
-      fullName: String
-    }
-  }
+    givenName: String,
+    familyName: String
   //every field does not have to be filled out
   //if a property exists, it needs to be the right type(num vs string)
 });
