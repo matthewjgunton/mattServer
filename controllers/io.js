@@ -10,7 +10,8 @@ module.exports = (io) => {
          socket.name = email;
          users.push(email);
          score.push(0);
-         socket.emit('arrive', {email, offenseUser, users});
+	console.log(users);
+         io.emit('arrive', {email, offenseUser, users});
          //will make this broadcast later
        })
        socket.on("offenseGo", (obj)=>{
@@ -20,26 +21,26 @@ module.exports = (io) => {
            if(offenseDown > 2){
              offenseUser = (offenseUser == 0) ? (1) : (0);
              offenseDown = 0;
-             socket.emit("turnover", {users, user: users[offenseUser], score});
+             io.emit("turnover", {users, user: users[offenseUser], score});
 
            }else{
              // offenseDown = 0;
              // offenseUser = (offenseUser == 0) ? (1) : (0);
              obj.downs = offenseDown;
-             socket.emit("move", obj);
+             io.emit("move", obj);
            }
        })
        socket.on("interception", ()=>{
          offenseDown = 0;
          offenseUser = (offenseUser == 0) ? (1) : (0);
-         socket.emit("turnover", {users, user: users[offenseUser], score});
+         io.emit("turnover", {users, user: users[offenseUser], score});
          console.log("off board");
        })
        socket.on("touchdown", ()=>{
          offenseDown = 0;
          score[offenseUser] += 7;
          offenseUser = (offenseUser == 0) ? (1) : (0);
-         socket.emit("turnover", {users, user: users[offenseUser], score});
+         io.emit("turnover", {users, user: users[offenseUser], score});
          console.log("TOUCHDOWN!");
        })
        socket.on("disconnect", (reason) => {

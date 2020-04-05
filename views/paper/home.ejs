@@ -25,7 +25,7 @@
   <center><canvas onmousemove="directionalKick(event)" onmousedown="setKick(event)" id = "field"></canvas></center>
   <input hidden type="range" min="1" max="1100" value="1" id="power" onchange="setPower()">
   <!-- <input hidden type="range" min="0" max="100" value="50" id="defense" onchange="setDefense()"> -->
-  <button onclick="hike()">Set Move</button>
+  <button hidden id="hike" onclick="hike()">Set Move</button>
 
     <% include ../partials/footer.ejs%>
 </body>
@@ -59,6 +59,9 @@
     canvas.height = 500;
     x = 100;
     y = 150;
+
+    onOffense = (data.users[data.offenseUser] === "<%=user.email%>") ? (true) : (false);
+
     direction = 1;
     drawField();
     drawBall();
@@ -102,6 +105,7 @@
 function hike(){
   console.log(angle, power, "go");
   socket.emit('offenseGo', {angle, power, user: "<%=user.email%>"});
+	$("#hike").hide();
 }
 
 function setKick(event){
@@ -115,6 +119,7 @@ function setKick(event){
 
 function setPower(){
   power = $("#power").val();
+	$("#hike").show();
 }
 
 function directionalKick(event){
