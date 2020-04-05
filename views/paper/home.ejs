@@ -57,7 +57,7 @@
     ctx = canvas.getContext('2d');
     canvas.width  = 1200;
     canvas.height = 500;
-    x = 200;
+    x = 100;
     y = 150;
     direction = 1;
     drawField();
@@ -82,10 +82,15 @@
     drawField();
     drawBall();
     //logic for next offense
+    if(obj.downs == 2){
+      socket.emit("interception");
+    }
     allowed = true;
   })
   socket.on("turnover", (obj)=>{
     direction *= -1;
+    drawField();
+    drawBall();
     onOffense = !onOffense;
     $("#users").empty();
     for(let i = 0; i < obj.users.length; i++){

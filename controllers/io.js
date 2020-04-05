@@ -7,9 +7,8 @@ module.exports = (io) => {
     io.on('connection', socket => {
        // handle various socket connections here
        socket.on("arrival", email => {
-         socket.set('username', email, function() {
-	      users[email] = email;
-	    });
+         socket.name = email;
+         users.push(email);
          score.push(0);
          socket.emit('arrive', {email, offenseUser, users});
          //will make this broadcast later
@@ -21,11 +20,13 @@ module.exports = (io) => {
            if(offenseDown > 2){
              offenseUser = (offenseUser == 0) ? (1) : (0);
              offenseDown = 0;
-             socket.emit("move", obj);
-           }else{
-             offenseDown = 0;
-             offenseUser = (offenseUser == 0) ? (1) : (0);
              socket.emit("turnover", {users, user: users[offenseUser], score});
+
+           }else{
+             // offenseDown = 0;
+             // offenseUser = (offenseUser == 0) ? (1) : (0);
+             obj.downs = offenseDown;
+             socket.emit("move", obj);
            }
        })
        socket.on("interception", ()=>{
@@ -42,6 +43,11 @@ module.exports = (io) => {
          console.log("TOUCHDOWN!");
        })
        socket.on("disconnect", (reason) => {
+         for(let i = 0; i < users.length; i++){
+           if(users[i]===socket.name){
+             users.splice(i, 1);
+           }
+         }
 /*		socket.get('username', function(err, user) {
 		      delete users[user];
 		      socket.emit('update', users);
