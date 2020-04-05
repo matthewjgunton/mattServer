@@ -7,7 +7,9 @@ module.exports = (io) => {
     io.on('connection', socket => {
        // handle various socket connections here
        socket.on("arrival", email => {
-         users.push(email);
+         socket.set('username', email, function() {
+	      users[email] = email;
+	    });
          score.push(0);
          socket.emit('arrive', {email, offenseUser, users});
          //will make this broadcast later
@@ -40,7 +42,10 @@ module.exports = (io) => {
          console.log("TOUCHDOWN!");
        })
        socket.on("disconnect", (reason) => {
-
-       })
+/*		socket.get('username', function(err, user) {
+		      delete users[user];
+		      socket.emit('update', users);
+		    });
+*/	  })
     });
 };

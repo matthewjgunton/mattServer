@@ -41,6 +41,12 @@
   $(document).ready(()=>{
     socket.emit('arrival', '<%=user.email%>');
   })
+  socket.on("update", function(data){
+	$("#users").empty();
+	for(let i = 0; i < data.length; i++){
+		$("#users").append($('<li>').text(data[i]));
+	}
+  })
   socket.on('arrive', function(data){
     console.log("hit", data.email);
     $('#users').append($('<li>').text(data.email));
@@ -90,7 +96,7 @@
 
 function hike(){
   console.log(angle, power, "go");
-  socket.emit('offenseGo', {angle, power, "<%=user.email%>"});
+  socket.emit('offenseGo', {angle, power, user: "<%=user.email%>"});
 }
 
 function setKick(event){
