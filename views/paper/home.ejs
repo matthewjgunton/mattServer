@@ -38,6 +38,7 @@
   let canvas, ctx, x, y, direction, angle, power;//direction 1 or -1
   let allowed = true;
   let onOffense = true;
+  let myUser;
   $(document).ready(()=>{
     socket.emit('arrival', '<%=user.email%>');
   })
@@ -61,7 +62,6 @@
     y = 150;
 
     onOffense = (data.users[data.offenseUser] === "<%=user.email%>") ? (true) : (false);
-
     direction = 1;
     drawField();
     drawBall();
@@ -71,24 +71,26 @@
     x += obj.power*direction;
     y += obj.power*direction*obj.angle;
     //falloff check
-    if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
-      console.log(37+y, direction*45+x);
-      socket.emit("interception");
-      return;
-    }
-    //touchdown check
-    if( (direction*45+x > 1104 && direction == 1) || (direction*45+x < 93 && direction == -1) ){
-      //touch down
-      alert("TOUCHDOWN to ",obj.user);
-      socket.emit("touchdown");
+    if(onOffense){
+      if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
+        console.log(37+y, direction*45+x);
+        socket.emit("interception");
+        return;
+      }
+      //touchdown check
+      if( (direction*45+x > 1104 && direction == 1) || (direction*45+x < 93 && direction == -1) ){
+        //touch down
+        alert("TOUCHDOWN to ",obj.user);
+        socket.emit("touchdown");
+      }
+      if(obj.downs == 2){
+        socket.emit("interception");
+      }
+      allowed = true;
     }
     drawField();
     drawBall();
     //logic for next offense
-    if(obj.downs == 2){
-      socket.emit("interception");
-    }
-    allowed = true;
   })
   socket.on("turnover", (obj)=>{
     direction *= -1;
