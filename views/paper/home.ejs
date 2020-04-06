@@ -92,6 +92,12 @@
   })
   socket.on("turnover", (obj)=>{
     direction *= -1;
+    y=150;
+    if(direction == -1){
+      x=1100;
+    }else{
+      x = 100;
+    }
     drawField();
     drawBall();
     onOffense = !onOffense;
