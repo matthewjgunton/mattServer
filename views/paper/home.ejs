@@ -73,7 +73,6 @@
     //falloff check
     if(onOffense){
       if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
-        console.log(37+y, direction*45+x);
         socket.emit("interception");
         return;
       }
@@ -100,6 +99,7 @@
     }else{
       x = 100;
     }
+    alert("Turnover\nobj.user is on offense");
     drawField();
     drawBall();
     onOffense = !onOffense;
