@@ -1,4 +1,5 @@
 const User = require("../models/groceryUsersModel.js");//allows us to search the userbase, and register new ones
+const Order = require("../models/groceryOrderModel.js");
 var fs = require("fs");
 const path = require("path");
 
@@ -69,6 +70,18 @@ exports.shopPage = (req, res)=>{
   });
 }
 
+exports.pastPage = (req, res) => {
+  if (!req.user){
+    return res.redirect("/grocery");
+  }
+  Order.find({userid: req.user.userid}).then((data)=>{
+    return res.render("/grocery/past", {user: req.user, data});
+  }).catch((err)=>{
+    console.log(err);
+    return res.redirect("/grocery");
+  })
+}
+
 exports.checkout = (req, res)=>{
   if (!req.user){
     return res.redirect("/grocery");
@@ -84,7 +97,29 @@ exports.checkout = (req, res)=>{
   }).then(function (result) {
     if (result.success) {
       console.log('Transaction ID: ' + result.transaction.id);
-      return res.status(201).redirect("/grocery");
+
+
+      let {items, amounts} = req.body;
+      if(items.length != amounts.length){
+        return res.status(400).redirect("/grocery");
+      }
+      let composite = [];
+      for(let i = 0; i < items.length; i++){
+        composite[i] = {item: items[i], amount: amounts[i]};
+      }
+      //date object is in UTC-0 Time
+      new Order({
+        userid: req.body.userid,
+        total: Number,
+        address: req.body.address,
+        items: composite
+      }).save().then((data)=>{
+        return res.status(201).redirect("/grocery");
+      }).catch((err)=>{
+        console.error(err);
+        return res.status(400).redirect("/grocery");
+      })
+
     } else {
       console.error(result.message);
     }
