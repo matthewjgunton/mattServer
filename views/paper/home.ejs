@@ -25,7 +25,8 @@
   <center><canvas onmousemove="directionalKick(event)" onmousedown="setKick(event)" id = "field"></canvas></center>
   <input hidden type="range" min="1" max="1100" value="1" id="power" onchange="setPower()">
   <input hidden type="range" min="0" max="100" value="50" id="defense" height = "20px" width = "4px" onchange="setDefense()">
-  <button onclick="hike()">Set Move</button>
+  <button hidden id="hike" onclick="hike()">Set Move</button>
+
 
     <% include ../partials/footer.ejs%>
 </body>
@@ -38,11 +39,17 @@
   let canvas, ctx, x, y, direction, angle, power;//direction 1 or -1
   let allowed = true;
   let onOffense = true;
+  let myUser;
   $(document).ready(()=>{
     socket.emit('arrival', '<%=user.email%>');
   })
+  socket.on("update", function(data){
+	$("#users").empty();
+	for(let i = 0; i < data.length; i++){
+		$("#users").append($('<li>').text(data[i]));
+	}
+  })
   socket.on('arrive', function(data){
-    console.log("hit", data.email);
     $('#users').append($('<li>').text(data.email));
     canvas = document.getElementById('field');
     //build the field, build the ball, build the interface
@@ -51,8 +58,10 @@
     ctx = canvas.getContext('2d');
     canvas.width  = 1200;
     canvas.height = 500;
-    x = 200;
+    x = 100;
     y = 150;
+
+    onOffense = (data.users[data.offenseUser] === "<%=user.email%>") ? (true) : (false);
     direction = 1;
     drawField();
     drawBall();
@@ -62,24 +71,39 @@
     x += obj.power*direction;
     y += obj.power*direction*obj.angle;
     //falloff check
-    if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
-      console.log(37+y, direction*45+x);
-      socket.emit("interception");
-      return;
-    }
-    //touchdown check
-    if( (direction*45+x > 1104 && direction == 1) || (direction*45+x < 93 && direction == -1) ){
-      //touch down
-      alert("TOUCHDOWN to ",obj.user);
-      socket.emit("touchdown");
+    if(onOffense){
+      if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 50 && direction == -1)){
+        socket.emit("interception");
+        return;
+      }
+      //touchdown check
+      if( (direction*45+x > 1100 && direction == 1) || (direction*45+x < 100 && direction == -1) ){
+        //touch down
+        alert("TOUCHDOWN to ",obj.user);
+        socket.emit("touchdown");
+        return;
+      }
+      if(obj.downs == 2){
+        socket.emit("interception");
+        return;
+      }
+      allowed = true;
     }
     drawField();
     drawBall();
     //logic for next offense
-    allowed = true;
   })
   socket.on("turnover", (obj)=>{
     direction *= -1;
+    y=150;
+    if(direction == -1){
+      x=1100;
+    }else{
+      x = 100;
+    }
+    alert("Turnover\n"+obj.user+" is on offense");
+    drawField();
+    drawBall();
     onOffense = !onOffense;
     $("#users").empty();
     for(let i = 0; i < obj.users.length; i++){
@@ -89,14 +113,14 @@
   })
 
 function hike(){
-  console.log(angle, power, "go");
-  socket.emit('offenseGo', {angle, power, "<%=user.email%>"});
+  socket.emit('offenseGo', {angle, power, user: "<%=user.email%>"});
+  $("#power").hide();
+	$("#hike").hide();
 }
 
 function setKick(event){
   if(onOffense){
     allowed = !allowed;
-    console.log(event.clientY - offsetY - y-35);
     angle = (event.clientY - offsetY - y-35)/(event.clientX - offsetX - x);
     $("#power").show();
   }
@@ -104,6 +128,7 @@ function setKick(event){
 
 function setPower(){
   power = $("#power").val();
+	$("#hike").show();
 }
 
 function directionalKick(event){
