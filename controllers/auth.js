@@ -67,5 +67,5 @@ exports.mediaSpecific = (req, res) => {
 }
 
 exports.mediaPage = (req, res) => {
-  return res.status(200).redirect('/media/1');
+  return res.status(200).redirect('/media/'+mediaPath.length);
 }

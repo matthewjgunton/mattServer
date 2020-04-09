@@ -24,8 +24,9 @@
 
   <center><canvas onmousemove="directionalKick(event)" onmousedown="setKick(event)" id = "field"></canvas></center>
   <input hidden type="range" min="1" max="1100" value="1" id="power" onchange="setPower()">
-  <!-- <input hidden type="range" min="0" max="100" value="50" id="defense" onchange="setDefense()"> -->
+  <input hidden type="range" min="0" max="100" value="50" id="defense" height = "20px" width = "4px" onchange="setDefense()">
   <button hidden id="hike" onclick="hike()">Set Move</button>
+
 
     <% include ../partials/footer.ejs%>
 </body>
@@ -49,7 +50,6 @@
 	}
   })
   socket.on('arrive', function(data){
-    console.log("hit", data.email);
     $('#users').append($('<li>').text(data.email));
     canvas = document.getElementById('field');
     //build the field, build the ball, build the interface
@@ -72,18 +72,20 @@
     y += obj.power*direction*obj.angle;
     //falloff check
     if(onOffense){
-      if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 80 && direction == -1)){
+      if ( 37+y > 299 || 37+y < -169 || (direction*45+x > 1150 && direction == 1) || (direction*45+x < 50 && direction == -1)){
         socket.emit("interception");
         return;
       }
       //touchdown check
-      if( (direction*45+x > 1104 && direction == 1) || (direction*45+x < 93 && direction == -1) ){
+      if( (direction*45+x > 1100 && direction == 1) || (direction*45+x < 100 && direction == -1) ){
         //touch down
         alert("TOUCHDOWN to ",obj.user);
         socket.emit("touchdown");
+        return;
       }
       if(obj.downs == 2){
         socket.emit("interception");
+        return;
       }
       allowed = true;
     }
@@ -99,7 +101,7 @@
     }else{
       x = 100;
     }
-    alert("Turnover\nobj.user is on offense");
+    alert("Turnover\n"+obj.user+" is on offense");
     drawField();
     drawBall();
     onOffense = !onOffense;
@@ -111,15 +113,14 @@
   })
 
 function hike(){
-  console.log(angle, power, "go");
   socket.emit('offenseGo', {angle, power, user: "<%=user.email%>"});
+  $("#power").hide();
 	$("#hike").hide();
 }
 
 function setKick(event){
   if(onOffense){
     allowed = !allowed;
-    console.log(event.clientY - offsetY - y-35);
     angle = (event.clientY - offsetY - y-35)/(event.clientX - offsetX - x);
     $("#power").show();
   }
