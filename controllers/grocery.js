@@ -76,7 +76,7 @@ exports.pastPage = (req, res) => {
   }
   Order.find({userid: req.user.userid}).then((data)=>{
     return res.render("/grocery/past", {user: req.user, data});
-  }).catch((err)=>{
+  }).catch((err)=>{ 
     console.log(err);
     return res.redirect("/grocery");
   })
