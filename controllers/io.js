@@ -44,6 +44,7 @@ module.exports = (io) => {
          console.log("TOUCHDOWN!");
        })
        socket.on("disconnect", (reason) => {
+	console.log(socket.name, " is leaving");
          for(let i = 0; i < users.length; i++){
            if(users[i]===socket.name){
              users.splice(i, 1);
