@@ -112,10 +112,20 @@
     onOffense = (obj.user === "<%=user.email%>") ? (true) : (false);
   })
 
+function setDefense(){
+  power = $("#power").val();
+  $("#hike").show();
+}
+
 function hike(){
-  socket.emit('offenseGo', {angle, power, user: "<%=user.email%>"});
-  $("#power").hide();
-	$("#hike").hide();
+  if(onOffense){
+    socket.emit('offenseGo', {angle, power, user: "<%=user.email%>"});
+    $("#power").hide();
+    $("#hike").hide();
+  }else{
+    socket.emit('offenseGo', {angle, -1, user: "<%=user.email%>"});
+  }
+
 }
 
 function setKick(event){

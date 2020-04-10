@@ -2,6 +2,11 @@ let offenseDown = 0;
 let users = [];
 let score = [];
 let offenseUser = 0;
+let offenseResponded = 0;
+let defenseResponded = 0;
+let angle = 0;
+let defAngle = 0;
+let power = 0;
 
 module.exports = (io) => {
     io.on('connection', socket => {
@@ -16,18 +21,28 @@ module.exports = (io) => {
        })
        socket.on("offenseGo", (obj)=>{
          console.log("object received", obj);
-         offenseDown++;
-           //we'll recalculate power here
-           if(offenseDown > 2){
-             offenseUser = (offenseUser == 0) ? (1) : (0);
-             offenseDown = 0;
-             io.emit("turnover", {users, user: users[offenseUser], score});
-
+           if(power == -1){
+             defenseResponded++;
+             defAngle = obj.angle > 50 ? (-.5) : (5);
            }else{
-             // offenseDown = 0;
-             // offenseUser = (offenseUser == 0) ? (1) : (0);
-             obj.downs = offenseDown;
-             io.emit("move", obj);
+              offenseDown++;
+              offenseResponded++;
+              angle = obj.angle;
+              power = obj.power;
+           }
+           //we'll recalculate power here
+           if(offenseResponded > 0 && defenseResponded > 0){
+             offenseResponded = 0;
+             defenseResponded = 0;
+             angle += defAngle;
+             if(offenseDown > 2){
+               offenseUser = (offenseUser == 0) ? (1) : (0);
+               offenseDown = 0;
+               io.emit("turnover", {users, user: users[offenseUser], score});
+             }else{
+               obj.downs = offenseDown;
+               io.emit("move", {angle, power, obj.user});
+             }
            }
        })
        socket.on("interception", ()=>{
@@ -44,16 +59,12 @@ module.exports = (io) => {
          console.log("TOUCHDOWN!");
        })
        socket.on("disconnect", (reason) => {
-	console.log(socket.name, " is leaving");
-         for(let i = 0; i < users.length; i++){
+	        console.log(socket.name, " is leaving");
+          for(let i = 0; i < users.length; i++){
            if(users[i]===socket.name){
              users.splice(i, 1);
            }
          }
-/*		socket.get('username', function(err, user) {
-		      delete users[user];
-		      socket.emit('update', users);
-		    });
-*/	  })
-    });
+	    })
+  });
 };
