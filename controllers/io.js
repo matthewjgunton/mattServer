@@ -41,7 +41,7 @@ module.exports = (io) => {
                io.emit("turnover", {users, user: users[offenseUser], score});
              }else{
                obj.downs = offenseDown;
-               io.emit("move", {angle, power, obj.user});
+               io.emit("move", {angle, power, user: obj.user});
              }
            }
        })
