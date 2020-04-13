@@ -9,7 +9,7 @@ function moveNew(e) {
     if(s > 0 && slideIndexNew > 1){
       showSlidesNew(--slideIndexNew);
     }
-    if(s < 0 && slideIndexNew < 3){
+    if(s < 0 && slideIndexNew < 4){
       showSlidesNew(++slideIndexNew);
     }
 
