@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/project/common.css" rel = "stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <% include ../partials/navbar %>
+
+  <h1>Transaction Paradigms of Relational Databases</h1>
+  <h4>May 15th, 2020</h4>
+
+  <center><img src = "/images/code.jpg" /></center>
+
+  <div id = "mid">
+    <p>
+      Nearly every piece of technology today interfaces with a database. Whether this be a mobile app that reminds you to take medicine or a social media site that stores your data and then sells it to advertisers, databases are the keystone of nearly all computer businesses. Nevertheless, many developers treat databases as a black box. While this view works fine for many programmers, it is worth knowing how the database processes transactions (think interactions with the database, both read and writes) can be extremely helpful for tracking down bugs at scale. This blog post is designed to give you a place to start.
+      <br/><br/>
+      To begin, let's give a roadmap. Databases have to handle multiple different transactions at a time. If they don't do this, then the database accesses will be slow and no one will be happy. The way they juggle all the transactions is called concurrency. Like other aspects of CS, concurrency is where the most difficult to track down bugs occur. This blog post will go over 3 types of concurrency paradigms: Timestamp Orderings, 2 Phase Locking, and Snapshot Isolation. Before we dive in, let me tell you how I'll be describing these paradigms. First off, none of this will be diving deep into the algorithms. Rather, I'll be explaining a high-level view of how they work, what they prioritize and the dangers that can happen. Finally, a critical part of database design is the concept of serializability. Serializability means that even if multiple transactions are processed in parallel, the order in which they mesh can be recreated as if they were going one at a time. That concept is important because it means no results in the database are altered from what is expected.
+      <br/><br/>
+      Let's begin with timestamp. Timestamp ordering is very intuitive. Every transaction is given a timestamp when it enters the system. In addition to this, every piece of data has 2 timestamps, one read, and one write. The read timestamp signals the newest transaction that has read it, and the write timestamp signals the newest transaction that has written to it. When a transaction first interacts with the DBA, it is assigned a unique timestamp, with each new transaction getting a larger numerical value timestamp. If the transaction attempts to read something where the write stamp is larger than the transactions timestamp, then it is rejected, as it is trying to read something that has been updated. If the transaction attempts to write something where a read timestamp is larger than its timestamp, then it is rejected, as the transaction is trying to effectively revert the DB back, where a transaction has already read the new state. As one can imagine, this system is intuitive and easy to debug. The issue is that it systematically disadvantages longer transactions, as it becomes more likely a termination will occur as new transactions come in simultaneously and have a higher transaction number than the older, longer one. The other concern with this system, is it does not account for when commits happen. As such, if a crash happens on the system, the read and write timestamps give no indication of what has been actually moved onto stable storage. Thus, during reboot, in addition to reading from the log, the system will also have to update every single read and write timestamp that is no longer accurate given the transactions lost during the crash. These problems are often addressed with validation timestamping, where the commit phase of a transaction is actively tracked. The specifics of this system do vary, so it is worth digging deep into yours to see when a transaction is allowed to be validated.
+      <br/><br/>
+      Two phase locking is a more involved form of concurrency control. This paradigm is concerned that there may be 2 accesses to the same data that are incompatible. To address this, the concept of shared locks and exclusive locks are introduced. The easiest way to describe these is to show how they are used. When a transaction comes into the DBA, it is broken down into a sequence of 2 basic commands, reads and writes. Those reads and writes are both called on specific data objects, such as a specific employee's name or salary. If a transaction wants to write, then it must take out an exclusive lock on that specific data object. The exclusive lock makes sure that only that transaction can have access to the data. No other concurrent transaction can read or write. Whenever a transaction wants to make a read, it creates a shared-lock on that data object. If there is another shared lock on that same data object, it isn't a problem, but if there is an exclusive lock on that data object, then the entire transaction stalls until either the transaction is aborted, or the exclusive lock is lifted. Only after every operation is done for the transaction do the locks get lifted. Naturally, this system can lead to a situation called a deadlock. Here one transaction is waiting on another one to finish to continue, but that transaction is waiting on the original one to finish before it can continue. This situation leads to both being aborted, but it must be caught otherwise the entire system stalls. Naturally, 2PL leads to many serializable transaction schedules not being allowed to execute because they create deadlocks. This is a downside to its creation, but ultimately not one most would have to worry about. In pure 2PL, the bigger concern are larger queries to the DB. If someone wants to get an aggregate calculation, they have to read from every single element in the DB. In 2PL, this may lead to problems with other concurrent transactions, slowing down the machine. In response to this issue, more gradients of locking. Looking up intentions with regards to locks helps handle the aggregate problem. Again, the exact definitions here vary and warrant a closer look. If your system is slow and it uses 2PL, then it is worth getting into the details of locks.
+      <br/><br/>
+      Finally, one of the most common paradigms snapshot isolation. Snapshot isolation reigns supreme to many because it does not worry about what edits specific transactions are making to the database. The way it does this without breaking consistency is by effectively giving every new transaction its own version of the database. Simply put, a transaction enters the database and gets its own virtual set of the database as it existed when the transaction entered the DB. The transaction is then free to make whatever changes or reads it wants. The concern begins when it comes time to commit. Most systems operate on the first committer rule. Simply put, the first transaction to commit that doesn't have any inconsistencies with the current state wins. Every other transaction trying to update the same kinds of values will be rejected. Compared to 2PL, SI will never result in a deadlock and will allow for many more serializable schedules to occur. Compared to timestamp ordering, it has the added benefit of not hurting long transactions as long as they are read only. Nevertheless, it is a problem as it disadvantages long write transactions, and naturally requires a lot more memory to operate than the others. Moreover, Oracle's version of SI will not always guarantee serializability, making there times when errors can occur without any flags being thrown. This is a very popular error and if you do not know it is a possibility, you may be pulling at strings for a while. The biggest warning signs of this error are that it only appears during times of high volume, but never otherwise. If that is the case, then it is worth diving deep into the Oracle definition of serializability and following your log records to see when data starts to conflict and break consistency.
+      <br/><br/>
+      That should give you a high level view of how the internals of database transactions happen. Should an error occur, knowing these paradigms will put you on the path to fixing them and optimizing your code so that db interactions in the future are even more efficient.
+      <br/><br/>
+      Onwards & Upwards
+    </p>
+  </div>
+
+    <% include ../partials/footer.ejs%>
+
+
+</body>
