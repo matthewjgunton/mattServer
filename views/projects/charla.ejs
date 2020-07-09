@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs%>
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/project/common.css" rel="stylesheet" />
+        <link href="/css/start.css" rel="stylesheet" />
+        <link href="/css/icons.css" rel="stylesheet" />
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <% include ../partials/navbar.ejs %>
+    <h1>Charla</h1>
+    <h4>Social Good | Native | Mobile</h4>
+    <center><img src="/images/charla.jpg" /></center>
+    <div id="text">
+        <p>Charla is designed to make it easier for people to amplify their voices. In the app, organizers write down a message they want to send out to a lot of people. Charla creates a unique message for each contact and then sends it out individually to each person.</p>
+    </div>
+    <div id="tech"> <span>Tech Used</span>
+        <ul>
+            <li>React Native</li>
+            <li>Expo</li>
+            <li>SMS</li>
+        </ul>
+    </div>
+    <div id="mid">
+        <p>
+        Charla is designed to make it easier for people to reach one another individually. Using Charla makes personally engaging large groups of people easier. This way you're able to reach more people. Charla is designed not to replace social media, but to expand the reach of those people trying to organize. Users create audiences of contacts, and then create messages to send to every single phone number in the audience. Charla takes the message and personalizes it, filling in properties like first names, last names, or companies the contact works for. Each audience member receives a unique message and has no idea they were sent it via Charla.
+        <br/><br/>
+        From an engineering point of view, building Charla has exposed me to a wides array of different technologies. I have had to deal with React Native, Expo, SQLlite, a variety of different Android versions, different SMS types, and finally making the app look presentable with custom fonts and design. Nevertheless, compared to some other apps Charla is easier to maintain simply because there is no backend. Charla doesn't track any usage statistics. Charla simply pulls in the user's contacts to create audiences, and then scripts the message so that all the user has to do is push send in their SMS application to send them. Getting to that ease of use was extremely difficult.
+        <br/><br/>
+        First, I had to build the basic functionality of the app. This meant Charla had to be able to pull contacts and save certain ones of them as groups. I relied heavily on Expo to interface directly with the device's operating system, and its contact interface did wonders. Nevertheless, putting the data into a workable data structure was going to be critical. Some people have  only a few hundred contacts  and so an inefficient algorithm wouldn't be good, but it's bloat wouldn't show too badly. However, because some people have thousands of contacts (and these are Charla's most likely user base), the entire contact algorithm had to be very efficient. Because I was working with javascript, I took advantage of the fact that every object in Javascript is effectively a hashmap. Giving each contact a unique key, I would be able to store them and save them by simply putting all the contacts into one big object, and then doing a hash on the key to find the contact. This efficiency is what drives the search feature within the contact. Users can thus both swipe through their list of contacts, or they search through them. This efficiency is carried over throughout Charla, so anytime you interface with contacts, the size of the group won't be a significant burden on the speed of the application. Nevertheless, Charla also had to be able to send texts. Returning again to Expo, I used their SMS interface to send off the user's messages. To make it easy for users to personalize their messages, I used emojis as placeholders. A user puts down a specific emoji, and Charla knows to replace that emoji with the corresponding contact's information. So if a silhouette emoji is the stand in for the full name, whenever a user types that into the chat box, Charla knows to generate a new message for each contact that replaces the silhouette emoji with the contact's full name. While I was researching the project, I came across a series of laws revolving mass communication. Charla is not a mass communication tool, as the user is still required to press 'send' on every message sent. This distinction has been used by several other apps such as 'Reach' and 'Hit Em Up' successfully. In other words, because the SMS feature won't send the messages automatically, the user has to click send each time on the pre-written message, Charla is not considered a mass communication tool.
+        <br/><br/>
+        After the functionality was set, I began focusing on embellishing Charla. I made it so users can choose what properties of their contacts they can pull in and engage with. I also allowed users to adjust which emoji stands for what properties. Naturally, I had to then style Charla to look good. No one would use Charla if the user experience was bad. I styled Charla to be vibrant and simple to use. All of the text is fairly large, and the colors are a mellow blue. However, the app still looked off until I added in custom fonts. It was an interesting learning experience to see how the app went from looking old and dated to looking new after one change in font.
+        <br/><br/>
+        I was lucky to have many of my friends take the time to beta-test Charla. Many of them told me they saw the immediate use for such an app. Nevertheless, there were a few bugs that arose. First, with the Android devices, to send each message, the Android OS would open the messaging app separately. This mean that to take advantage of the speed that Charla generated new texts for you, you had to constantly be pressing the back button. For comparison with iOS, the experience was simply a pop-up, so you could send off the texts very quickly if you wanted to. In my opinion the Android change was an awful user experience, so I decided to not publish the Android version. I would rather put out consistently good products than a variable experience. Separately, one of my friends found an error at scale. The app would crash when she tried to contact roughly 70 people. Despite searching everywhere online, I couldn't find anything. Then I decided to look into the error logs that iPhones have, and I saw that the CPU was getting overused. React Native is computationally heavy, so I had to find ways to reduce that burden, as clearly it was causing the app to crash at scale. I had recently taken a computer architecture course, so I decided to rewrite a bit of the code to implement those memory saving/ compiler optimizing ways. Utilizing 4x1 loop unrolling and eliminating memory aliasing, I was able to completely get rid of the error. I was especially proud of that bug fix, as it required me looking deep beneath the levels of abstraction.
+        <br/><br/>
+        In short, I am very proud of Charla. While there may be more bugs at scale, overall the project is something that I think gives a strong user experience. I've already heard back from a few users saying they like the platform, so I'm very happy my app has been able to help people.
+        </p>
+    </div>
+    <% include ../partials/footer.ejs%>
+</body>
+
+</html>
