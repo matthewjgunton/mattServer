@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <!-- <meta name="google-site-verification" content="xG8lCsXIU0hTHhH6Cj41yyo_tqyfsoszTugkHA93Kg0" /> -->
+  <!-- <meta name="msvalidate.01" content="129B059FC9FD8F76F9BCBEFA4B897CE5" /> -->
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/project/common.css" rel = "stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <% include ../partials/navbar.ejs %>
+
+  <h1>Project Tusk</h1>
+  <h4>Data Science | Machine Learning | Noise Pollution</h4>
+
+  <center><img src = "/images/tusk.jpg"/></center>
+  <div id = "text">
+    <p>
+      Along with Cody Benkoski, I created a data visualization tool for hearing loss & noise pollution. Then to see where the next generation of hearing tech will be, we used a Convolutional Neural Network
+    </p>
+  </div>
+
+  <div id = "tech">
+    <span>Tech Used</span>
+    <ul>
+      <li>Librosa</li>
+      <li>AWS</li>
+      <li>TensorFlow</li>
+      <li>Leaflet.js</li>
+    </ul>
+  </div>
+  <div id = "mid">
+    <p>
+      Project Tusk was a multifaceted project. Cody Benkoski and I were studying noise pollution and how it could damage hearing. To begin, we used Leaflet.js to visualize the problem. Often people think noise pollution and hearing damage aren’t serious. One reason they might believe that is they cannot see the problem. Thus, we used Leaflet to complete two tasks. First, we used data from the CDC to show the prevalence of hearing loss across the US by state and age group. Seeing that an enormous amount of the population has this problem should make anyone take notice. Second, we used data from the SONYC data set to show how dangerously loud sounds can reach someone. It was a wonderful way to visualize the data in an interactive way.
+      <br/><br/>
+      The second part of our task was more involved. We wanted to see what could be done about the problem. I know a few people in my life who suffer from hearing loss, so I was curious how the world could move to better aid these people and even help prevent others from suffering from hearing loss. The people who curated the SONYC dataset had a paper published about classifying audio via Convolutional Neural Network or CNN. A CNN is a form of machine learning that is based on very complex statistics. At a high level, a CNN is supposed to emulate a brain. An image is given to the CNN, say a photo of a dog, then the CNN scans the image a given amount of pixels at a time, in our instance 128x128 pixels at a time. It then runs through multiple layers, allowing it to create complex probabilities based on the input. Once the input runs through the network, it will end on a end neuron. This end neuron corresponds to a certain answer. For instance, if you were building a CNN to detect what kind of animal was in a photo, one neuron might correlate to a dog. The CNN is trained on hundreds of thousands of pieces of data. This way the CNN is said to be “learning.” The big drawback to CNNs is that they require so much data.
+      <br/><br/>
+      You may be thinking that a CNN would not be useful for audio classification, because it needs something in pixels, an image! However, this is where the paper came into play. It showed that you could use a spectrogram of the audio (a visual representation of a sound wave) to train the classification. The spectrogram is basically an image, so you could use that conversion to train your CNN. It worked very well in the paper, so we used their model in our work. We trained it on the UrbanSound8K data set (also created by the same people on the SONYC team) and found that with 66% accuracy it could identify the sound. Humans normally have accuracy of 70-75%, so we weren’t too bad for a first attempt! Using that CNN, we tested it on the data we used for the sensor map. We found that while our CNN was able to detect certain classes with great accuracy, the issue was the input had multiple true classes. For example, while our CNN could tell us that an engine was idling, the percentage difference between that and other true cases wasn’t significantly different from its percentage difference with false cases. Thus, we concluded that as audio classification is furthered, CNNs must be trained on data so the probability associated with the final neuron corresponds strongly with true or false. In other words, the CNN’s end neurons must have probabilities that strongly represent the multiple true classes in the input.
+      <br/><br/>
+      In closing, this was a wonderful project to close out my summer. It introduced me a variety of new technologies and gave me insight into an emerging part of technology.
+
+    </p>
+  </div>
+
+<% include ../partials/footer.ejs%>
+
+</body>
+
+</html>
