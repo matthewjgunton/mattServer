@@ -39,12 +39,13 @@ exports.blogPage = (req, res) => {
 exports.blogSpecific = (req, res) => {
 
   let a = req.params.num;
-  for(let i = 0; i < blogPath.length; i++){
+  for(let i = 0; i <= blogPath.length; i++){
     let test = blogPath[i].substring(0, blogPath[i].indexOf('.'));
     if(a === test){
       return res.status(200).render('blogs/'+a);
     }
-    if(i == projectPath.length - 1){
+    if(i == blogPath.length - 1){
+	console.log("ENDED", a, test);
       return res.status(200).redirect('/blog');
     }
   }
@@ -59,7 +60,7 @@ exports.mediaSpecific = (req, res) => {
       return res.status(200).render('media/'+a);
       break;
     }
-    if(i == projectPath.length - 1){
+    if(i == mediaPath.length - 1){
       return res.status(200).render('media/1');
       break;
     }
