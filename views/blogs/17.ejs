@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs%>
+  <link href = "/css/common.css" rel = "stylesheet" />
+  <link href = "/css/project/common.css" rel = "stylesheet" />
+  <link href = "/css/start.css" rel="stylesheet" />
+  <link href = "/css/icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+  <% include ../partials/navbar %>
+
+  <h1>Solving the Maximum Subarray Problem</h1>
+  <h4>November 10th, 2020</h4>
+
+  <center><img src = "/images/code.jpg" /></center>
+
+  <div id = "mid">
+    <p>
+      There is a very famous problem in computer science called the maximum subarray problem. The problem goes like this: you are given an array of numbers. Find the maximum value you can by adding together adjacent values. Another way it may be asked to you is in the form of stocks: if you are given the prices of a stock throughout the week, can you find the best time to buy and sell? In both cases, the goal is to find the maximum value of a subarray. I’ll start by solving the simple maximum subarray and then work around to solving the stock price variation.
+<br/><br/>
+      Beginning with the simple subarray, there are a variety of ways to try solving the problem. The most straight forward is the brute force method. With this version, one simply creates 3 for loops to try every single possible subarray, with each new iteration of the outer loop starting the subarray from a new index. Once you’ve tried them all, you know which one is the maximum. While this solution will give the correct answer, it is extremely inefficient. In computer science, we will often simplify algorithms to their theoretic runtime. In this case, if the size of our array is represented by n, then to get the correct answer the algorithm has to run n^3 times. Because we always want to code with a mind towards scaling, a complexity that grows in polynomial time is very expensive.
+      <script src="https://gist.github.com/matthewjgunton/94731d680fbb14744aec3ca7a8268bd2.js"></script>
+      Thus, we should look for a better solution. Here we should look to Kandane’s algorithm. Kandane saw that the subarray was currently operating by trying every possibility. Nevertheless, he saw that many of these ended up being redundant tests. Many of the new sums would be smaller than the one currently being tested. As a result, it was a waste of time to compute them. With this insight, he saw that a lot of the tests could be skipped, making the algorithm a lot faster. The algorithm he created is below.
+      <script src="https://gist.github.com/matthewjgunton/00aaa3f5bdbb7a0da5492d537811061c.js"></script>
+      As you can see, it only needs to run through one for loop, meaning that the cost to run through the algorithm is only n. This reduction is critical and makes our algorithm far more scalable. While there are other ways to solve this problem, none have been able to be more time efficient than Kandane.
+<br/><br/>
+      With the solution to the maximum subarray in hand, we can turn to the stock problem. Here we are given an array of stock values. To convert this situation to the maximum subarray problem, we will subtract each stock price from the one after it. This way, we find the difference between stock prices day to day. Our array is now setup so that if we find the maximum value of a continuous subarray, we will also have found the best price we can get along with the day to buy and sell. By adding a few variables, we can adjust our Kandane formula to get the correct algorithm below:
+      <script src="https://gist.github.com/matthewjgunton/4e49ac410be24915a075f0a219452195.js"></script>
+<br/><br/>
+      Hope you enjoyed this explanation of the Maximum Subarray Problem.
+
+
+      <br/><br/>
+      Onwards & Upwards
+    </p>
+  </div>
+
+    <% include ../partials/footer.ejs%>
+
+
+</body>
