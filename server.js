@@ -43,13 +43,13 @@ a.createFiles(projectPath, 'projectPath').then( () => {
     a.createFiles(mediaPath, 'mediaPath').then (()=> {
       const rtAuth = require("./routes/rtAuth.js");
       const rtEyeRemember = require("./routes/rtEyeRemember");
-      //const rtRabbit = require("./routes/rtRabbit");
+      const rtRabbit = require("./routes/rtRabbit");
       const rtPaper = require("./routes/rtPaper");
       const ioController = require("./controllers/io.js")(io);
       app.use("/", rtAuth);
       app.use("/eye_remember", rtEyeRemember);
       app.use("/paper", rtPaper);
-      //app.use("/rabbit", rtRabbit);
+      app.use("/rabbit", rtRabbit);
       app.locals.io = io
       app.use(function(req, res){
         res.status(404);

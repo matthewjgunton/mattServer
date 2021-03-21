@@ -1,6 +1,7 @@
 
 var googleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var User = require('../models/users.js');//allows me to store only things I care about, as specified in the model, ont random things passed through
+var User = require('../models/rabbitUsersModel.js');//allows me to store only things I care about, as specified in the model, ont random things passed through
+
 
 var configAuth = require("./auth.js");
 
@@ -44,10 +45,11 @@ passport.use(new googleStrategy({
           var newUser = new User();
           newUser.userid = profile.id;
           newUser.token = accessToken;
-          console.log(">",profile.name);
-          newUser.givenName = profile.name.givenName;
-          newUser.familyName = profile.name.familyName;
+          newUser.name.givenName = profile.name.givenName;
+          newUser.name.familyName = profile.name.familyName;
+          newUser.name.fullName = profile.name.givenName+" "+profile.name.familyName;
           newUser.email = profile.emails[0].value;
+          newUser.eggsFound = 0;
 
           newUser.save(function(err, result){
             if(err){

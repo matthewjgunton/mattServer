@@ -66,7 +66,7 @@
   <div style="border-top: 2px solid white; border-bottom: 2px solid white">
     <h1>Found an Egg?</h1>
     <h2>Enter Its Code Here:</h2>
-    <input style = "padding: 12px 20px; margin: 8px 0; box-sizing: border-box; width: 45%;" id='code' name='code' placeholder="Secret Code"></input><br/>
+    <input style = "padding: 12px 20px; margin: 8px 0; box-sizing: border-box; width: 45%;" id='code' name='code' placeholder="Secret Code" autocomplete="off"></input><br/>
     <button style = "background-color: white; font-size: 12px; border-radius: 20px; width: 30%;" type="button" onclick="checkDig()">Submit</button><br/><br/>
   <div>
 
@@ -79,8 +79,11 @@
   <div style = "text-align: left; border-top: 2px solid white;">
     <h1 style="text-align: center;">Rules</h1>
     <ol>
+      <li>Follow All COVID Restrictions Set by Lehigh COVID Response Team</li>
       <li>Find eggs, and put the code you find in that egg into the website</li>
       <li>Throw out eggs after you find them</li>
+      <li>Winners will be notified via email after the hunt is over</li>
+      <li>All winners are entitled to a dinner from any restaurant listed on Doordash up to the amount they win listed on this website</li>
       <li>No throwing eggs</li>
       <li>No sabotaging eggs by moving them after game start; Especially when putting them in areas outside of the initial guidelines.</li>
       <li>No trying to guess codes to put into the website</li>
@@ -113,19 +116,16 @@
                   text += "</b>";
                 }
                 if(i == 0 || i == 1){
-                  text += " - $200";
+                  text += " - up to $100 dinner";
                 }
                 if(i == 2 || i == 3){
-                  text += " - $150";
+                  text += " - up to $75 dinner";
                 }
                 if(i == 4 || i == 5){
-                  text += " - $100";
+                  text += " - up to $50 dinner";
                 }
                 if(i == 6 || i == 7){
-                  text += " - $50";
-                }
-                if(i > 7){
-                  text += " - $0";
+                  text += " - up to $25 dinner";
                 }
                 text += "</li>"
               }

@@ -12,16 +12,16 @@ function getLeaderboard(theUrl){
               text += "<li>";
               text += json.data[i].name.givenName+" "+json.data[i].name.familyName.charAt(0)+"  : "+json.data[i].eggsFound+" Eggs";
               if(i == 0 || i == 1){
-                text += " - $200";
+                text += " - up to $100 dinner";
               }
               if(i == 2 || i == 3){
-                text += " - $150";
+                text += " - up to $75 dinner";
               }
               if(i == 4 || i == 5){
-                text += " - $100";
+                text += " - up to $50 dinner";
               }
               if(i == 6 || i == 7){
-                text += " - $200";
+                text += " - up to $25 dinner";
               }
               text += "</li>"
             }
