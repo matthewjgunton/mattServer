@@ -82,6 +82,7 @@
       <li>Follow All COVID Restrictions Set by Lehigh COVID Response Team</li>
       <li>Find eggs, and put the code you find in that egg into the website</li>
       <li>Throw out eggs after you find them</li>
+      <li>All participants must have On-Campus Resources</li>
       <li>Winners will be notified via email after the hunt is over</li>
       <li>All winners are entitled to a dinner from any restaurant listed on Doordash up to the amount they win listed on this website</li>
       <li>No throwing eggs</li>
@@ -161,20 +162,22 @@
       };
       var data = JSON.stringify({"userid": "<%=user.userid%>", "code": code});
       xhr.send(data);
-      xhr.onload = function() {
-        if(data.msg === "success!"){
+      xhr.onload = function(d) {
+	var json = JSON.parse(xhr.responseText);
+	console.log("data",json);
+        if(json.msg === "success!"){
           alert("We got it! Keep it up!");
           window.location.href = "/rabbit";
         }
-        if(data.msg === "nse"){
+        if(json.msg === "nse"){
           alert("That egg doesn't exist");
           boot++;
         }
-        if(data.msg === "fAl"){
+        if(json.msg === "fAl"){
           alert("Someone has already found this egg");
           boot++;
         }
-        if(data.msg === "bad request!"){
+        if(json.msg === "bad request!"){
           alert("Bad Internet Connection. Please try again later");
         }
         document.getElementById("code").value = "";
