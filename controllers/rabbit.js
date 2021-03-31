@@ -61,10 +61,6 @@ exports.foundEgg = (req, res) => {
     console.log("Safety check bad request");
     return res.status(400).json({msg: "bad request!"});
   }
-//  if(req.user.userid !== req.body.userid){
-//	console.log("ERROR with userid");
-//	return res.status(400).json({msg: "bad request!"});
- // }
   //now we know it's a good code, we look up the kid and give him the points
   User.findOne({userid: req.user.userid}).then((data)=>{
     if(!data){

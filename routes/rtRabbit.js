@@ -15,14 +15,14 @@ sendRoutes.route("/oauth/callback")
 sendRoutes.route("/home")
   .get(controller.homePage);
 
-//sendRoutes.route("/foundEgg")
-//  .post(controller.foundEgg);
+sendRoutes.route("/foundEgg")
+  .post(controller.foundEgg);
 
 sendRoutes.route("/leaderboard")
   .get(controller.leaderboard);
 
-//sendRoutes.route("/enterEggCodes/:check")
-  //.get(controller.enterEggs);//very important this route is shut down before game begins
+sendRoutes.route("/enterEggCodes/:check")
+  .get(controller.enterEggs);//very important this route is shut down before game begins
 
 sendRoutes.route("/out")
   .get(controller.logOut);
