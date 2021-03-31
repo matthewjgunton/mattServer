@@ -33,15 +33,23 @@ exports.homePage = function(req, res){
 }
 
 exports.leaderboard = (req, res) => {
+  if(!req.user) return res.status(400).json({e: "no"});
   User.find({}).sort({'eggsFound': -1}).limit(10).exec(function(err, data){
     if(err) return res.status(400).json({msg: "Bad request!"});
-    return res.status(200).json({data, msg: "success!"});
+    let obj = JSON.parse(JSON.stringify(data));
+    for(let i = 0; i < obj.length; i++){
+	delete obj[i]._id;
+	delete obj[i].token;
+	delete obj[i].userid;
+    }
+    return res.status(200).json({data: obj, msg: "success!"});
   })
 }
 
 exports.foundEgg = (req, res) => {
 
-  if(Object.keys(req.body).length != 2){
+  if(Object.keys(req.body).length != 2 || !req.user){
+    console.log("no user or body length not 2");
     return res.status(400).json({msg: "bad request!"});
   }
 
@@ -50,11 +58,17 @@ exports.foundEgg = (req, res) => {
     digitVal += req.body.code.charCodeAt(i);
   }
   if(digitVal % 11 != 2){
+    console.log("Safety check bad request");
     return res.status(400).json({msg: "bad request!"});
   }
+//  if(req.user.userid !== req.body.userid){
+//	console.log("ERROR with userid");
+//	return res.status(400).json({msg: "bad request!"});
+ // }
   //now we know it's a good code, we look up the kid and give him the points
-  User.findOne({userid: req.body.userid}).then((data)=>{
+  User.findOne({userid: req.user.userid}).then((data)=>{
     if(!data){
+	console.log("no user found bad request");
       return res.status(400).json({msg: "bad request!"});
     }
     Egg.findOne({code: req.body.code}).then((eggData)=>{
@@ -65,7 +79,7 @@ exports.foundEgg = (req, res) => {
         return res.status(400).json({msg: "fAl"});
       }
       let newEggsFound = data.eggsFound+1;
-      User.findOneAndUpdate({userid: req.body.userid}, {eggsFound: newEggsFound}).then(()=>{
+      User.findOneAndUpdate({userid: req.user.userid}, {eggsFound: newEggsFound}).then(()=>{
         Egg.findOneAndUpdate({code: req.body.code}, {found: true}).then(()=>{
           console.log(req.user.email," found egg: ",req.body.code);
           return res.status(201).json({msg: "success!"});
