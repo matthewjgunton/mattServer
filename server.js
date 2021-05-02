@@ -3,6 +3,8 @@ const app = express();
 const server = require('http').createServer(app);
 const path = require("path");
 const io = require("socket.io")(server);
+const csrf = require('csurf');     //protects against cross site forgery requests
+
 
 // rabbit libraries
 var session = require('express-session');//to store information between links from user
@@ -29,12 +31,7 @@ app.use(session({//set up session to our specifications
 }));//for authenticating users
 app.use(passport.initialize());//starts passport
 app.use(passport.session());//allows authentication info to pass between pages
-
-/*
-
-  AVOIDING CROSS-SITE FRADULENT REQUESTS NEED LIBRARIES FOR PASSPORT
-
-*/
+app.use(csrf());//now we can generate cryptographically secure numbers to prevent CSRF attacks
 
 app.use( express.static(__dirname+"/public") );
 
@@ -49,12 +46,12 @@ a.createFiles(projectPath, 'projectPath').then( () => {
     a.createFiles(mediaPath, 'mediaPath').then (()=> {
       const rtAuth = require("./routes/rtAuth.js");
       const rtEyeRemember = require("./routes/rtEyeRemember");
-      // const rtRabbit = require("./routes/rtRabbit");
+      const rtRabbit = require("./routes/rtRabbit");
       const rtPaper = require("./routes/rtPaper");
       const ioController = require("./controllers/io.js")(io);
       app.use("/", rtAuth);
       app.use("/eye_remember", rtEyeRemember);
-      app.use("/paper", rtPaper);
+      // app.use("/paper", rtPaper);
       // app.use("/rabbit", rtRabbit);
       app.locals.io = io
       app.use(function(req, res){
