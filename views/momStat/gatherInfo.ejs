@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs%>
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/project/common.css" rel="stylesheet" />
+        <link href="/css/start.css" rel="stylesheet" />
+        <link href="/css/icons.css" rel="stylesheet" />
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <center>
+  <h1>Welcome <%=user.fullName%>!</h1>
+  <h4>Not You? <a href = "<%=rt%>/out">Click Here</a></h4>
+  <h2>We are trying to understand the relative importance of alignment of the eyes.  You will remain anonymous.  We will collect some information about you, and would like your honest responses evaluating 8 individuals.</h2>
+
+    <span>What is your age?</span><br/><input id="age" type="number"></input><br/><br/>
+
+    <span>With what gender do you identify?</span><br/>
+    <select name="gender" id = "gender">
+      <option value="f">Female</option>
+      <option value="m">Male</option>
+      <option value="p">Prefer Not To Say</option>
+      <option value="o">Other</option>
+    </select><br/><br/>
+
+    <span>Do you have eye misalignment or history of eye misalignment?</span><br/>
+    <select id = "personalMisalignment" name="personalMisalignment">
+      <option value="1">Yes</option>
+      <option value="0">No</option>
+    </select><br/><br/>
+
+    <span>Does any family member have misalignment of their eyes??</span><br/>
+    <select id = "familialMisalignment" name="familialMisalignment">
+      <option value="1">Yes</option>
+      <option value="0">No</option>
+    </select><br/><br/>
+    <button onclick="sub()">Confirm</button>
+  </center>
+
+  <script>
+    function sub(){
+
+        var xhr = new XMLHttpRequest();
+        var url = "<%=rt%>/submitInfo";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+            }
+        };
+        let age = document.getElementById("age").value;
+        let gender = document.getElementById("gender").value;
+        let personalMisalignment = document.getElementById("personalMisalignment").value;
+        let familialMisalignment = document.getElementById("familialMisalignment").value;
+        console.log(age, gender, personalMisalignment, familialMisalignment);
+        var data = JSON.stringify({age, gender, personalMisalignment, familialMisalignment, "_csrf": "<%=csrfToken%>"});
+        xhr.send(data);
+        xhr.onload = function() {
+          var json = JSON.parse(xhr.responseText);
+          if(json.msg === "success!"){
+            alert("We got it! Keep it up!");
+            window.location.href = "<%=rt%>";
+          }
+          if(json.msg === "bad request!"){
+            alert("Bad Internet Connection. Please try again later");
+            location.reload();
+          }
+        }
+      }
+  </script>
+
+</body>
+
+</html>

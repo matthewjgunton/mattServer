@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs%>
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/project/common.css" rel="stylesheet" />
+        <link href="/css/start.css" rel="stylesheet" />
+        <link href="/css/icons.css" rel="stylesheet" />
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body>
+
+  <center>
+  <h1>Welcome <%=user.fullName%>!</h1>
+  <h4>Not You? <a href = "<%=rt%>/out">Click Here</a></h4>
+  <h2>We are trying to understand the relative importance of alignment of the eyes.  You will remain anonymous.  We would like your honest responses evaluating _____________________.</h2>
+
+  <div id = "imgContainer">
+  </div>
+
+  </center>
+
+  <script>
+
+  function Image(id){
+    this.image = id;
+    this.before = null;
+    this.after = null;
+  }
+
+  function sub(){
+
+      var xhr = new XMLHttpRequest();
+      var url = "<%=rt%>/home";
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+              var json = JSON.parse(xhr.responseText);
+          }
+      };
+
+      var data = JSON.stringify({images: compositeChain, "_csrf": "<%=csrfToken%>"});
+      xhr.send(data);
+      xhr.onload = function() {
+        var json = JSON.parse(xhr.responseText);
+        if(json.msg === "success!"){
+          alert("We got it! Thank you for taking the survey!!");
+          window.location.href = "<%=rt%>";
+        }
+        if(json.msg === "bad request!"){
+          alert("Bad Internet Connection. Please try again later");
+          location.reload();
+        }
+      }
+  }
+
+  let firstChain;
+  let secondChain;
+  let firstChainIndex;
+  let secondChainIndex;
+
+  let compositeChain = [];
+
+  function merge(){
+      $("#imgContainer").empty();
+      console.log(firstChain, secondChain, "Chains");
+
+        let first = rankingArr[0].index;
+        let second = rankingArr[1].index;
+
+        if(!compositeChain.includes(imagesArr[first].image)){
+          compositeChain.push(imagesArr[first].image);
+        }
+
+
+        let indexOfFirst = compositeChain.indexOf(imagesArr[first].image);
+        let indexOfSecond = compositeChain.includes(imagesArr[second].image) ? compositeChain.indexOf(imagesArr[second].image) : indexOfFirst;
+
+        if(indexOfFirst > indexOfSecond){//TRANSITION IS WRONG HERE <<
+          let temp = compositeChain[indexOfFirst];
+          compositeChain[indexOfFirst] = compositeChain[indexOfSecond];
+          compositeChain[indexOfSecond] = temp;
+        }
+
+        if(compositeChain.length == 8){
+          //we got them all!
+          console.log(compositeChain);
+          sub();
+          return;
+        }
+
+        if(firstChain.image === compositeChain[indexOfFirst]){
+          if(firstChain.after === null){
+            while(secondChain !== null){
+              compositeChain.push(secondChain.image);
+              secondChain = secondChain.after;
+            }
+            console.log(compositeChain);
+            sub();
+            return;
+          }
+            firstChain = firstChain.after;
+            for(let i = 0; i < imagesArr.length; i++){
+              if(imagesArr[i] === firstChain){
+                firstChainIndex = i;
+              }
+            }
+        }
+        if(secondChain.image === compositeChain[indexOfFirst]){
+          if(secondChain.after === null){
+            while(firstChain !== null){
+              compositeChain.push(firstChain.image);
+              firstChain = firstChain.after;
+            }
+            console.log(compositeChain);
+            sub();
+            return;
+          }
+            secondChain = secondChain.after;
+            for(let i = 0; i < imagesArr.length; i++){
+              if(imagesArr[i] === secondChain){
+                secondChainIndex = i;
+              }
+            }
+        }
+        currentImages.splice(0, currentImages.length);
+        rankingArr.splice(0, rankingArr.length);
+        select2();
+
+  }
+
+  function prep(){
+
+      let index = rankingArr[0].index;
+      if(typeof firstChain === 'undefined'){
+        firstChain = imagesArr[index];
+        firstChainIndex = index;
+      }else{
+        secondChain = imagesArr[index];
+        secondChainIndex = index;
+      }
+
+      for(let i = 1; i < rankingArr.length; i++){
+
+        index = rankingArr[i].index;
+        let prior = rankingArr[i-1].index;
+        imagesArr[index].before = imagesArr[prior];
+        imagesArr[prior].after = imagesArr[index];
+      }
+
+      //then we make the call to reset & do again
+      $("#imgContainer").empty();
+      currentImages.splice(0, currentImages.length);
+      rankingArr.splice(0, rankingArr.length);
+
+      if(randomArray.length == 4) select4();
+      else select2();
+  }
+
+  function select2(){
+    let sanitize = firstChain.image.replace(/[.]/g,"");
+    currentImages.push(sanitize);
+    $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+firstChainIndex+")' style=' background-color: #cccccc; background-repeat: no-repeat; background-size: cover; width: 100px; height: 100px; background-image: url(/images/statistics/"+firstChain.image+")'></img>");
+
+    sanitize = secondChain.image.replace(/[.]/g,"");
+    currentImages.push(sanitize);
+    $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+secondChainIndex+")' style=' background-color: #cccccc; background-repeat: no-repeat; background-size: cover; width: 100px; height: 100px; background-image: url(/images/statistics/"+secondChain.image+")'></img>");
+  }
+
+  const rankingArr = [];
+  function rank(fullImage, index){
+    let add = true;
+    for(let i = 0; i < rankingArr.length; i++){
+      $("#"+rankingArr[i].fullImage).empty();
+      if(rankingArr[i].fullImage === fullImage){
+        add = false;
+        rankingArr.splice(i,1);
+      }
+      $("#"+rankingArr[i].fullImage).append("<span>"+(i+1)+"</span>");
+    }
+    if(!add) {
+      $("#send").remove();
+      return;
+    };
+    rankingArr.push({fullImage, index});
+    $("#"+fullImage).append("<span>"+rankingArr.length+"</span>");
+    if(rankingArr.length == currentImages.length){
+      let func = rankingArr.length == 2 ? "merge()" : "prep()";
+      $("#imgContainer").append("<button id = 'send' onclick='"+func+"'>Submit</button>");
+    }
+  }
+
+  function select4(){
+    for(let i = 0; i < 4; i++){
+      let index = randomArray.shift();
+      let sanitize = imagesArr[index].image.replace(/[.]/g,"");
+      currentImages.push(sanitize);
+      $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+index+")' style=' background-color: #cccccc; background-repeat: no-repeat; background-size: cover; width: 100px; height: 100px; background-image: url(/images/statistics/"+imagesArr[index].image+")'></img>");
+    }
+  }
+
+  function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
+  //main:
+  const imagesArr = [];
+  let randomArray = [];
+  let currentImages = [];
+  <%for(let i = 0; i < images.length; i++){%>
+    imagesArr.push( new Image('<%=images[i].image%>') );
+    randomArray.push(<%=i%>);
+  <%}%>
+  shuffle(randomArray);
+
+  //stage 1: select 4
+  select4();
+
+  //stage 2: select the remaining 4
+
+  //stage 3: fill in the blanks
+
+  </script>
+
+</body>
+
+</html>
