@@ -49,10 +49,14 @@ a.createFiles(projectPath, 'projectPath').then( () => {
       const rtRabbit = require("./routes/rtRabbit");
       const rtPaper = require("./routes/rtPaper");
       const ioController = require("./controllers/io.js")(io);
+
+      const rtMomStat = require("./routes/rtMomStat.js");
+
       app.use("/", rtAuth);
       app.use("/eye_remember", rtEyeRemember);
       // app.use("/paper", rtPaper);
       // app.use("/rabbit", rtRabbit);
+      app.use("/statistics", rtMomStat);
       app.locals.io = io
       app.use(function(req, res){
         res.status(404);

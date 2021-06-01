@@ -29,7 +29,7 @@ exports.homePage = function(req, res){
   if (!req.user){
     return res.redirect("/rabbit/index");
   }
-  return res.status(201).render("rabbit/home.ejs",{user: req.user, csrfToken: req.csrfToken(),});
+  return res.status(201).render("rabbit/home.ejs",{user: req.user, csrfToken: req.csrfToken()});
 }
 
 exports.leaderboard = (req, res) => {
