@@ -13,14 +13,24 @@
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </head>
 
+<style>
+  .img-stat{
+    background-color: #cccccc;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 10em;
+    height: 10em;
+  }
+</style>
+
 <body>
 
   <center>
   <h1>Welcome <%=user.fullName%>!</h1>
   <h4>Not You? <a href = "<%=rt%>/out">Click Here</a></h4>
-  <h2>We are trying to understand the relative importance of alignment of the eyes.  You will remain anonymous.  We would like your honest responses evaluating _____________________.</h2>
+  <h2>We are trying to understand the relative importance of alignment of the eyes.  <br /> Please score the following photos based on your interpretation of the severity of the misalignment, or need for correction of the alignment of the eyes.  1 has the most severe misalignment or greatest need for correction, with each one afterwards being less severe</h2>
 
-  <div id = "imgContainer">
+  <div id = "imgContainer" style="display: inline-grid;grid-column-gap: 2em;grid-row-gap: 2em;grid-template-columns: auto auto;">
   </div>
 
   </center>
@@ -166,11 +176,11 @@
   function select2(){
     let sanitize = firstChain.image.replace(/[.]/g,"");
     currentImages.push(sanitize);
-    $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+firstChainIndex+")' style=' background-color: #cccccc; background-repeat: no-repeat; background-size: cover; width: 100px; height: 100px; background-image: url(/images/statistics/"+firstChain.image+")'></img>");
+    $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+firstChainIndex+")' class='img-stat' style='  background-image: url(/images/statistics/"+firstChain.image+")'></img>");
 
     sanitize = secondChain.image.replace(/[.]/g,"");
     currentImages.push(sanitize);
-    $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+secondChainIndex+")' style=' background-color: #cccccc; background-repeat: no-repeat; background-size: cover; width: 100px; height: 100px; background-image: url(/images/statistics/"+secondChain.image+")'></img>");
+    $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+secondChainIndex+")' class='img-stat' style=' background-image: url(/images/statistics/"+secondChain.image+")'></img>");
   }
 
   const rankingArr = [];
@@ -201,7 +211,7 @@
       let index = randomArray.shift();
       let sanitize = imagesArr[index].image.replace(/[.]/g,"");
       currentImages.push(sanitize);
-      $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+index+")' style=' background-color: #cccccc; background-repeat: no-repeat; background-size: cover; width: 100px; height: 100px; background-image: url(/images/statistics/"+imagesArr[index].image+")'></img>");
+      $("#imgContainer").append("<div id='"+sanitize+"' onclick='rank(`"+sanitize+"`, "+index+")' class='img-stat' style='background-image: url(/images/statistics/"+imagesArr[index].image+")'></img>");
     }
   }
 
