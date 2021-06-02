@@ -191,6 +191,7 @@
       if(rankingArr[i].fullImage === fullImage){
         add = false;
         rankingArr.splice(i,1);
+        continue;
       }
       $("#"+rankingArr[i].fullImage).append("<span>"+(i+1)+"</span>");
     }
