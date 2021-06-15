@@ -14,21 +14,35 @@
 </head>
 
 <style>
+*{
+  font-family: 'Times New Roman';
+  font-weight: normal;
+}
+
   .img-stat{
     background-color: #cccccc;
     background-repeat: no-repeat;
     background-size: cover;
-    width: 10em;
-    height: 10em;
+    width: 12em;
+    height: 12em;
   }
+  .num{
+    font-weight: bold;
+    font-size:3em;
+  }
+
+  .submit{
+    grid-column: 1 / span 2;
+  }
+
 </style>
 
 <body>
 
   <center>
-  <h1>Welcome <%=user.fullName%>!</h1>
-  <h4>Not You? <a href = "<%=rt%>/out">Click Here</a></h4>
-  <h2>We are trying to understand the relative importance of alignment of the eyes.  <br /> Please score the following photos based on your interpretation of the severity of the misalignment, or need for correction of the alignment of the eyes.  1 has the most severe misalignment or greatest need for correction, with each one afterwards being less severe</h2>
+  <h2>Welcome <%=user.fullName%>!</h2>
+  <h5>Not You? <a style="font-size: 1em;" href = "<%=rt%>/out">Click Here</a></h5>
+  <h4>We are trying to understand the relative importance of alignment of the eyes<br/>Please rank the following photos based on your interpretation of the severity of the misalignment or the need for surgical correction of the eye misalignment.<br/><br/>Rank 1 is the <u>most severe</u> misalignment or has the greatest need for surgical correction, and each subsequent rank is progressively <u>less severe</u></h4>
 
   <div id = "imgContainer" style="display: inline-grid;grid-column-gap: 2em;grid-row-gap: 2em;grid-template-columns: auto auto;">
   </div>
@@ -87,7 +101,6 @@
         if(!compositeChain.includes(imagesArr[first].image)){
           compositeChain.push(imagesArr[first].image);
         }
-
 
         let indexOfFirst = compositeChain.indexOf(imagesArr[first].image);
         let indexOfSecond = compositeChain.includes(imagesArr[second].image) ? compositeChain.indexOf(imagesArr[second].image) : indexOfFirst;
@@ -186,24 +199,35 @@
   const rankingArr = [];
   function rank(fullImage, index){
     let add = true;
+    let display = 0;
+    let remove = -1;
     for(let i = 0; i < rankingArr.length; i++){
       $("#"+rankingArr[i].fullImage).empty();
+      display++;
       if(rankingArr[i].fullImage === fullImage){
         add = false;
-        rankingArr.splice(i,1);
+        // rankingArr.splice(i,1);
+        remove = i;
+        display--;
         continue;
       }
-      $("#"+rankingArr[i].fullImage).append("<span>"+(i+1)+"</span>");
+      console.log(rankingArr[i].fullImage, display);
+      $("#"+rankingArr[i].fullImage).append("<span class='num'>"+(display)+"</span>");
     }
+
+    if(remove != -1){
+      rankingArr.splice(remove, 1);
+    }
+
     if(!add) {
       $("#send").remove();
       return;
     };
     rankingArr.push({fullImage, index});
-    $("#"+fullImage).append("<span>"+rankingArr.length+"</span>");
+    $("#"+fullImage).append("<span class='num'>"+rankingArr.length+"</span>");
     if(rankingArr.length == currentImages.length){
       let func = rankingArr.length == 2 ? "merge()" : "prep()";
-      $("#imgContainer").append("<button id = 'send' onclick='"+func+"'>Submit</button>");
+      $("#imgContainer").append("<button id = 'send' class='submit' onclick='"+func+"'>Submit</button>");
     }
   }
 
