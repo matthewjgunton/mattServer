@@ -15,11 +15,11 @@ sendRoutes.route("/projects")
 sendRoutes.route("/projects/:project")
   .get(controller.projectSpecific);
 
-sendRoutes.route("/blog")
-  .get(controller.blogPage);
+// sendRoutes.route("/blog")
+//   .get(controller.blogPage);
 
-sendRoutes.route("/blog/:num")
-  .get(controller.blogSpecific);
+// sendRoutes.route("/blog/:num")
+//   .get(controller.blogSpecific);
 
 sendRoutes.route("/media")
   .get(controller.mediaPage);

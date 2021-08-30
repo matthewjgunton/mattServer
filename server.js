@@ -38,11 +38,11 @@ app.use( express.static(__dirname+"/public") );
 //have it figure out how many pages are in what
 const a = require("./createFiles.js");
 const projectPath = path.join(__dirname+'/views/projects/');
-const blogPath = path.join(__dirname+'/views/blogs/');
+// const blogPath = path.join(__dirname+'/views/blogs/');
 const mediaPath = path.join(__dirname+'/views/media/');
 
 a.createFiles(projectPath, 'projectPath').then( () => {
-  a.createFiles(blogPath, 'blogPath').then( () => {
+  // a.createFiles(blogPath, 'blogPath').then( () => {
     a.createFiles(mediaPath, 'mediaPath').then (()=> {
       const rtAuth = require("./routes/rtAuth.js");
       const rtEyeRemember = require("./routes/rtEyeRemember");
@@ -71,7 +71,7 @@ a.createFiles(projectPath, 'projectPath').then( () => {
       server.listen(5000);
       console.log("lift off");
     })
-  })
+  // })
 })
 
 
